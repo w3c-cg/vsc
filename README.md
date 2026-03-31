@@ -197,41 +197,10 @@ All deliverables are published under the [W3C Document License](https://www.w3.o
 
 **Chairs:**
 - *Amir Hameed Mir* - *Sirraya labs* - *amsaalegal@gmail.com*
-- *[Name]* - *[Affiliation]* - *[Email]*
+
 
 **W3C Staff Contact:**
 - *Ian Jacobs* 
 
 ---
 
-*This work is supported by the W3C Verifiable Supply Chain Community Group.*
-```
-
-## Key Best Practices Applied:
-
-### ✅ **Structure**
-- Clear hierarchy with emojis for visual scanning
-- Table of contents via headings
-- Consistent section organization
-
-### ✅ **Clarity**
-- **Scope**: Explicit what is IN and OUT
-- **Success Criteria**: Measurable, verifiable goals
-- **Relationship to UORA**: Clear comparison table
-
-### ✅ **Contributor Experience**
-- Getting started paths for different personas
-- Contribution priority matrix
-- Clear communication channels
-
-### ✅ **Professional Standards**
-- W3C branding and license
-- Links to related standards bodies
-- Formal deliverables structure
-
-### ✅ **Actionable**
-- Specific file structure
-- Concrete deliverables
-- Success metrics
-
-Would you like me to adjust any section, add more detail to specific areas, or create companion files (CONTRIBUTING.md, CODE_OF_CONDUCT.md, etc.)?
