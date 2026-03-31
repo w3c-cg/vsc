@@ -196,11 +196,11 @@ All deliverables are published under the [W3C Document License](https://www.w3.o
 ## 📧 Contact
 
 **Chairs:**
-- *[Name]* - *[Affiliation]* - *[Email]*
+- *Amir Hameed Mir* - *Sirraya labs* - *amsaalegal@gmail.com*
 - *[Name]* - *[Affiliation]* - *[Email]*
 
 **W3C Staff Contact:**
-- *[Name]* - *[Email]*
+- *Ian Jacobs* 
 
 ---
 
