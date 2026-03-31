@@ -170,10 +170,9 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 📅 Meetings & Communication
 
-- **Weekly Calls**: Wednesdays 10:00 EST / 15:00 UTC
-- **Slack Channel**: [#verifiable-supply-chain](https://w3c.slack.com/archives/verifiable-supply-chain)
+- **Weekly Calls**: Wilbe available soon
 - **Mailing List**: [public-vsc@w3.org](mailto:public-vsc@w3.org)
-- **Meeting Calendar**: [Subscribe](https://www.w3.org/community/vsc/calendar/)
+- **Meeting Calendar**: [Subscribe](https://www.w3.org/groups/cg/vsc/calendar/)
 
 ## 👥 Participants
 
