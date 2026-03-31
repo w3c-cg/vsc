@@ -170,7 +170,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 📅 Meetings & Communication
 
-- **Weekly Calls**: Wilbe available soon
+- **Weekly Calls**: Not yet decided
 - **Mailing List**: [public-vsc@w3.org](mailto:public-vsc@w3.org)
 - **Meeting Calendar**: [Subscribe](https://www.w3.org/groups/cg/vsc/calendar/)
 
