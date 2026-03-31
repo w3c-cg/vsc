@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UORA Core Specification 1.0</title>
+    <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove"></script>
+    <script class="remove">
+        var respecConfig = {
+            specStatus: "CG-DRAFT",
+            group: "cg/uora",
+            shortName: "uora-core",
+            copyrightStart: "2026",
+            edDraftURI: "https://w3c.github.io/uora-cg/spec/",
+            latestVersion: "https://w3c.github.io/uora-cg/spec/",
+            prevVersion: null,
+            editors: [
+                {
+                    name: "Amir Hameed Mir",
+                    company: "Sirraya Labs",
+                    companyURL: "https://sirraya.com",
+                    w3cid: null
+                }
+            ],
+            github: "https://github.com/w3c/uora-cg",
+            canonicalURI: "https://w3c.github.io/uora-cg/spec/",
+            license: "w3c-software-doc",
+            localBiblio: {
+                "DID-CORE": {
+                    title: "Decentralized Identifiers (DIDs) v1.0",
+                    href: "https://www.w3.org/TR/did-core/",
+                    authors: ["Drummond Reed", "Manu Sporny", "Markus Sabadello", "Oliver Terbu"],
+                    date: "July 2022"
+                },
+                "VC-DATA-MODEL": {
+                    title: "Verifiable Credentials Data Model v2.0",
+                    href: "https://www.w3.org/TR/vc-data-model-2.0/",
+                    authors: ["Manu Sporny", "Ted Thibodeau Jr.", "Ivan Herman"],
+                    date: "January 2025"
+                },
+                "EPCIS": {
+                    title: "GS1 EPCIS Standard 2.0",
+                    href: "https://www.gs1.org/standards/epcis",
+                    authors: ["GS1"],
+                    date: "September 2024"
+                },
+                "DID-KR": {
+                    title: "DID Key Recovery Specification",
+                    href: "https://w3c.github.io/did-key-recovery/",
+                    authors: ["Amir Hameed Mir", "Manu Sporny"],
+                    date: "March 2026"
+                }
+            }
+        };
+    </script>
+    <style>
+        pre {
+            background-color: #f5f5f5;
+            padding: 1em;
+            border-left: 4px solid #005a9c;
+            overflow-x: auto;
+        }
+        .example {
+            margin: 1em 0;
+            border-left: 4px solid #ff9800;
+            padding-left: 1em;
+        }
+        .note {
+            background-color: #f9f9f9;
+            border-left: 4px solid #ff9800;
+            padding: 1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <section id="abstract">
+        <h2>Abstract</h2>
+        <p>
+            This specification defines the Universal Object & Resource Attestation (UORA) protocol, a vendor-neutral,
+            decentralized framework for the identity, state verification, and lifecycle tracking of physical assets.
+            UORA bridges the gap between physical objects and digital identifiers by enabling every resource to function
+            as a first-class citizen of the internet. The protocol leverages W3C's Decentralized Identifiers (DIDs) and
+            Verifiable Credentials (VCs) to create a unified, interoperable system for asset provenance, custody tracking,
+            and lifecycle management across global supply chains.
+        </p>
+    </section>
+
+    <section id="sotd">
+        <h2>Status of This Document</h2>
+        <p>
+            This is the first draft specification of the UORA Community Group, prepared by the group chair to initiate
+            technical discussion and establish the foundational architecture. It is intended for review, feedback,
+            and collaborative refinement by community participants.
+        </p>
+        <p>
+            The UORA Community Group is a W3C Community Group. Participation in the group does not imply W3C Membership.
+            This document is not a W3C Standard and may be updated, replaced, or obsoleted by other documents at any time.
+        </p>
+        <p>
+            Contributions, comments, and suggestions are welcome via the <a href="https://github.com/w3c/uora-cg">GitHub repository</a>
+            or the group's mailing list.
+        </p>
+    </section>
+
+    <section id="introduction" class="informative">
+        <h2>1. Introduction</h2>
+        <p>
+            Physical assets—from pharmaceutical products to automotive parts, from luxury goods to critical minerals—
+            form the backbone of the global economy. Yet these assets remain largely invisible to the decentralized web.
+            Their identities are managed through centralized systems, their histories fragmented across siloed databases,
+            and their provenance difficult to verify.
+        </p>
+        <p>
+            The Universal Object & Resource Attestation (UORA) protocol addresses this gap by providing a standardized,
+            decentralized framework for assigning persistent identifiers to physical objects and tracking their lifecycle
+            through cryptographically verifiable attestations.
+        </p>
+
+        <section id="problem-statement">
+            <h3>1.1 Problem Statement</h3>
+            <p>Current systems for tracking physical assets suffer from several fundamental limitations:</p>
+            <ul>
+                <li><strong>Centralized Control:</strong> Asset identifiers are controlled by centralized registries that can be revoked or manipulated.</li>
+                <li><strong>Fragmented Provenance:</strong> Supply chain data is scattered across incompatible systems, making end-to-end traceability difficult.</li>
+                <li><strong>Verifiability Gaps:</strong> Claims about asset origin, custody, and condition lack cryptographic proof.</li>
+                <li><strong>Interoperability Barriers:</strong> No universal standard exists for asset identification and attestation across industries.</li>
+                <li><strong>Physical-Digital Gap:</strong> The link between physical objects and their digital representations is often weak or easily counterfeited.</li>
+            </ul>
+        </section>
+
+        <section id="solution-overview">
+            <h3>1.2 Solution Overview</h3>
+            <p>UORA addresses these challenges through four core components:</p>
+            <ol>
+                <li><strong>Universal Addressing:</strong> Each physical asset receives a globally unique, decentralized identifier (DID) that is self-sovereign and cryptographically verifiable.</li>
+                <li><strong>Event-Based Attestations:</strong> The asset's lifecycle is documented through Verifiable Credentials that attest to key events: origin, transfer, transformation, and disposition.</li>
+                <li><strong>Secure Physical Binding:</strong> Standardized methods for linking digital DIDs to physical anchors (NFC, QR, cryptographic hardware, IoT sensors) ensure tamper-evident possession verification.</li>
+                <li><strong>Interoperability Framework:</strong> Clear guidelines for integrating UORA with existing business systems and legacy standards enable practical adoption.</li>
+            </ol>
+        </section>
+
+        <section id="conformance">
+            <h3>1.3 Conformance</h3>
+            <p>
+                As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes
+                in this specification are non-normative. Everything else in this specification is normative.
+            </p>
+            <p>
+                The key words <em class="rfc2119">MUST</em>, <em class="rfc2119">MUST NOT</em>,
+                <em class="rfc2119">REQUIRED</em>, <em class="rfc2119">SHALL</em>, <em class="rfc2119">SHALL NOT</em>,
+                <em class="rfc2119">SHOULD</em>, <em class="rfc2119">SHOULD NOT</em>,
+                <em class="rfc2119">RECOMMENDED</em>, <em class="rfc2119">MAY</em>, and
+                <em class="rfc2119">OPTIONAL</em> in this document are to be interpreted as described in
+                <a href="https://datatracker.ietf.org/doc/html/rfc2119">RFC 2119</a>.
+            </p>
+        </section>
+    </section>
+
+    <section id="terminology">
+        <h2>2. Terminology</h2>
+        <dl>
+            <dt><dfn>Asset</dfn></dt>
+            <dd>A physical object that can be uniquely identified and tracked through its lifecycle.</dd>
+
+            <dt><dfn>Attestation</dfn></dt>
+            <dd>A verifiable claim about an asset's state, event, or characteristic, expressed as a Verifiable Credential.</dd>
+
+            <dt><dfn>Asset DID</dfn></dt>
+            <dd>A Decentralized Identifier assigned to a physical asset, enabling it to be uniquely and persistently identified.</dd>
+
+            <dt><dfn>Event-Based Attestation</dfn></dt>
+            <dd>A Verifiable Credential that documents a specific event in an asset's lifecycle (origin, transfer, transformation, disposition).</dd>
+
+            <dt><dfn>Physical Anchor</dfn></dt>
+            <dd>A physical element (NFC tag, QR code, cryptographic chip, IoT sensor) that binds an Asset DID to the physical object.</dd>
+
+            <dt><dfn>Holder</dfn></dt>
+            <dd>The entity currently in possession of an asset and its associated DID.</dd>
+
+            <dt><dfn>Issuer</dfn></dt>
+            <dd>An entity authorized to create attestations about an asset (e.g., manufacturer, logistics provider, auditor).</dd>
+
+            <dt><dfn>Verifier</dfn></dt>
+            <dd>An entity that validates attestations to verify asset provenance, custody, or condition.</dd>
+        </dl>
+    </section>
+
+    <section id="architecture">
+        <h2>3. UORA Architecture</h2>
+        <p>
+            The UORA protocol defines a layered architecture that separates concerns and enables modular implementation.
+        </p>
+
+        <figure id="architecture-diagram">
+            <pre>
++------------------------------------------------------------------+
+|                     UORA Application Layer                       |
+|  (Industry Profiles, Business Logic, User Interfaces)            |
++------------------------------------------------------------------+
+|                     UORA Attestation Layer                       |
+|  (Origin, Transfer, Transformation, Disposition VCs)             |
++------------------------------------------------------------------+
+|                     UORA Addressing Layer                        |
+|  (Asset DID Generation, Resolution, Management)                  |
++------------------------------------------------------------------+
+|                     W3C Foundation Layer                         |
+|  (DID Core, VC Data Model, DID Resolution)                       |
++------------------------------------------------------------------+
+|                     Physical Binding Layer                       |
+|  (NFC, QR, Cryptographic Hardware, IoT Sensors)                  |
++------------------------------------------------------------------+
+            </pre>
+            <figcaption>Figure 1: UORA Layered Architecture</figcaption>
+        </figure>
+
+        <section id="addressing-layer">
+            <h3>3.1 Addressing Layer</h3>
+            <p>
+                Every physical asset tracked under UORA <em class="rfc2119">MUST</em> be assigned a unique Decentralized
+                Identifier (DID). Asset DIDs <em class="rfc2119">SHOULD</em> be generated using the <code>did:key</code>
+                method or another method that ensures self-sovereign control.
+            </p>
+
+            <div class="example">
+                <p>Example: Asset DID Generation</p>
+                <pre>
+{
+  "did": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+  "publicKey": "z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+  "assetType": "batch",
+  "batchNumber": "LOT-2025-001",
+  "productCode": "NDC-12345-678-90"
+}
+                </pre>
+            </div>
+
+            <section id="asset-granularity">
+                <h4>3.1.1 Asset Granularity Levels</h4>
+                <p>Assets <em class="rfc2119">MAY</em> be identified at three levels of granularity:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>Description</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Batch</strong></td>
+                            <td>Group of identical items produced together</td>
+                            <td>Pharmaceuticals, food products, chemicals</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SKU</strong></td>
+                            <td>Stock Keeping Unit (product line)</td>
+                            <td>Consumer goods, electronics, apparel</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Serial</strong></td>
+                            <td>Individual, uniquely identifiable item</td>
+                            <td>Luxury goods, medical devices, automotive parts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="did-document">
+                <h4>3.1.2 Asset DID Document</h4>
+                <p>
+                    The DID Document for an asset <em class="rfc2119">SHOULD</em> include additional metadata about the asset,
+                    using the <code>alsoKnownAs</code> property to reference existing identifiers (e.g., GS1 GTIN, serial numbers).
+                </p>
+                <div class="example">
+                    <pre>
+{
+  "@context": "https://www.w3.org/ns/did/v1",
+  "id": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+  "alsoKnownAs": [
+    "https://example.com/batch/LOT-2025-001",
+    "urn:epc:id:sgtin:0614141.123456.001"
+  ],
+  "verificationMethod": [{
+    "id": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs#keys-1",
+    "type": "Ed25519VerificationKey2020",
+    "controller": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+    "publicKeyMultibase": "z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs"
+  }],
+  "authentication": [
+    "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs#keys-1"
+  ],
+  "service": [{
+    "id": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs#asset",
+    "type": "UORAAsset",
+    "serviceEndpoint": "https://example.com/assets/LOT-2025-001",
+    "assetMetadata": {
+      "productName": "Example Pharmaceutical",
+      "batchNumber": "LOT-2025-001",
+      "manufacturingDate": "2025-03-31T00:00:00Z",
+      "expirationDate": "2026-03-30T23:59:59Z"
+    }
+  }]
+}
+                    </pre>
+                </div>
+            </section>
+        </section>
+
+        <section id="attestation-layer">
+            <h3>3.2 Attestation Layer</h3>
+            <p>
+                Asset lifecycle events are documented using Verifiable Credentials. UORA defines four core event types,
+                which <em class="rfc2119">SHALL</em> form the foundation of asset provenance.
+            </p>
+
+            <section id="origin-attestation">
+                <h4>3.2.1 Origin Attestation</h4>
+                <p>
+                    An Origin Attestation documents the creation, manufacturing, or extraction of an asset.
+                    It <em class="rfc2119">SHOULD</em> include information about the producer, location, time, and
+                    relevant certifications.
+                </p>
+                <div class="example">
+                    <pre>
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/uora/v1"
+  ],
+  "type": ["VerifiableCredential", "UORAOrigin"],
+  "issuer": "did:web:manufacturer.example.com",
+  "credentialSubject": {
+    "id": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+    "origin": {
+      "type": "Manufacturing",
+      "producer": {
+        "id": "did:web:manufacturer.example.com",
+        "name": "Example Pharmaceuticals"
+      },
+      "location": {
+        "address": "123 Pharma Lane, City, State, ZIP",
+        "coordinates": "40.7128° N, 74.0060° W",
+        "country": "US"
+      },
+      "timestamp": "2025-03-31T10:00:00Z",
+      "batchNumber": "LOT-2025-001",
+      "manufacturingDate": "2025-03-31T00:00:00Z",
+      "expirationDate": "2026-03-30T23:59:59Z",
+      "certifications": [
+        {
+          "type": "GMP",
+          "issuer": "FDA",
+          "reference": "GMP-2025-12345"
+        }
+      ]
+    }
+  },
+  "proof": {
+    "type": "Ed25519Signature2020",
+    "created": "2025-03-31T10:00:00Z",
+    "verificationMethod": "did:web:manufacturer.example.com#keys-1",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "z58DzUq..."
+  }
+}
+                    </pre>
+                </div>
+            </section>
+
+            <section id="transfer-attestation">
+                <h4>3.2.2 Transfer Attestation</h4>
+                <p>
+                    A Transfer Attestation documents a change of custody or ownership. It <em class="rfc2119">SHALL</em>
+                    include the sender, recipient, location, and timestamp of the transfer.
+                </p>
+                <div class="example">
+                    <pre>
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/uora/v1"
+  ],
+  "type": ["VerifiableCredential", "UORATransfer"],
+  "issuer": "did:web:logistics.example.com",
+  "credentialSubject": {
+    "id": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+    "transfer": {
+      "from": {
+        "holder": "did:web:manufacturer.example.com",
+        "timestamp": "2025-03-31T10:00:00Z",
+        "location": {
+          "address": "123 Pharma Lane, City, State, ZIP"
+        }
+      },
+      "to": {
+        "holder": "did:web:distributor.example.com",
+        "timestamp": "2025-04-01T14:30:00Z",
+        "location": {
+          "address": "456 Distribution Ave, City, State, ZIP"
+        }
+      },
+      "carrier": {
+        "id": "did:web:carrier.example.com",
+        "name": "Global Logistics",
+        "trackingNumber": "1Z999AA10123456784"
+      }
+    }
+  },
+  "proof": { ... }
+}
+                    </pre>
+                </div>
+            </section>
+
+            <section id="transformation-attestation">
+                <h4>3.2.3 Transformation Attestation</h4>
+                <p>
+                    A Transformation Attestation documents processing, assembly, or modification of an asset.
+                    It <em class="rfc2119">SHALL</em> include input assets, output assets, and the transformation process.
+                </p>
+                <div class="example">
+                    <pre>
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/uora/v1"
+  ],
+  "type": ["VerifiableCredential", "UORATransformation"],
+  "issuer": "did:web:processor.example.com",
+  "credentialSubject": {
+    "inputs": [
+      "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+      "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbd"
+    ],
+    "outputs": [
+      "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbe"
+    ],
+    "transformation": {
+      "type": "Assembly",
+      "process": "A-2025-001",
+      "timestamp": "2025-04-15T09:00:00Z",
+      "location": {
+        "address": "789 Assembly Way, City, State, ZIP"
+      },
+      "qualityChecks": [
+        {
+          "check": "Visual Inspection",
+          "result": "Pass",
+          "inspector": "did:web:inspector.example.com#QA-001"
+        }
+      ]
+    }
+  },
+  "proof": { ... }
+}
+                    </pre>
+                </div>
+            </section>
+
+            <section id="disposition-attestation">
+                <h4>3.2.4 Disposition Attestation</h4>
+                <p>
+                    A Disposition Attestation documents the end-of-life of an asset, including recycling,
+                    decommissioning, or destruction. It <em class="rfc2119">SHALL</em> include the method,
+                    location, and responsible party.
+                </p>
+                <div class="example">
+                    <pre>
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/uora/v1"
+  ],
+  "type": ["VerifiableCredential", "UORADisposition"],
+  "issuer": "did:web:recycler.example.com",
+  "credentialSubject": {
+    "id": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+    "disposition": {
+      "type": "Recycling",
+      "timestamp": "2025-12-31T10:00:00Z",
+      "location": {
+        "address": "321 Recycling Center, City, State, ZIP"
+      },
+      "responsibleParty": {
+        "id": "did:web:recycler.example.com",
+        "name": "Green Recycling Inc."
+      },
+      "certificate": {
+        "number": "RC-2025-12345",
+        "standard": "ISO 14001"
+      }
+    }
+  },
+  "proof": { ... }
+}
+                    </pre>
+                </div>
+            </section>
+        </section>
+
+        <section id="physical-binding">
+            <h3>3.3 Secure Physical Binding</h3>
+            <p>
+                The link between an Asset DID and the physical object <em class="rfc2119">MUST</em> be established
+                through a tamper-evident physical anchor. UORA supports multiple binding methods.
+            </p>
+
+            <section id="binding-methods">
+                <h4>3.3.1 Binding Methods</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Description</th>
+                            <th>Security Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>NFC/RFID</strong></td>
+                            <td>Cryptographic tag containing the Asset DID or DID URL</td>
+                            <td>High (with secure element)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>QR Code</strong></td>
+                            <td>Printed QR encoding the Asset DID URL</td>
+                            <td>Medium (copiable but traceable)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cryptographic Hardware</strong></td>
+                            <td>Secure element with private key for authentication</td>
+                            <td>Very High</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IoT Sensors</strong></td>
+                            <td>Embedded sensors with DID-enabled communication</td>
+                            <td>High</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="binding-proof">
+                <h4>3.3.2 Proof of Binding</h4>
+                <p>
+                    To verify possession and authenticity, the holder <em class="rfc2119">SHALL</em> be able to
+                    demonstrate control over both the physical anchor and the associated DID.
+                </p>
+                <div class="example">
+                    <p>Example: Proof of Binding using NFC challenge-response</p>
+                    <pre>
+{
+  "challenge": "n once random challenge",
+  "response": "signed challenge using DID's private key",
+  "anchorType": "NFC",
+  "anchorId": "04:5F:3A:2B:1C:9D",
+  "timestamp": "2025-03-31T10:00:00Z"
+}
+                    </pre>
+                </div>
+            </section>
+        </section>
+    </section>
+
+    <section id="resolution">
+        <h2>4. Asset DID Resolution</h2>
+        <p>
+            Asset DIDs <em class="rfc2119">SHALL</em> be resolvable to DID Documents containing asset metadata
+            and service endpoints. Resolution <em class="rfc2119">MAY</em> be performed through:
+        </p>
+        <ul>
+            <li><strong>Universal Resolver</strong> - W3C Universal DID Resolver</li>
+            <li><strong>DID Method-Specific Resolvers</strong> - Native to the DID method used</li>
+            <li><strong>Cached Resolution</strong> - For performance in high-throughput environments</li>
+        </ul>
+
+        <div class="note">
+            <p>
+                Implementers <em class="rfc2119">SHOULD</em> cache resolved DID Documents to reduce latency,
+                but <em class="rfc2119">MUST</em> respect cache TTL values and honor revocation mechanisms.
+            </p>
+        </div>
+    </section>
+
+    <section id="interoperability">
+        <h2>5. Interoperability with Legacy Systems</h2>
+        <p>
+            UORA <em class="rfc2119">SHALL</em> provide clear mappings to existing supply chain standards
+            to enable practical adoption.
+        </p>
+
+        <section id="gs1-epcis">
+            <h3>5.1 GS1 EPCIS Mapping</h3>
+            <p>
+                GS1 EPCIS events <em class="rfc2119">MAY</em> be mapped to UORA attestations as follows:
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>EPCIS Event Type</th>
+                        <th>UORA Attestation</th>
+                        <th>Mapping Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ObjectEvent (commissioning)</td>
+                        <td>Origin Attestation</td>
+                        <td>First recorded event becomes origin</td>
+                    </tr>
+                    <tr>
+                        <td>ObjectEvent (shipping/receiving)</td>
+                        <td>Transfer Attestation</td>
+                        <td>BizStep determines sender/recipient</td>
+                    </tr>
+                    <tr>
+                        <td>AggregationEvent</td>
+                        <td>Transformation Attestation</td>
+                        <td>Child EPCS become inputs</td>
+                    </tr>
+                    <tr>
+                        <td>DispositionEvent</td>
+                        <td>Disposition Attestation</td>
+                        <td>End-of-life events</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="iso-alignment">
+            <h3>5.2 ISO Standards Alignment</h3>
+            <p>
+                UORA aligns with the following ISO standards:
+            </p>
+            <ul>
+                <li><strong>ISO 28000</strong> - Supply Chain Security: UORA attestations provide verifiable chain of custody</li>
+                <li><strong>ISO 9001</strong> - Quality Management: Attestations support quality traceability</li>
+                <li><strong>ISO 14001</strong> - Environmental Management: Disposition attestations document recycling</li>
+                <li><strong>ISO 27001</strong> - Information Security: Cryptographic verification ensures integrity</li>
+            </ul>
+        </section>
+    </section>
+
+    <section id="security">
+        <h2>6. Security Considerations</h2>
+        
+        <section id="key-management">
+            <h3>6.1 Key Management and Recovery</h3>
+            <p>
+                Asset DIDs <em class="rfc2119">MUST</em> be managed with appropriate key recovery mechanisms.
+                The [[DID-KR]] specification provides a framework for social recovery that <em class="rfc2119">SHOULD</em>
+                be implemented for high-value assets.
+            </p>
+        </section>
+
+        <section id="tamper-evidence">
+            <h3>6.2 Tamper Evidence</h3>
+            <p>
+                Physical anchors <em class="rfc2119">SHALL</em> be designed to provide tamper evidence.
+                <em class="rfc2119">RECOMMENDED</em> approaches include:
+            </p>
+            <ul>
+                <li>Cryptographic seals that break upon removal</li>
+                <li>Secure elements with anti-tamper circuitry</li>
+                <li>Blockchain-anchored audit trails</li>
+                <li>Time-stamped attestations of integrity checks</li>
+            </ul>
+        </section>
+
+        <section id="replay-attacks">
+            <h3>6.3 Replay Attack Prevention</h3>
+            <p>
+                All proof-of-binding mechanisms <em class="rfc2119">SHALL</em> incorporate nonces or timestamps
+                to prevent replay attacks. Verifiers <em class="rfc2119">MUST</em> validate freshness of proofs.
+            </p>
+        </section>
+    </section>
+
+    <section id="privacy">
+        <h2>7. Privacy Considerations</h2>
+        
+        <section id="selective-disclosure">
+            <h3>7.1 Selective Disclosure</h3>
+            <p>
+                UORA attestations <em class="rfc2119">SHOULD</em> leverage the selective disclosure capabilities
+                of Verifiable Credentials, enabling holders to reveal only necessary information to verifiers.
+            </p>
+        </section>
+
+        <section id="data-minimization">
+            <h3>7.2 Data Minimization</h3>
+            <p>
+                Asset DID Documents <em class="rfc2119">SHOULD NOT</em> contain sensitive information unless
+                absolutely necessary. Such information <em class="rfc2119">SHOULD</em> be stored off-ledger
+                and referenced via service endpoints with appropriate access controls.
+            </p>
+        </section>
+    </section>
+
+    <section id="api-reference" class="appendix">
+        <h2>A. API Reference</h2>
+        <p>
+            This section defines the normative API endpoints for UORA-compliant systems.
+        </p>
+
+        <section id="asset-registration">
+            <h3>A.1 Asset Registration</h3>
+            <pre>
+POST /uora/v1/assets
+Request:
+{
+  "assetType": "batch",
+  "batchNumber": "LOT-2025-001",
+  "productCode": "NDC-12345-678-90",
+  "didMethod": "key",
+  "metadata": {
+    "productName": "Example Pharmaceutical",
+    "manufacturingDate": "2025-03-31T00:00:00Z"
+  }
+}
+
+Response:
+{
+  "did": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+  "didDocument": { ... },
+  "created": "2025-03-31T10:00:00Z"
+}
+            </pre>
+        </section>
+
+        <section id="attestation-issuance">
+            <h3>A.2 Attestation Issuance</h3>
+            <pre>
+POST /uora/v1/attestations
+Request:
+{
+  "assetDid": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+  "type": "UORAOrigin",
+  "credential": { ... }
+}
+
+Response:
+{
+  "attestationId": "urn:uuid:123e4567-e89b-12d3-a456-426614174000",
+  "verifiableCredential": { ... },
+  "status": "issued",
+  "timestamp": "2025-03-31T10:00:00Z"
+}
+            </pre>
+        </section>
+
+        <section id="asset-verification">
+            <h3>A.3 Asset Verification</h3>
+            <pre>
+GET /uora/v1/assets/{did}/provenance
+Response:
+{
+  "assetDid": "did:key:z6Mk2c9LiqwxsnFYhPj7TNwe-Cj_R8yVRw-ISCH40lqfcbs",
+  "origin": { ... },
+  "transfers": [ ... ],
+  "transformations": [ ... ],
+  "disposition": { ... },
+  "currentHolder": "did:web:distributor.example.com",
+  "lastUpdated": "2025-04-01T14:30:00Z"
+}
+            </pre>
+        </section>
+    </section>
+
+    <section id="use-case-examples" class="appendix">
+        <h2>B. Use Case Examples</h2>
+        
+        <section id="pharmaceuticals">
+            <h3>B.1 Pharmaceutical Supply Chain</h3>
+            <p>
+                A pharmaceutical manufacturer uses UORA to track a batch of medication from production to patient.
+                Each batch receives a DID at commissioning. Origin attestation includes GMP certification.
+                Transfer attestations document each custody change from manufacturer to distributor to pharmacy.
+                The final dispensation to a patient is recorded as a final transfer, enabling recall capabilities.
+            </p>
+        </section>
+
+        <section id="critical-minerals">
+            <h3>B.2 Critical Minerals Traceability</h3>
+            <p>
+                A mining company uses UORA to document conflict-free tantalum from mine to smelter to electronics manufacturer.
+                Origin attestations include mine location, extraction date, and ethical sourcing certifications.
+                Transformation attestations document smelting and refining processes.
+                The final electronic component carries the full provenance chain, verifiable at point of sale.
+            </p>
+        </section>
+
+        <section id="luxury-goods">
+            <h3>B.3 Luxury Goods Authentication</h3>
+            <p>
+                A luxury watch manufacturer embeds an NFC chip with the watch's DID. The chip is cryptographically bound
+                to the physical watch. At each service, authorized watchmakers issue maintenance attestations.
+                Buyers can verify authenticity and service history by scanning the watch with their phone,
+                receiving verifiable proofs of origin and service.
+            </p>
+        </section>
+    </section>
+
+    <section id="acknowledgments">
+        <h2>Acknowledgments</h2>
+        <p>
+            The UORA Community Group thanks the W3C staff and the broader decentralized identity community for their
+            foundational work on DIDs and Verifiable Credentials, which made this specification possible.
+        </p>
+        <p>
+            Special thanks to the early supporters of this community group whose participation helped launch this initiative.
+        </p>
+    </section>
+
+    <section id="references" class="appendix">
+        <h2>C. References</h2>
+        
+        <section id="normative-references">
+            <h3>C.1 Normative References</h3>
+            <ul>
+                <li><a href="https://www.w3.org/TR/did-core/">[DID-CORE]</a></li>
+                <li><a href="https://www.w3.org/TR/vc-data-model-2.0/">[VC-DATA-MODEL]</a></li>
+                <li><a href="https://datatracker.ietf.org/doc/html/rfc2119">[RFC2119]</a></li>
+            </ul>
+        </section>
+        
+        <section id="informative-references">
+            <h3>C.2 Informative References</h3>
+            <ul>
+                <li><a href="https://www.gs1.org/standards/epcis">[EPCIS]</a></li>
+                <li><a href="https://w3c.github.io/did-key-recovery/">[DID-KR]</a></li>
+                <li><a href="https://www.iso.org/standard/44641.html">[ISO-28000]</a></li>
+            </ul>
+        </section>
+    </section>
+</body>
+</html>
