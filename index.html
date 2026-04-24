@@ -1,47 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Verifiable Supply Chain Requirements and Use Cases</title>
-    <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove"></script>
-    <script class="remove">
-      var respecConfig = {
-        specStatus: "CG-DRAFT",
-        shortName: "vsc-requirements",
-        editors: [
-          {
-            name: "Amir Hameed Mir",
-            
-          }
-        ],
-        group: "vsc",
-        wg: "Verifiable Supply Chain Community Group",
-        wgURI: "https://www.w3.org/community/vsc/",
-        wgPublicList: "public-vsc",
-        license: "w3c-cc-by",
-      };
-    </script>
-  </head>
-  <body>
-    <section id="abstract">
-      <h2>Abstract</h2>
-      <p>
-        This document defines the requirements, scope, and primary use cases for the Verifiable Supply Chain Community Group. It establishes the baseline for interoperability in supply chain credential exchange.
-      </p>
-    </section>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <section id="introduction">
-      <h2>Introduction</h2>
-      <p>
-        The objective of this group is to define a verifiable framework for supply chain transparency. This draft serves as the initial "Problem Statement" for our work.
-      </p>
-    </section>
+  <title>Verifiable Supply Chain (VSC) — Requirements and Use Cases</title>
 
-    <section id="use-cases">
-      <h2>Use Cases</h2>
-      <p>
-        [TO BE DEFINED: Describe the scenarios here, e.g., Raw Material Provenance, Custody Hand-off, etc.]
-      </p>
-    </section>
-  </body>
+  <meta name="description"
+    content="VSC defines a framework for interoperable, verifiable supply chain data using Verifiable Credentials, EPCIS, and decentralized identity." />
+
+  <!-- ReSpec -->
+  <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
+
+  <script class="remove">
+    var respecConfig = {
+      specStatus: "CG-DRAFT",
+      shortName: "vsc-requirements",
+
+      group: "cg/vsc",
+
+      wg: "Verifiable Supply Chain Community Group",
+      wgURI: "https://www.w3.org/community/vsc/",
+      wgPublicList: "public-vsc",
+
+      github: {
+        repoURL: "https://github.com/w3c-cg/vsc-requirements",
+        branch: "main"
+      },
+
+      edDraftURI: "https://w3c-cg.github.io/vsc-requirements/",
+
+      editors: [{
+        name: "Amir Hameed Mir",
+        company: "Verifiable Supply Chain Community Group",
+        companyURL: "https://www.w3.org/community/vsc/"
+      }],
+
+      authors: [{
+        name: "VSC Community Group Participants",
+        url: "https://www.w3.org/community/vsc/"
+      }],
+
+      license: "w3c-software-doc",
+      copyrightStart: 2026,
+
+      maxTocLevel: 3,
+      noRecTrack: true,
+
+      xref: ["did-core", "vc-data-model"],
+
+      localBiblio: {
+        "EPCIS": {
+          title: "EPC Information Services (EPCIS) Standard",
+          href: "https://ref.gs1.org/standards/epcis/",
+          publisher: "GS1"
+        },
+        "DID-CORE": {
+          title: "Decentralized Identifiers (DIDs) v1.0",
+          href: "https://www.w3.org/TR/did-core/",
+          publisher: "W3C"
+        },
+        "VC-DATA-MODEL": {
+          title: "Verifiable Credentials Data Model",
+          href: "https://www.w3.org/TR/vc-data-model/",
+          publisher: "W3C"
+        },
+        "RFC2119": {
+          title: "Key words for use in RFCs",
+          href: "https://www.rfc-editor.org/rfc/rfc2119"
+        },
+        "RFC8174": {
+          title: "Ambiguity of Uppercase vs Lowercase",
+          href: "https://www.rfc-editor.org/rfc/rfc8174"
+        }
+      }
+    };
+  </script>
+</head>
+
+<body>
+
+<section id="abstract">
+  <p>
+    The <strong>Verifiable Supply Chain (VSC)</strong> specification defines a
+    framework for interoperable and cryptographically verifiable exchange of
+    supply chain data. It combines event-based models such as [[EPCIS]] with
+    decentralized identity technologies including [[DID-CORE]] and
+    [[VC-DATA-MODEL]].
+  </p>
+</section>
+
+<section id="sotd">
+  <p>
+    This document is a <strong>Community Group Draft</strong> produced by the
+    Verifiable Supply Chain Community Group. It is not a W3C Standard and may
+    change at any time.
+  </p>
+</section>
+
+<section id="introduction">
+  <h2>Introduction</h2>
+
+  <p>
+    Global supply chains involve multiple independent actors exchanging data
+    across organizational boundaries. Current systems lack interoperability
+    and verifiability, resulting in data silos and limited transparency.
+  </p>
+
+  <p>
+    VSC introduces a model where [=Supply Chain Event=]s are represented as
+    [=Verifiable Credential=]s, enabling secure, interoperable, and auditable
+    data exchange aligned with [=EPCIS Event=] structures.
+  </p>
+</section>
+
+<section id="conformance">
+  <p>
+    The key words <em class="rfc2119">MUST</em>,
+    <em class="rfc2119">SHOULD</em>, and
+    <em class="rfc2119">MAY</em> are to be interpreted as described in
+    [[RFC2119]] [[RFC8174]].
+  </p>
+</section>
+
+<section id="scope">
+  <h2>Scope</h2>
+
+  <ul>
+    <li>Verifiable representation of [=Supply Chain Event=]s</li>
+    <li>Integration with [=EPCIS Event=] data models</li>
+    <li>Interoperability across organizations</li>
+    <li>Cryptographic verification of claims</li>
+  </ul>
+
+  <p>This specification does not define:</p>
+  <ul>
+    <li>Specific blockchain implementations</li>
+    <li>Business-specific workflows</li>
+  </ul>
+</section>
+
+<section id="terminology">
+  <h2>Terminology</h2>
+
+  <dl>
+    <dt><dfn>Supply Chain Event</dfn></dt>
+    <dd>An event such as shipping, receiving, or transformation.</dd>
+
+    <dt><dfn>Verifiable Credential</dfn></dt>
+    <dd>A cryptographically verifiable claim per [[VC-DATA-MODEL]].</dd>
+
+    <dt><dfn>EPCIS Event</dfn></dt>
+    <dd>A standardized supply chain event defined by [[EPCIS]].</dd>
+  </dl>
+</section>
+
+<section id="use-cases">
+  <h2>Use Cases</h2>
+
+  <section>
+    <h3>Raw Material Provenance</h3>
+    <p>
+      Enable verification of origin for raw materials using
+      [=Verifiable Credential=]s derived from [=Supply Chain Event=] data.
+    </p>
+  </section>
+
+  <section>
+    <h3>Custody Transfer</h3>
+    <p>
+      Record and verify transfer of goods between participants as
+      verifiable [=Supply Chain Event=]s.
+    </p>
+  </section>
+
+  <section>
+    <h3>Compliance Verification</h3>
+    <p>
+      Provide verifiable proof that goods meet regulatory requirements using
+      [=Verifiable Credential=]s aligned with [=EPCIS Event=] data.
+    </p>
+  </section>
+</section>
+
+<section id="requirements">
+  <h2>Requirements</h2>
+
+  <section>
+    <h3>Functional Requirements</h3>
+    <ul>
+      <li>Support issuance and verification of [=Verifiable Credential=]s</li>
+      <li>Enable interoperability across systems</li>
+      <li>Allow selective disclosure of information</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Non-Functional Requirements</h3>
+    <ul>
+      <li>Scalability across global supply chains</li>
+      <li>Privacy-preserving data exchange</li>
+      <li>Security against tampering and fraud</li>
+    </ul>
+  </section>
+</section>
+
+<section id="security">
+  <h2>Security Considerations</h2>
+
+  <p>
+    Implementations MUST ensure integrity and authenticity of
+    [=Supply Chain Event=] data using cryptographic verification mechanisms
+    defined in [[VC-DATA-MODEL]].
+  </p>
+
+  <p>
+    Privacy SHOULD be preserved using selective disclosure mechanisms
+    supported by [=Verifiable Credential=]s.
+  </p>
+</section>
+
+<section id="future-work">
+  <h2>Future Work</h2>
+
+  <ul>
+    <li>Mapping [=EPCIS Event=]s to [=Verifiable Credential=]s</li>
+    <li>Reference architecture</li>
+    <li>Interoperability test suites</li>
+  </ul>
+</section>
+
+</body>
 </html>
