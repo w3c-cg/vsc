@@ -1,0 +1,36 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/uora/contexts/core.jsonld"
+  ],
+  "id": "urn:uuid:transfer-182712",
+  "type": [
+    "VerifiableCredential",
+    "UORAAttestation",
+    "UORATransferAttestation"
+  ],
+  "issuer": {
+    "id": "did:web:shipper.example.com"
+  },
+  "validFrom": "2026-04-28T12:57:12.945+00:00",
+  "credentialSubject": {
+    "id": "did:web:maker.example.com:object:serial:SN-001",
+    "eventType": "Transfer",
+    "transferType": "custody",
+    "fromParty": "did:web:shipper.example.com",
+    "toParty": "did:web:receiver.example.com",
+    "antecedent": "urn:uuid:origin-id",
+    "authorizedBy": {
+      "certificationId": "urn:uuid:shipper-cert",
+      "trustFramework": "https://w3id.org/verifiable-supply-chain/trust-frameworks/logistics-v1",
+      "verifiedAt": "2026-04-28T12:57:12.945+00:00"
+    }
+  },
+  "evidence": [
+    {
+      "id": "urn:uuid:ev-002",
+      "type": ["Evidence"],
+      "name": "Dock Door Handover Scan"
+    }
+  ]
+}
