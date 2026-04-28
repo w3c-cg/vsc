@@ -2,7 +2,7 @@
 """
 UORA Reference Resolver v2.0
 =============================
-Enterprise-grade reference implementation of the UORA Core Protocol v1.0.
+Implementation of the UORA Core Protocol v1.0.
 
 Implements:
   - UORA-Query-API (§3.3)        : Standardized /history endpoint
