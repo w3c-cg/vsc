@@ -7,9 +7,8 @@
   <title>Verifiable Supply Chain (VSC) — Requirements and Use Cases</title>
 
   <meta name="description"
-    content="VSC defines a framework for interoperable, verifiable supply chain data using Verifiable Credentials, EPCIS, and decentralized identity." />
+    content="Requirements and use cases for representing supply chain events as Verifiable Credentials, establishing a foundation for mapping EPCIS event models to decentralized identity-based verification systems." />
 
-  <!-- ReSpec -->
   <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
 
   <script class="remove">
@@ -65,6 +64,16 @@
           href: "https://www.w3.org/TR/vc-data-model/",
           publisher: "W3C"
         },
+        "DSCSA": {
+          title: "Drug Supply Chain Security Act",
+          href: "https://www.fda.gov/drugs/drug-supply-chain-security-act-dscsa",
+          publisher: "U.S. Food and Drug Administration"
+        },
+        "EUDR": {
+          title: "EU Deforestation Regulation",
+          href: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R1115",
+          publisher: "European Union"
+        },
         "RFC2119": {
           title: "Key words for use in RFCs",
           href: "https://www.rfc-editor.org/rfc/rfc2119"
@@ -82,36 +91,108 @@
 
 <section id="abstract">
   <p>
-    The <strong>Verifiable Supply Chain (VSC)</strong> specification defines a
-    framework for interoperable and cryptographically verifiable exchange of
-    supply chain data. It combines event-based models such as [[EPCIS]] with
-    decentralized identity technologies including [[DID-CORE]] and
-    [[VC-DATA-MODEL]].
+    This document defines requirements and use cases for representing
+    <strong>supply chain events as Verifiable Credentials</strong>, enabling
+    interoperable and cryptographically verifiable data exchange across
+    organizational boundaries. It establishes a foundation for mapping
+    [[EPCIS]] event models to decentralized identity-based verification
+    systems using [[DID-CORE]] and [[VC-DATA-MODEL]].
+  </p>
+  <p>
+    This is a <strong>requirements and use cases document</strong>, not a
+    full technical specification. It defines the problem space, terminology,
+    and functional requirements that will guide the development of the VSC
+    Core Data Model and related specifications.
   </p>
 </section>
 
 <section id="sotd">
   <p>
     This document is a <strong>Community Group Draft</strong> produced by the
-    Verifiable Supply Chain Community Group. It is not a W3C Standard and may
-    change at any time.
+    <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain Community Group</a>.
+    It is not a W3C Standard and may change at any time.
+  </p>
+  <p>
+    Feedback and contributions are welcome via the
+    <a href="https://github.com/w3c-cg/vsc-requirements">GitHub repository</a>.
   </p>
 </section>
 
 <section id="introduction">
   <h2>Introduction</h2>
 
-  <p>
-    Global supply chains involve multiple independent actors exchanging data
-    across organizational boundaries. Current systems lack interoperability
-    and verifiability, resulting in data silos and limited transparency.
-  </p>
+  <section id="problem-statement">
+    <h3>Problem Statement</h3>
 
-  <p>
-    VSC introduces a model where [=Supply Chain Event=]s are represented as
-    [=Verifiable Credential=]s, enabling secure, interoperable, and auditable
-    data exchange aligned with [=EPCIS Event=] structures.
-  </p>
+    <p>
+      Global supply chains involve multiple independent actors exchanging
+      critical data across organizational and jurisdictional boundaries.
+      Current systems face three structural challenges:
+    </p>
+
+    <ul>
+      <li>
+        <strong>Fragmentation:</strong> Proprietary data formats and
+        point-to-point integrations prevent end-to-end visibility.
+      </li>
+      <li>
+        <strong>Lack of verifiability:</strong> Existing supply chain
+        standards such as [[EPCIS]] define data structures but do not provide
+        native cryptographic verification of who asserted what, when, and
+        under what authority.
+      </li>
+      <li>
+        <strong>Regulatory pressure:</strong> Regulations such as the U.S.
+        [[DSCSA]] and the EU [[EUDR]] increasingly require auditable,
+        tamper-evident records of product provenance and chain of custody.
+      </li>
+    </ul>
+  </section>
+
+  <section id="vsc-approach">
+    <h3>The VSC Approach</h3>
+
+    <p>
+      The <strong>Verifiable Supply Chain (VSC)</strong> framework addresses
+      these challenges by introducing a model where [=Supply Chain Event=]s
+      are represented as [=Verifiable Credential=]s. This approach:
+    </p>
+
+    <ul>
+      <li>
+        <strong>Preserves event semantics:</strong> Maintains alignment with
+        [[EPCIS]] event types (ObjectEvent, AggregationEvent,
+        TransformationEvent, etc.) while adding a cryptographic integrity
+        layer.
+      </li>
+      <li>
+        <strong>Binds identity to events:</strong> Each event is signed by the
+        asserting party using [[DID-CORE]], enabling verification of who
+        made each claim.
+      </li>
+      <li>
+        <strong>Enables selective disclosure:</strong> Using
+        [[VC-DATA-MODEL]] mechanisms, parties can reveal only the
+        information necessary for a given verification context.
+      </li>
+    </ul>
+  </section>
+
+  <section id="document-structure">
+    <h3>Document Structure</h3>
+
+    <p>
+      This document is structured as follows:
+    </p>
+
+    <ul>
+      <li><a href="#terminology"></a> defines key terms used throughout</li>
+      <li><a href="#architecture"></a> introduces the conceptual model</li>
+      <li><a href="#use-cases"></a> describes motivating scenarios</li>
+      <li><a href="#requirements"></a> specifies functional and non-functional requirements</li>
+      <li><a href="#security"></a> addresses supply-chain-specific risks</li>
+    </ul>
+  </section>
 </section>
 
 <section id="conformance">
@@ -126,18 +207,62 @@
 <section id="scope">
   <h2>Scope</h2>
 
-  <ul>
-    <li>Verifiable representation of [=Supply Chain Event=]s</li>
-    <li>Integration with [=EPCIS Event=] data models</li>
-    <li>Interoperability across organizations</li>
-    <li>Cryptographic verification of claims</li>
-  </ul>
+  <section id="in-scope">
+    <h3>In Scope</h3>
+    <ul>
+      <li>
+        <strong>Event-to-credential mapping:</strong> A normative mapping
+        from [[EPCIS]] event types to [=Verifiable Credential=] schemas.
+      </li>
+      <li>
+        <strong>Identity binding:</strong> Specification of how
+        [=Supply Chain Actor=]s are identified using [[DID-CORE]] and how
+        their authority to assert events is established.
+      </li>
+      <li>
+        <strong>Verification model:</strong> Rules for verifying the
+        integrity, authenticity, and provenance of [=Supply Chain Event=]s
+        represented as [=Verifiable Credential=]s.
+      </li>
+      <li>
+        <strong>Selective disclosure:</strong> Mechanisms for revealing
+        subsets of event data based on verifier context and authorization.
+      </li>
+      <li>
+        <strong>Interoperability considerations:</strong> Requirements for
+        ensuring that VSC-conformant implementations can exchange and verify
+        credentials across organizational boundaries.
+      </li>
+    </ul>
+  </section>
 
-  <p>This specification does not define:</p>
-  <ul>
-    <li>Specific blockchain implementations</li>
-    <li>Business-specific workflows</li>
-  </ul>
+  <section id="out-of-scope">
+    <h3>Out of Scope</h3>
+    <ul>
+      <li>
+        <strong>Consensus systems:</strong> This specification does not
+        define or require any specific distributed ledger or blockchain
+        technology.
+      </li>
+      <li>
+        <strong>Storage layers:</strong> Mechanisms for persisting
+        credentials or event data are implementation-specific.
+      </li>
+      <li>
+        <strong>Transport protocols:</strong> How credentials are exchanged
+        between parties (e.g., HTTP, messaging) is not defined here.
+      </li>
+      <li>
+        <strong>Business workflows:</strong> Specific business processes,
+        rules engines, or workflow automation are out of scope.
+      </li>
+      <li>
+        <strong>Identity governance:</strong> While VSC references
+        [[DID-CORE]], the governance frameworks for issuing and revoking
+        organizational identities are defined externally.
+      </li>
+    </ul>
+  </section>
 </section>
 
 <section id="terminology">
@@ -145,62 +270,307 @@
 
   <dl>
     <dt><dfn>Supply Chain Event</dfn></dt>
-    <dd>An event such as shipping, receiving, or transformation.</dd>
+    <dd>
+      A record of something that occurred at a specific point in time within
+      a supply chain, such as the creation, movement, transformation, or
+      observation of goods. In VSC, supply chain events are modeled on
+      [[EPCIS]] event types.
+    </dd>
+
+    <dt><dfn>Supply Chain Actor</dfn></dt>
+    <dd>
+      An organization or individual that participates in a supply chain and
+      is capable of asserting [=Supply Chain Event=]s. Each actor is
+      identified by a [[DID-CORE]] identifier.
+    </dd>
 
     <dt><dfn>Verifiable Credential</dfn></dt>
-    <dd>A cryptographically verifiable claim per [[VC-DATA-MODEL]].</dd>
+    <dd>
+      A cryptographically verifiable set of claims made by an issuer about a
+      subject, as defined in [[VC-DATA-MODEL]]. In VSC, each
+      [=Supply Chain Event=] is represented as a [=Verifiable Credential=]
+      where the asserting party is the issuer and the event data constitutes
+      the credential subject.
+    </dd>
 
     <dt><dfn>EPCIS Event</dfn></dt>
-    <dd>A standardized supply chain event defined by [[EPCIS]].</dd>
+    <dd>
+      A standardized supply chain event defined by [[EPCIS]], including
+      types such as ObjectEvent, AggregationEvent, TransformationEvent,
+      TransactionEvent, and AssociationEvent.
+    </dd>
+
+    <dt><dfn>Event-to-Credential Mapping</dfn></dt>
+    <dd>
+      The normative transformation of an [=EPCIS Event=] into a
+      [=Verifiable Credential=], preserving event semantics,
+      temporal context, and business context.
+    </dd>
+
+    <dt><dfn>Verifiable Presentation</dfn></dt>
+    <dd>
+      A collection of [=Verifiable Credential=]s assembled by a holder for
+      presentation to a verifier, as defined in [[VC-DATA-MODEL]].
+    </dd>
   </dl>
+</section>
+
+<section id="architecture">
+  <h2>Conceptual Architecture</h2>
+
+  <section id="roles">
+    <h3>Roles</h3>
+
+    <p>VSC defines three primary roles, aligned with [[VC-DATA-MODEL]]:</p>
+
+    <ul>
+      <li>
+        <strong>Issuer:</strong> A [=Supply Chain Actor=] that asserts a
+        [=Supply Chain Event=] and creates the corresponding
+        [=Verifiable Credential=]. The issuer signs the credential using
+        the private key associated with their [[DID-CORE]] identifier.
+      </li>
+      <li>
+        <strong>Holder:</strong> An entity that receives and may present
+        [=Verifiable Credential=]s. In supply chain contexts, a holder is
+        typically a downstream trading partner or a regulatory body.
+      </li>
+      <li>
+        <strong>Verifier:</strong> An entity that validates the integrity,
+        authenticity, and provenance of a [=Verifiable Credential=] or
+        [=Verifiable Presentation=]. This includes verifying the issuer's
+        DID, signature, and credential status.
+      </li>
+    </ul>
+  </section>
+
+  <section id="object-model">
+    <h3>Object Model</h3>
+
+    <p>The core objects in VSC are:</p>
+
+    <ul>
+      <li>
+        <strong>[=Supply Chain Event=]:</strong> The actual occurrence being
+        recorded (e.g., a shipment, a quality inspection).
+      </li>
+      <li>
+        <strong>[=Verifiable Credential=]:</strong> The cryptographically
+        signed representation of the event.
+      </li>
+      <li>
+        <strong>Event Schema:</strong> The definition of the credential
+        structure for each event type, derived from [[EPCIS]] semantics.
+      </li>
+      <li>
+        <strong>[=Verifiable Presentation=]:</strong> A collection of event
+        credentials assembled to demonstrate a chain of custody or
+        compliance history.
+      </li>
+    </ul>
+  </section>
+
+  <section id="information-flow">
+    <h3>Information Flow</h3>
+
+    <p>
+      The VSC model follows this general flow:
+    </p>
+
+    <ol>
+      <li>
+        A [=Supply Chain Event=] occurs (e.g., goods are shipped).
+      </li>
+      <li>
+        The asserting [=Supply Chain Actor=] (issuer) creates a
+        [=Verifiable Credential=] conforming to the VSC event schema for
+        that event type, preserving [[EPCIS]] semantics.
+      </li>
+      <li>
+        The credential is transmitted to the intended recipient (holder),
+        typically the next party in the supply chain.
+      </li>
+      <li>
+        The holder may present the credential—alone or as part of a
+        [=Verifiable Presentation=]—to a verifier (e.g., a regulator or
+        downstream customer).
+      </li>
+      <li>
+        The verifier checks the credential's signature, issuer DID, and
+        revocation status before accepting the event as valid.
+      </li>
+    </ol>
+  </section>
 </section>
 
 <section id="use-cases">
   <h2>Use Cases</h2>
 
-  <section>
+  <section id="use-case-provenance">
     <h3>Raw Material Provenance</h3>
-    <p>
-      Enable verification of origin for raw materials using
-      [=Verifiable Credential=]s derived from [=Supply Chain Event=] data.
-    </p>
+
+    <dl>
+      <dt>Scenario</dt>
+      <dd>
+        A manufacturer needs to verify the origin and harvesting conditions
+        of raw materials to comply with [[EUDR]] requirements.
+      </dd>
+      <dt>Actors</dt>
+      <dd>Raw material supplier (issuer), manufacturer (verifier).</dd>
+      <dt>Flow</dt>
+      <dd>
+        The supplier issues a [=Verifiable Credential=] for each batch,
+        containing origin coordinates, harvest date, and species
+        information. The manufacturer verifies the credential's integrity,
+        issuer identity, and temporal validity before accepting the
+        shipment.
+      </dd>
+      <dt>VSC Relevance</dt>
+      <dd>
+        Demonstrates binding of geo-spatial and temporal claims to a
+        verifiable event.
+      </dd>
+    </dl>
   </section>
 
-  <section>
-    <h3>Custody Transfer</h3>
-    <p>
-      Record and verify transfer of goods between participants as
-      verifiable [=Supply Chain Event=]s.
-    </p>
+  <section id="use-case-custody">
+    <h3>Custody Transfer with Chain of Evidence</h3>
+
+    <dl>
+      <dt>Scenario</dt>
+      <dd>
+        A pharmaceutical product changes hands from manufacturer to
+        wholesaler to dispenser. Each transfer must be verifiable to
+        satisfy [[DSCSA]] requirements.
+      </dd>
+      <dt>Actors</dt>
+      <dd>
+        Manufacturer, wholesaler, dispenser (all as issuers of their
+        respective events); regulators (verifiers).
+      </dd>
+      <dt>Flow</dt>
+      <dd>
+        Each party issues a custody transfer [=Verifiable Credential=]
+        referencing the product identifier and the previous event in the
+        chain. A regulator can request a [=Verifiable Presentation=]
+        containing the full chain of custody.
+      </dd>
+      <dt>VSC Relevance</dt>
+      <dd>
+        Demonstrates linked event credentials forming an auditable chain
+        of custody.
+      </dd>
+    </dl>
   </section>
 
-  <section>
-    <h3>Compliance Verification</h3>
-    <p>
-      Provide verifiable proof that goods meet regulatory requirements using
-      [=Verifiable Credential=]s aligned with [=EPCIS Event=] data.
-    </p>
+  <section id="use-case-compliance">
+    <h3>Automated Compliance Verification</h3>
+
+    <dl>
+      <dt>Scenario</dt>
+      <dd>
+        A border authority needs to verify that imported goods meet safety
+        and origin requirements before clearing customs.
+      </dd>
+      <dt>Actors</dt>
+      <dd>Exporter (issuer), customs authority (verifier).</dd>
+      <dt>Flow</dt>
+      <dd>
+        The exporter presents a [=Verifiable Presentation=] containing
+        inspection certificates, origin credentials, and transport event
+        credentials. The customs authority's automated system verifies
+        each credential against trusted issuer registries.
+      </dd>
+      <dt>VSC Relevance</dt>
+      <dd>
+        Demonstrates selective presentation of multiple event types for
+        regulatory verification.
+      </dd>
+    </dl>
   </section>
 </section>
 
 <section id="requirements">
   <h2>Requirements</h2>
 
-  <section>
+  <section id="functional-requirements">
     <h3>Functional Requirements</h3>
+
+    <p>
+      The following requirements are specific to VSC and go beyond
+      general [[VC-DATA-MODEL]] capabilities:
+    </p>
+
     <ul>
-      <li>Support issuance and verification of [=Verifiable Credential=]s</li>
-      <li>Enable interoperability across systems</li>
-      <li>Allow selective disclosure of information</li>
+      <li>
+        <strong>REQ-F1: Event-to-Credential Mapping</strong><br/>
+        VSC-conformant implementations <em class="rfc2119">MUST</em>
+        support a normative mapping from each [[EPCIS]] event type
+        (ObjectEvent, AggregationEvent, TransformationEvent,
+        TransactionEvent, AssociationEvent) to a corresponding
+        [=Verifiable Credential=] schema.
+      </li>
+      <li>
+        <strong>REQ-F2: Event Semantics Preservation</strong><br/>
+        The [=Event-to-Credential Mapping=] <em class="rfc2119">MUST</em>
+        preserve the temporal context (<code>eventTime</code>,
+        <code>recordTime</code>), business context
+        (<code>bizLocation</code>, <code>bizStep</code>), and
+        product identifiers (<code>EPC</code> or equivalent) of the
+        source [[EPCIS]] event.
+      </li>
+      <li>
+        <strong>REQ-F3: Issuer Identification</strong><br/>
+        Every [=Verifiable Credential=] representing a
+        [=Supply Chain Event=] <em class="rfc2119">MUST</em> include an
+        issuer identifier using [[DID-CORE]] syntax.
+      </li>
+      <li>
+        <strong>REQ-F4: Event Linking</strong><br/>
+        Implementations <em class="rfc2119">SHOULD</em> support linking
+        [=Supply Chain Event=]s through references in subsequent
+        credentials, enabling reconstruction of event chains for custody
+        transfer and provenance use cases.
+      </li>
+      <li>
+        <strong>REQ-F5: Selective Disclosure</strong><br/>
+        VSC-conformant presentations <em class="rfc2119">MUST</em>
+        support selective disclosure of event fields, allowing a holder
+        to reveal only the subset of event data required by a verifier.
+      </li>
+      <li>
+        <strong>REQ-F6: Batch-Level Traceability</strong><br/>
+        Implementations <em class="rfc2119">SHOULD</em> support
+        batch-level and lot-level identifiers in event credentials,
+        enabling traceability without requiring per-item granularity.
+      </li>
     </ul>
   </section>
 
-  <section>
+  <section id="non-functional-requirements">
     <h3>Non-Functional Requirements</h3>
+
     <ul>
-      <li>Scalability across global supply chains</li>
-      <li>Privacy-preserving data exchange</li>
-      <li>Security against tampering and fraud</li>
+      <li>
+        <strong>REQ-NF1: Scalability</strong><br/>
+        The credential model <em class="rfc2119">MUST</em> be usable at
+        the scale of global supply chains, supporting high-volume event
+        generation without unreasonable computational or storage overhead.
+      </li>
+      <li>
+        <strong>REQ-NF2: Privacy Preservation</strong><br/>
+        VSC <em class="rfc2119">SHOULD</em> support privacy-preserving
+        mechanisms including selective disclosure and zero-knowledge
+        proofs where applicable, ensuring that supply chain participants
+        are not required to reveal competitively sensitive data beyond
+        what is necessary for verification.
+      </li>
+      <li>
+        <strong>REQ-NF3: Interoperability</strong><br/>
+        VSC-conformant implementations from different vendors
+        <em class="rfc2119">MUST</em> be capable of exchanging and
+        verifying event credentials without prior bilateral agreements.
+      </li>
     </ul>
   </section>
 </section>
@@ -209,25 +579,106 @@
   <h2>Security Considerations</h2>
 
   <p>
-    Implementations MUST ensure integrity and authenticity of
-    [=Supply Chain Event=] data using cryptographic verification mechanisms
-    defined in [[VC-DATA-MODEL]].
+    In addition to the security considerations defined in
+    [[VC-DATA-MODEL]], VSC implementations must address the following
+    supply-chain-specific risks:
   </p>
 
+  <section id="fraudulent-injection">
+    <h3>Fraudulent Event Injection</h3>
+    <p>
+      A malicious actor may attempt to inject fabricated
+      [=Supply Chain Event=]s into a supply chain record. VSC
+      implementations <em class="rfc2119">MUST</em> verify issuer
+      identity and authority to assert events for the claimed
+      business context. Verification <em class="rfc2119">SHOULD</em>
+      include checking the issuer's DID against trusted registries
+      or trust frameworks.
+    </p>
+  </section>
+
+  <section id="credential-replay">
+    <h3>Credential Replay</h3>
+    <p>
+      A [=Verifiable Credential=] valid for one supply chain context may
+      be replayed in another. Implementations
+      <em class="rfc2119">SHOULD</em> include context-binding mechanisms
+      such as intended audience or transaction identifiers to prevent
+      cross-context replay attacks.
+    </p>
+  </section>
+
+  <section id="broken-custody">
+    <h3>Broken Custody Chains</h3>
+    <p>
+      A verifier may receive an incomplete chain of event credentials,
+      either due to omission or error. VSC-conformant verifiers
+      <em class="rfc2119">SHOULD</em> detect gaps in event chains and
+      signal non-verifiability where chain integrity is broken.
+    </p>
+  </section>
+</section>
+
+<section id="privacy">
+  <h2>Privacy Considerations</h2>
+
   <p>
-    Privacy SHOULD be preserved using selective disclosure mechanisms
-    supported by [=Verifiable Credential=]s.
+    Supply chain data often includes commercially sensitive information.
+    VSC implementations <em class="rfc2119">SHOULD</em>:
   </p>
+
+  <ul>
+    <li>
+      Support selective disclosure mechanisms as described in
+      [[VC-DATA-MODEL]].
+    </li>
+    <li>
+      Avoid requiring globally unique, long-lived correlatable
+      identifiers for all participants in all contexts.
+    </li>
+    <li>
+      Allow the use of pairwise [[DID-CORE]] identifiers where
+      appropriate.
+    </li>
+  </ul>
 </section>
 
 <section id="future-work">
   <h2>Future Work</h2>
 
+  <p>
+    This requirements document identifies the following areas for
+    future specification work:
+  </p>
+
   <ul>
-    <li>Mapping [=EPCIS Event=]s to [=Verifiable Credential=]s</li>
-    <li>Reference architecture</li>
-    <li>Interoperability test suites</li>
+    <li>
+      <strong>VSC Core Data Model:</strong> Normative definition of
+      credential schemas for each [[EPCIS]] event type.
+    </li>
+    <li>
+      <strong>EPCIS-VC Mapping Specification:</strong> Detailed,
+      testable mapping from [[EPCIS]] data structures to
+      [[VC-DATA-MODEL]] representations.
+    </li>
+    <li>
+      <strong>VSC Trust Framework:</strong> Guidance on establishing
+      verifiable trust relationships among [=Supply Chain Actor=]s.
+    </li>
+    <li>
+      <strong>Interoperability Test Suite:</strong> Conformance tests
+      for VSC implementations.
+    </li>
   </ul>
+</section>
+
+<section id="acknowledgments" class="appendix">
+  <h2>Acknowledgments</h2>
+  <p>
+    The editors thank the participants of the
+    <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain Community Group</a>
+    for their contributions and feedback.
+  </p>
 </section>
 
 </body>
