@@ -1,685 +1,575 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <title>Verifiable Supply Chain (VSC) — Requirements and Use Cases</title>
-
-  <meta name="description"
-    content="Requirements and use cases for representing supply chain events as Verifiable Credentials, establishing a foundation for mapping EPCIS event models to decentralized identity-based verification systems." />
-
-  <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
-
-  <script class="remove">
-    var respecConfig = {
-      specStatus: "CG-DRAFT",
-      shortName: "vsc-requirements",
-
-      group: "cg/vsc",
-
-      wg: "Verifiable Supply Chain Community Group",
-      wgURI: "https://www.w3.org/community/vsc/",
-      wgPublicList: "public-vsc",
-
-      github: {
-        repoURL: "https://github.com/w3c-cg/vsc-requirements",
-        branch: "main"
-      },
-
-      edDraftURI: "https://w3c-cg.github.io/vsc-requirements/",
-
-      editors: [{
-        name: "Amir Hameed Mir",
-        company: "Verifiable Supply Chain Community Group",
-        companyURL: "https://www.w3.org/community/vsc/"
-      }],
-
-      authors: [{
-        name: "VSC Community Group Participants",
-        url: "https://www.w3.org/community/vsc/"
-      }],
-
-      license: "w3c-software-doc",
-      copyrightStart: 2026,
-
-      maxTocLevel: 3,
-      noRecTrack: true,
-
-      xref: ["did-core", "vc-data-model"],
-
-      localBiblio: {
-        "EPCIS": {
-          title: "EPC Information Services (EPCIS) Standard",
-          href: "https://ref.gs1.org/standards/epcis/",
-          publisher: "GS1"
-        },
-        "DID-CORE": {
-          title: "Decentralized Identifiers (DIDs) v1.0",
-          href: "https://www.w3.org/TR/did-core/",
-          publisher: "W3C"
-        },
-        "VC-DATA-MODEL": {
-          title: "Verifiable Credentials Data Model",
-          href: "https://www.w3.org/TR/vc-data-model/",
-          publisher: "W3C"
-        },
-        "DSCSA": {
-          title: "Drug Supply Chain Security Act",
-          href: "https://www.fda.gov/drugs/drug-supply-chain-security-act-dscsa",
-          publisher: "U.S. Food and Drug Administration"
-        },
-        "EUDR": {
-          title: "EU Deforestation Regulation",
-          href: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R1115",
-          publisher: "European Union"
-        },
-        "RFC2119": {
-          title: "Key words for use in RFCs",
-          href: "https://www.rfc-editor.org/rfc/rfc2119"
-        },
-        "RFC8174": {
-          title: "Ambiguity of Uppercase vs Lowercase",
-          href: "https://www.rfc-editor.org/rfc/rfc8174"
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifiable Supply Chain CG • W3C</title>
+    <meta name="description" content="Accelerating adoption of decentralized, verifiable data standards in global supply chains">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --w3c-blue: #005A9C;
+            --w3c-dark: #003B6A;
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-600: #475569;
+            --gray-800: #1E293B;
+            --gold: #C4953A;
         }
-      }
-    };
-  </script>
-</head>
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--w3c-blue);
+        }
+
+        .w3c-badge {
+            background: var(--w3c-blue);
+            color: white;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--w3c-blue); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--w3c-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--w3c-dark);
+            transform: translateY(-1px);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #F0F7FF 0%, #E8F0FE 50%, #F5F3FF 100%);
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(0,90,156,0.03) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            display: inline-block;
+            background: var(--white);
+            color: var(--w3c-blue);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: var(--gray-800);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--w3c-blue), #1a73e8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== MISSION CARDS ===== */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .mission-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s;
+        }
+
+        .mission-card:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .mission-icon {
+            width: 48px;
+            height: 48px;
+            background: #F0F7FF;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            color: var(--w3c-blue);
+        }
+
+        .mission-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mission-card p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        /* ===== SPEC SHOWCASE ===== */
+        .specs-section {
+            background: var(--gray-50);
+            padding: 5rem 2rem;
+        }
+
+        .specs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .spec-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .spec-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .spec-card:hover {
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+            border-color: var(--w3c-blue);
+        }
+
+        .spec-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #FEF3C7;
+            color: #92400E;
+            margin-bottom: 1rem;
+        }
+
+        .spec-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-card p {
+            color: var(--gray-600);
+            font-size: 0.88rem;
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            background: var(--w3c-blue);
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--w3c-blue);
+        }
+
+        .btn-light:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* ===== ACTIVITY ===== */
+        .activity-section {
+            background: var(--white);
+        }
+
+        .activity-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-100);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .activity-item:hover {
+            background: var(--gray-50);
+        }
+
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            background: #10B981;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .activity-item span {
+            font-size: 0.9rem;
+        }
+
+        .activity-item a {
+            color: var(--w3c-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--gray-800);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #93C5FD;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            section { padding: 3rem 1rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
 <body>
 
-<section id="abstract">
-  <p>
-    This document defines requirements and use cases for representing
-    <strong>supply chain events as Verifiable Credentials</strong>, enabling
-    interoperable and cryptographically verifiable data exchange across
-    organizational boundaries. It establishes a foundation for mapping
-    [[EPCIS]] event models to decentralized identity-based verification
-    systems using [[DID-CORE]] and [[VC-DATA-MODEL]].
-  </p>
-  <p>
-    This is a <strong>requirements and use cases document</strong>, not a
-    full technical specification. It defines the problem space, terminology,
-    and functional requirements that will guide the development of the VSC
-    Core Data Model and related specifications.
-  </p>
-</section>
+    <!-- ===== NAVIGATION ===== -->
+    <nav>
+        <div class="nav-brand">
+            <span class="w3c-badge">W3C</span>
+            VSC Community Group
+        </div>
+        <div class="nav-links">
+            <a href="#mission">Mission</a>
+            <a href="#specs">Specifications</a>
+            <a href="#activity">Activity</a>
+            <a href="#join" class="btn btn-primary">Join Group</a>
+        </div>
+    </nav>
 
-<section id="sotd">
-  <p>
-    This document is a <strong>Community Group Draft</strong> produced by the
-    <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain Community Group</a>.
-    It is not a W3C Standard and may change at any time.
-  </p>
-  <p>
-    Feedback and contributions are welcome via the
-    <a href="https://github.com/w3c-cg/vsc-requirements">GitHub repository</a>.
-  </p>
-</section>
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-eyebrow">W3C Community Group</div>
+            <h1>Building <span>Verifiable Trust</span> in Global Supply Chains</h1>
+            <p>We develop industry-specific profiles, interoperability frameworks, and certification guidelines for decentralized, verifiable data standards.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="https://www.w3.org/community/vsc/join" class="btn btn-primary" style="font-size: 1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-user-plus"></i> Join the Community
+                </a>
+                <a href="#specs" class="btn" style="background: white; border: 2px solid var(--gray-200); font-size: 1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-book"></i> View Specifications
+                </a>
+            </div>
+        </div>
+    </section>
 
-<section id="introduction">
-  <h2>Introduction</h2>
+    <!-- ===== MISSION ===== -->
+    <section id="mission">
+        <div class="section-header">
+            <h2>Our Focus Areas</h2>
+            <p>Practical implementation of Verifiable Credentials in real-world supply chains</p>
+        </div>
+        <div class="mission-grid">
+            <div class="mission-card">
+                <div class="mission-icon"><i class="fas fa-industry"></i></div>
+                <h3>Industry-Specific Profiles</h3>
+                <p>VC/UORA profiles tailored to pharmaceuticals, automotive, food & beverage, critical minerals, and luxury goods.</p>
+            </div>
+            <div class="mission-card">
+                <div class="mission-icon"><i class="fas fa-plug"></i></div>
+                <h3>Interoperability & Compliance</h3>
+                <p>Test suites and implementation guides for seamless integration with GS1 EPCIS, ISO standards, DSCSA, and CBAM.</p>
+            </div>
+            <div class="mission-card">
+                <div class="mission-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Trust Frameworks</h3>
+                <p>Governance models and conformance criteria for organizations issuing verifiable supply chain claims.</p>
+            </div>
+        </div>
+    </section>
 
-  <section id="problem-statement">
-    <h3>Problem Statement</h3>
+    <!-- ===== SPECIFICATIONS ===== -->
+    <div class="specs-section" id="specs">
+        <div class="specs-container">
+            <div class="section-header">
+                <h2>Specifications & Deliverables</h2>
+                <p>Reusable, public VC/UORA profiles for supply chain verticals</p>
+            </div>
+            <div class="spec-cards" id="specCards">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
 
-    <p>
-      Global supply chains involve multiple independent actors exchanging
-      critical data across organizational and jurisdictional boundaries.
-      Current systems face three structural challenges:
-    </p>
+    <!-- ===== COMMUNITY ACTIVITY ===== -->
+    <section id="activity" class="activity-section">
+        <div class="section-header">
+            <h2>Community Activity</h2>
+            <p>Recent discussions from our mailing list</p>
+        </div>
+        <div class="activity-list" id="activityList">
+            <div style="text-align: center; padding: 2rem; color: var(--gray-600);">
+                <i class="fas fa-spinner fa-pulse"></i> Loading recent discussions...
+            </div>
+        </div>
+    </section>
 
-    <ul>
-      <li>
-        <strong>Fragmentation:</strong> Proprietary data formats and
-        point-to-point integrations prevent end-to-end visibility.
-      </li>
-      <li>
-        <strong>Lack of verifiability:</strong> Existing supply chain
-        standards such as [[EPCIS]] define data structures but do not provide
-        native cryptographic verification of who asserted what, when, and
-        under what authority.
-      </li>
-      <li>
-        <strong>Regulatory pressure:</strong> Regulations such as the U.S.
-        [[DSCSA]] and the EU [[EUDR]] increasingly require auditable,
-        tamper-evident records of product provenance and chain of custody.
-      </li>
-    </ul>
-  </section>
+    <!-- ===== CTA ===== -->
+    <section class="cta-section" id="join">
+        <h2>Ready to shape the future of supply chain trust?</h2>
+        <p>Join industry leaders building verifiable data standards</p>
+        <a href="https://www.w3.org/community/vsc/join" class="btn btn-light" style="font-size: 1rem; padding: 1rem 2.5rem;">
+            <i class="fas fa-arrow-right"></i> Join Verifiable Supply Chain CG
+        </a>
+    </section>
 
-  <section id="vsc-approach">
-    <h3>The VSC Approach</h3>
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>© 2026 W3C Verifiable Supply Chain Community Group</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://www.w3.org/community/vsc/">W3C Group Page</a> • 
+            <a href="mailto:public-vsc@w3.org">public-vsc@w3.org</a> • 
+            <a href="https://github.com/w3c-cg/vsc">GitHub</a>
+        </p>
+    </footer>
 
-    <p>
-      The <strong>Verifiable Supply Chain (VSC)</strong> framework addresses
-      these challenges by introducing a model where [=Supply Chain Event=]s
-      are represented as [=Verifiable Credential=]s. This approach:
-    </p>
+    <script>
+        // ============================================================
+        // CONFIGURATION
+        // ============================================================
+        const CONFIG = {
+            groupId: 'cg/vsc',
+            apiBase: 'https://api.w3.org',
+            mailingListUrl: 'https://lists.w3.org/Archives/Public/public-vsc/',
+            
+            // Your specifications
+            specifications: [
+                {
+                    id: 'pharma-profile',
+                    name: 'Pharma Supply Chain Profile',
+                    url: 'https://w3c-cg.github.io/vsc/specs/pharma-profile.html',
+                    description: 'VC/UORA profile for pharmaceutical supply chains',
+                    status: 'Draft'
+                },
+               
+            ]
+        };
 
-    <ul>
-      <li>
-        <strong>Preserves event semantics:</strong> Maintains alignment with
-        [[EPCIS]] event types (ObjectEvent, AggregationEvent,
-        TransformationEvent, etc.) while adding a cryptographic integrity
-        layer.
-      </li>
-      <li>
-        <strong>Binds identity to events:</strong> Each event is signed by the
-        asserting party using [[DID-CORE]], enabling verification of who
-        made each claim.
-      </li>
-      <li>
-        <strong>Enables selective disclosure:</strong> Using
-        [[VC-DATA-MODEL]] mechanisms, parties can reveal only the
-        information necessary for a given verification context.
-      </li>
-    </ul>
-  </section>
+        // ============================================================
+        // RENDER SPECIFICATIONS
+        // ============================================================
+        function renderSpecs() {
+            const container = document.getElementById('specCards');
+            
+            container.innerHTML = CONFIG.specifications.map(spec => `
+                <div class="spec-card" onclick="window.open('${spec.url}', '_blank')">
+                    <div class="spec-status">${spec.status}</div>
+                    <h3>${spec.name}</h3>
+                    <p>${spec.description}</p>
+                </div>
+            `).join('');
+        }
 
-  <section id="document-structure">
-    <h3>Document Structure</h3>
+        // ============================================================
+        // FETCH MAILING LIST ACTIVITY
+        // ============================================================
+        async function fetchMailingList() {
+            const container = document.getElementById('activityList');
+            
+            try {
+                const response = await fetch(CONFIG.mailingListUrl);
+                if (!response.ok) throw new Error('Failed to fetch');
+                
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                const links = Array.from(doc.querySelectorAll('a[href$=".html"]'))
+                    .filter(link => link.textContent.trim() && !link.textContent.includes('Parent Directory'))
+                    .slice(0, 5);
+                
+                if (links.length === 0) {
+                    container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--gray-600);">No recent discussions</div>';
+                    return;
+                }
+                
+                container.innerHTML = links.map(link => {
+                    const href = link.getAttribute('href');
+                    const url = href.startsWith('http') ? href : `${CONFIG.mailingListUrl}${href}`;
+                    return `
+                        <div class="activity-item" onclick="window.open('${url}', '_blank')">
+                            <div class="activity-dot"></div>
+                            <span>${link.textContent.trim()}</span>
+                            <a href="${url}">View →</a>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div style="text-align:center;padding:2rem;">
+                        <p>Mailing list archive: <a href="${CONFIG.mailingListUrl}">${CONFIG.mailingListUrl}</a></p>
+                    </div>`;
+            }
+        }
 
-    <p>
-      This document is structured as follows:
-    </p>
+        // ============================================================
+        // INITIALIZE
+        // ============================================================
+        function init() {
+            renderSpecs();
+            fetchMailingList();
+        }
 
-    <ul>
-      <li><a href="#terminology"></a> defines key terms used throughout</li>
-      <li><a href="#architecture"></a> introduces the conceptual model</li>
-      <li><a href="#use-cases"></a> describes motivating scenarios</li>
-      <li><a href="#requirements"></a> specifies functional and non-functional requirements</li>
-      <li><a href="#security"></a> addresses supply-chain-specific risks</li>
-    </ul>
-  </section>
-</section>
-
-<section id="conformance">
-  <p>
-    The key words <em class="rfc2119">MUST</em>,
-    <em class="rfc2119">SHOULD</em>, and
-    <em class="rfc2119">MAY</em> are to be interpreted as described in
-    [[RFC2119]] [[RFC8174]].
-  </p>
-</section>
-
-<section id="scope">
-  <h2>Scope</h2>
-
-  <section id="in-scope">
-    <h3>In Scope</h3>
-    <ul>
-      <li>
-        <strong>Event-to-credential mapping:</strong> A normative mapping
-        from [[EPCIS]] event types to [=Verifiable Credential=] schemas.
-      </li>
-      <li>
-        <strong>Identity binding:</strong> Specification of how
-        [=Supply Chain Actor=]s are identified using [[DID-CORE]] and how
-        their authority to assert events is established.
-      </li>
-      <li>
-        <strong>Verification model:</strong> Rules for verifying the
-        integrity, authenticity, and provenance of [=Supply Chain Event=]s
-        represented as [=Verifiable Credential=]s.
-      </li>
-      <li>
-        <strong>Selective disclosure:</strong> Mechanisms for revealing
-        subsets of event data based on verifier context and authorization.
-      </li>
-      <li>
-        <strong>Interoperability considerations:</strong> Requirements for
-        ensuring that VSC-conformant implementations can exchange and verify
-        credentials across organizational boundaries.
-      </li>
-    </ul>
-  </section>
-
-  <section id="out-of-scope">
-    <h3>Out of Scope</h3>
-    <ul>
-      <li>
-        <strong>Consensus systems:</strong> This specification does not
-        define or require any specific distributed ledger or blockchain
-        technology.
-      </li>
-      <li>
-        <strong>Storage layers:</strong> Mechanisms for persisting
-        credentials or event data are implementation-specific.
-      </li>
-      <li>
-        <strong>Transport protocols:</strong> How credentials are exchanged
-        between parties (e.g., HTTP, messaging) is not defined here.
-      </li>
-      <li>
-        <strong>Business workflows:</strong> Specific business processes,
-        rules engines, or workflow automation are out of scope.
-      </li>
-      <li>
-        <strong>Identity governance:</strong> While VSC references
-        [[DID-CORE]], the governance frameworks for issuing and revoking
-        organizational identities are defined externally.
-      </li>
-    </ul>
-  </section>
-</section>
-
-<section id="terminology">
-  <h2>Terminology</h2>
-
-  <dl>
-    <dt><dfn>Supply Chain Event</dfn></dt>
-    <dd>
-      A record of something that occurred at a specific point in time within
-      a supply chain, such as the creation, movement, transformation, or
-      observation of goods. In VSC, supply chain events are modeled on
-      [[EPCIS]] event types.
-    </dd>
-
-    <dt><dfn>Supply Chain Actor</dfn></dt>
-    <dd>
-      An organization or individual that participates in a supply chain and
-      is capable of asserting [=Supply Chain Event=]s. Each actor is
-      identified by a [[DID-CORE]] identifier.
-    </dd>
-
-    <dt><dfn>Verifiable Credential</dfn></dt>
-    <dd>
-      A cryptographically verifiable set of claims made by an issuer about a
-      subject, as defined in [[VC-DATA-MODEL]]. In VSC, each
-      [=Supply Chain Event=] is represented as a [=Verifiable Credential=]
-      where the asserting party is the issuer and the event data constitutes
-      the credential subject.
-    </dd>
-
-    <dt><dfn>EPCIS Event</dfn></dt>
-    <dd>
-      A standardized supply chain event defined by [[EPCIS]], including
-      types such as ObjectEvent, AggregationEvent, TransformationEvent,
-      TransactionEvent, and AssociationEvent.
-    </dd>
-
-    <dt><dfn>Event-to-Credential Mapping</dfn></dt>
-    <dd>
-      The normative transformation of an [=EPCIS Event=] into a
-      [=Verifiable Credential=], preserving event semantics,
-      temporal context, and business context.
-    </dd>
-
-    <dt><dfn>Verifiable Presentation</dfn></dt>
-    <dd>
-      A collection of [=Verifiable Credential=]s assembled by a holder for
-      presentation to a verifier, as defined in [[VC-DATA-MODEL]].
-    </dd>
-  </dl>
-</section>
-
-<section id="architecture">
-  <h2>Conceptual Architecture</h2>
-
-  <section id="roles">
-    <h3>Roles</h3>
-
-    <p>VSC defines three primary roles, aligned with [[VC-DATA-MODEL]]:</p>
-
-    <ul>
-      <li>
-        <strong>Issuer:</strong> A [=Supply Chain Actor=] that asserts a
-        [=Supply Chain Event=] and creates the corresponding
-        [=Verifiable Credential=]. The issuer signs the credential using
-        the private key associated with their [[DID-CORE]] identifier.
-      </li>
-      <li>
-        <strong>Holder:</strong> An entity that receives and may present
-        [=Verifiable Credential=]s. In supply chain contexts, a holder is
-        typically a downstream trading partner or a regulatory body.
-      </li>
-      <li>
-        <strong>Verifier:</strong> An entity that validates the integrity,
-        authenticity, and provenance of a [=Verifiable Credential=] or
-        [=Verifiable Presentation=]. This includes verifying the issuer's
-        DID, signature, and credential status.
-      </li>
-    </ul>
-  </section>
-
-  <section id="object-model">
-    <h3>Object Model</h3>
-
-    <p>The core objects in VSC are:</p>
-
-    <ul>
-      <li>
-        <strong>[=Supply Chain Event=]:</strong> The actual occurrence being
-        recorded (e.g., a shipment, a quality inspection).
-      </li>
-      <li>
-        <strong>[=Verifiable Credential=]:</strong> The cryptographically
-        signed representation of the event.
-      </li>
-      <li>
-        <strong>Event Schema:</strong> The definition of the credential
-        structure for each event type, derived from [[EPCIS]] semantics.
-      </li>
-      <li>
-        <strong>[=Verifiable Presentation=]:</strong> A collection of event
-        credentials assembled to demonstrate a chain of custody or
-        compliance history.
-      </li>
-    </ul>
-  </section>
-
-  <section id="information-flow">
-    <h3>Information Flow</h3>
-
-    <p>
-      The VSC model follows this general flow:
-    </p>
-
-    <ol>
-      <li>
-        A [=Supply Chain Event=] occurs (e.g., goods are shipped).
-      </li>
-      <li>
-        The asserting [=Supply Chain Actor=] (issuer) creates a
-        [=Verifiable Credential=] conforming to the VSC event schema for
-        that event type, preserving [[EPCIS]] semantics.
-      </li>
-      <li>
-        The credential is transmitted to the intended recipient (holder),
-        typically the next party in the supply chain.
-      </li>
-      <li>
-        The holder may present the credential—alone or as part of a
-        [=Verifiable Presentation=]—to a verifier (e.g., a regulator or
-        downstream customer).
-      </li>
-      <li>
-        The verifier checks the credential's signature, issuer DID, and
-        revocation status before accepting the event as valid.
-      </li>
-    </ol>
-  </section>
-</section>
-
-<section id="use-cases">
-  <h2>Use Cases</h2>
-
-  <section id="use-case-provenance">
-    <h3>Raw Material Provenance</h3>
-
-    <dl>
-      <dt>Scenario</dt>
-      <dd>
-        A manufacturer needs to verify the origin and harvesting conditions
-        of raw materials to comply with [[EUDR]] requirements.
-      </dd>
-      <dt>Actors</dt>
-      <dd>Raw material supplier (issuer), manufacturer (verifier).</dd>
-      <dt>Flow</dt>
-      <dd>
-        The supplier issues a [=Verifiable Credential=] for each batch,
-        containing origin coordinates, harvest date, and species
-        information. The manufacturer verifies the credential's integrity,
-        issuer identity, and temporal validity before accepting the
-        shipment.
-      </dd>
-      <dt>VSC Relevance</dt>
-      <dd>
-        Demonstrates binding of geo-spatial and temporal claims to a
-        verifiable event.
-      </dd>
-    </dl>
-  </section>
-
-  <section id="use-case-custody">
-    <h3>Custody Transfer with Chain of Evidence</h3>
-
-    <dl>
-      <dt>Scenario</dt>
-      <dd>
-        A pharmaceutical product changes hands from manufacturer to
-        wholesaler to dispenser. Each transfer must be verifiable to
-        satisfy [[DSCSA]] requirements.
-      </dd>
-      <dt>Actors</dt>
-      <dd>
-        Manufacturer, wholesaler, dispenser (all as issuers of their
-        respective events); regulators (verifiers).
-      </dd>
-      <dt>Flow</dt>
-      <dd>
-        Each party issues a custody transfer [=Verifiable Credential=]
-        referencing the product identifier and the previous event in the
-        chain. A regulator can request a [=Verifiable Presentation=]
-        containing the full chain of custody.
-      </dd>
-      <dt>VSC Relevance</dt>
-      <dd>
-        Demonstrates linked event credentials forming an auditable chain
-        of custody.
-      </dd>
-    </dl>
-  </section>
-
-  <section id="use-case-compliance">
-    <h3>Automated Compliance Verification</h3>
-
-    <dl>
-      <dt>Scenario</dt>
-      <dd>
-        A border authority needs to verify that imported goods meet safety
-        and origin requirements before clearing customs.
-      </dd>
-      <dt>Actors</dt>
-      <dd>Exporter (issuer), customs authority (verifier).</dd>
-      <dt>Flow</dt>
-      <dd>
-        The exporter presents a [=Verifiable Presentation=] containing
-        inspection certificates, origin credentials, and transport event
-        credentials. The customs authority's automated system verifies
-        each credential against trusted issuer registries.
-      </dd>
-      <dt>VSC Relevance</dt>
-      <dd>
-        Demonstrates selective presentation of multiple event types for
-        regulatory verification.
-      </dd>
-    </dl>
-  </section>
-</section>
-
-<section id="requirements">
-  <h2>Requirements</h2>
-
-  <section id="functional-requirements">
-    <h3>Functional Requirements</h3>
-
-    <p>
-      The following requirements are specific to VSC and go beyond
-      general [[VC-DATA-MODEL]] capabilities:
-    </p>
-
-    <ul>
-      <li>
-        <strong>REQ-F1: Event-to-Credential Mapping</strong><br/>
-        VSC-conformant implementations <em class="rfc2119">MUST</em>
-        support a normative mapping from each [[EPCIS]] event type
-        (ObjectEvent, AggregationEvent, TransformationEvent,
-        TransactionEvent, AssociationEvent) to a corresponding
-        [=Verifiable Credential=] schema.
-      </li>
-      <li>
-        <strong>REQ-F2: Event Semantics Preservation</strong><br/>
-        The [=Event-to-Credential Mapping=] <em class="rfc2119">MUST</em>
-        preserve the temporal context (<code>eventTime</code>,
-        <code>recordTime</code>), business context
-        (<code>bizLocation</code>, <code>bizStep</code>), and
-        product identifiers (<code>EPC</code> or equivalent) of the
-        source [[EPCIS]] event.
-      </li>
-      <li>
-        <strong>REQ-F3: Issuer Identification</strong><br/>
-        Every [=Verifiable Credential=] representing a
-        [=Supply Chain Event=] <em class="rfc2119">MUST</em> include an
-        issuer identifier using [[DID-CORE]] syntax.
-      </li>
-      <li>
-        <strong>REQ-F4: Event Linking</strong><br/>
-        Implementations <em class="rfc2119">SHOULD</em> support linking
-        [=Supply Chain Event=]s through references in subsequent
-        credentials, enabling reconstruction of event chains for custody
-        transfer and provenance use cases.
-      </li>
-      <li>
-        <strong>REQ-F5: Selective Disclosure</strong><br/>
-        VSC-conformant presentations <em class="rfc2119">MUST</em>
-        support selective disclosure of event fields, allowing a holder
-        to reveal only the subset of event data required by a verifier.
-      </li>
-      <li>
-        <strong>REQ-F6: Batch-Level Traceability</strong><br/>
-        Implementations <em class="rfc2119">SHOULD</em> support
-        batch-level and lot-level identifiers in event credentials,
-        enabling traceability without requiring per-item granularity.
-      </li>
-    </ul>
-  </section>
-
-  <section id="non-functional-requirements">
-    <h3>Non-Functional Requirements</h3>
-
-    <ul>
-      <li>
-        <strong>REQ-NF1: Scalability</strong><br/>
-        The credential model <em class="rfc2119">MUST</em> be usable at
-        the scale of global supply chains, supporting high-volume event
-        generation without unreasonable computational or storage overhead.
-      </li>
-      <li>
-        <strong>REQ-NF2: Privacy Preservation</strong><br/>
-        VSC <em class="rfc2119">SHOULD</em> support privacy-preserving
-        mechanisms including selective disclosure and zero-knowledge
-        proofs where applicable, ensuring that supply chain participants
-        are not required to reveal competitively sensitive data beyond
-        what is necessary for verification.
-      </li>
-      <li>
-        <strong>REQ-NF3: Interoperability</strong><br/>
-        VSC-conformant implementations from different vendors
-        <em class="rfc2119">MUST</em> be capable of exchanging and
-        verifying event credentials without prior bilateral agreements.
-      </li>
-    </ul>
-  </section>
-</section>
-
-<section id="security">
-  <h2>Security Considerations</h2>
-
-  <p>
-    In addition to the security considerations defined in
-    [[VC-DATA-MODEL]], VSC implementations must address the following
-    supply-chain-specific risks:
-  </p>
-
-  <section id="fraudulent-injection">
-    <h3>Fraudulent Event Injection</h3>
-    <p>
-      A malicious actor may attempt to inject fabricated
-      [=Supply Chain Event=]s into a supply chain record. VSC
-      implementations <em class="rfc2119">MUST</em> verify issuer
-      identity and authority to assert events for the claimed
-      business context. Verification <em class="rfc2119">SHOULD</em>
-      include checking the issuer's DID against trusted registries
-      or trust frameworks.
-    </p>
-  </section>
-
-  <section id="credential-replay">
-    <h3>Credential Replay</h3>
-    <p>
-      A [=Verifiable Credential=] valid for one supply chain context may
-      be replayed in another. Implementations
-      <em class="rfc2119">SHOULD</em> include context-binding mechanisms
-      such as intended audience or transaction identifiers to prevent
-      cross-context replay attacks.
-    </p>
-  </section>
-
-  <section id="broken-custody">
-    <h3>Broken Custody Chains</h3>
-    <p>
-      A verifier may receive an incomplete chain of event credentials,
-      either due to omission or error. VSC-conformant verifiers
-      <em class="rfc2119">SHOULD</em> detect gaps in event chains and
-      signal non-verifiability where chain integrity is broken.
-    </p>
-  </section>
-</section>
-
-<section id="privacy">
-  <h2>Privacy Considerations</h2>
-
-  <p>
-    Supply chain data often includes commercially sensitive information.
-    VSC implementations <em class="rfc2119">SHOULD</em>:
-  </p>
-
-  <ul>
-    <li>
-      Support selective disclosure mechanisms as described in
-      [[VC-DATA-MODEL]].
-    </li>
-    <li>
-      Avoid requiring globally unique, long-lived correlatable
-      identifiers for all participants in all contexts.
-    </li>
-    <li>
-      Allow the use of pairwise [[DID-CORE]] identifiers where
-      appropriate.
-    </li>
-  </ul>
-</section>
-
-<section id="future-work">
-  <h2>Future Work</h2>
-
-  <p>
-    This requirements document identifies the following areas for
-    future specification work:
-  </p>
-
-  <ul>
-    <li>
-      <strong>VSC Core Data Model:</strong> Normative definition of
-      credential schemas for each [[EPCIS]] event type.
-    </li>
-    <li>
-      <strong>EPCIS-VC Mapping Specification:</strong> Detailed,
-      testable mapping from [[EPCIS]] data structures to
-      [[VC-DATA-MODEL]] representations.
-    </li>
-    <li>
-      <strong>VSC Trust Framework:</strong> Guidance on establishing
-      verifiable trust relationships among [=Supply Chain Actor=]s.
-    </li>
-    <li>
-      <strong>Interoperability Test Suite:</strong> Conformance tests
-      for VSC implementations.
-    </li>
-  </ul>
-</section>
-
-<section id="acknowledgments" class="appendix">
-  <h2>Acknowledgments</h2>
-  <p>
-    The editors thank the participants of the
-    <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain Community Group</a>
-    for their contributions and feedback.
-  </p>
-</section>
-
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
