@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>VSC Critical Minerals Profile — Requirements and Use Cases</title>
+
+  <meta name="description"
+    content="Requirements and use cases for applying the Verifiable Supply Chain (VSC)
+    framework to critical and strategic minerals, covering mine-to-market traceability,
+    ESG due diligence, and regulatory compliance." />
+
+  <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
+
+  <script class="remove">
+    var respecConfig = {
+      specStatus:    "CG-DRAFT",
+      shortName:     "vsc-critical-minerals",
+
+      // VSC Community Group (launched February 21 2026)
+      group: "vsc",
+
+      editors: [
+        {
+          name:       "Amir Hameed Mir",
+          company:    "Verifiable Supply Chain Community Group",
+          companyURL: "https://www.w3.org/community/vsc/"
+        }
+      ],
+
+      authors: [
+        {
+          name: "VSC Community Group Participants",
+          url:  "https://www.w3.org/community/vsc/"
+        }
+      ],
+
+      github: {
+        repoURL: "https://github.com/w3c-cg/vsc",
+        branch:  "main"
+      },
+
+      edDraftURI:    "https://w3c-cg.github.io/vsc/critical-minerals/",
+      license:       "w3c-software-doc",
+      copyrightStart: 2026,
+      maxTocLevel:   3,
+      noRecTrack:    true,
+
+      xref: ["did-core", "vc-data-model-2.0"],
+
+      localBiblio: {
+
+        /* ── Base VSC specification ──────────────────────────────── */
+        "VSC-REQUIREMENTS": {
+          title:     "Verifiable Supply Chain (VSC) — Requirements and Use Cases",
+          href:      "https://w3c-cg.github.io/vsc-requirements/",
+          publisher: "W3C Verifiable Supply Chain Community Group",
+          date:      "2026"
+        },
+
+        /* ── EPCIS / GS1 ─────────────────────────────────────────── */
+        "EPCIS20": {
+          title:     "EPC Information Services (EPCIS) Standard, Release 2.0",
+          href:      "https://ref.gs1.org/standards/epcis/",
+          publisher: "GS1",
+          date:      "June 2022"
+        },
+        "CBV20": {
+          title:     "GS1 Core Business Vocabulary (CBV) Standard, Release 2.0",
+          href:      "https://ref.gs1.org/standards/cbv/",
+          publisher: "GS1",
+          date:      "June 2022"
+        },
+        "ISO19987": {
+          title:     "ISO/IEC 19987:2024 — Information technology — EPC Information Services (EPCIS)",
+          href:      "https://www.iso.org/standard/85557.html",
+          publisher: "ISO/IEC",
+          date:      "2024"
+        },
+        "GS1-DIGITALLINK": {
+          title:     "GS1 Digital Link Standard",
+          href:      "https://ref.gs1.org/standards/digital-link/",
+          publisher: "GS1"
+        },
+
+        /* ── VC / DID ecosystem ───────────────────────────────────── */
+        "DID-CORE": {
+          title:     "Decentralized Identifiers (DIDs) v1.0",
+          href:      "https://www.w3.org/TR/did-core/",
+          publisher: "W3C",
+          date:      "19 July 2022"
+        },
+        "VC-DATA-MODEL": {
+          title:     "Verifiable Credentials Data Model v2.0",
+          href:      "https://www.w3.org/TR/vc-data-model-2.0/",
+          publisher: "W3C",
+          date:      "15 May 2025"
+        },
+        "VC-DI": {
+          title:     "Verifiable Credential Data Integrity 1.0",
+          href:      "https://www.w3.org/TR/vc-data-integrity/",
+          publisher: "W3C",
+          date:      "15 May 2025"
+        },
+        "SD-JWT": {
+          title:     "Selective Disclosure for JWTs (SD-JWT)",
+          href:      "https://datatracker.ietf.org/doc/draft-ietf-oauth-selective-disclosure-jwt/",
+          publisher: "IETF OAuth Working Group"
+        },
+        "VC-BITSTRING-STATUS": {
+          title:     "Bitstring Status List v1.0",
+          href:      "https://www.w3.org/TR/vc-bitstring-status-list/",
+          publisher: "W3C",
+          date:      "15 May 2025"
+        },
+
+        /* ── Critical minerals regulations ───────────────────────── */
+        "CRMA": {
+          title:     "EU Critical Raw Materials Act — Regulation (EU) 2024/1252",
+          href:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1252",
+          publisher: "European Union",
+          date:      "May 2024"
+        },
+        "EU-BATTERY-REG": {
+          title:     "EU Battery Regulation — Regulation (EU) 2023/1542",
+          href:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R1542",
+          publisher: "European Union",
+          date:      "July 2023"
+        },
+        "EU-DPP": {
+          title:     "EU Digital Product Passport — Ecodesign for Sustainable Products Regulation (ESPR) — Regulation (EU) 2024/1781",
+          href:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1781",
+          publisher: "European Union",
+          date:      "2024"
+        },
+        "EU-CSDDD": {
+          title:     "EU Corporate Sustainability Due Diligence Directive (CSDDD) — Directive 2024/1760",
+          href:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024L1760",
+          publisher: "European Union",
+          date:      "2024"
+        },
+        "OECD-DD": {
+          title:     "OECD Due Diligence Guidance for Responsible Supply Chains of Minerals from Conflict-Affected and High-Risk Areas, 3rd edition",
+          href:      "https://www.oecd.org/daf/inv/mne/OECD-Due-Diligence-Guidance-Minerals-Edition3.pdf",
+          publisher: "OECD",
+          date:      "2016"
+        },
+        "OECD-TRACEABILITY": {
+          title:     "IEA–OECD Report: Traceability for Responsible and Resilient Critical Mineral Supply Chains",
+          href:      "https://www.iea.org/reports/traceability-for-responsible-and-resilient-critical-mineral-supply-chains",
+          publisher: "IEA / OECD",
+          date:      "2025"
+        },
+        "SEC-CONFLICT": {
+          title:     "SEC Rule 13p-1 — Conflict Minerals Disclosure",
+          href:      "https://www.sec.gov/rules/final/2012/34-67716.pdf",
+          publisher: "U.S. Securities and Exchange Commission",
+          date:      "August 2012"
+        },
+        "USGS-2025": {
+          title:     "USGS 2025 Critical Minerals List",
+          href:      "https://www.usgs.gov/centers/national-minerals-information-center/critical-minerals",
+          publisher: "U.S. Geological Survey",
+          date:      "2025"
+        },
+
+        /* ── Industry frameworks ──────────────────────────────────── */
+        "GBA-BATTERY-PASSPORT": {
+          title:     "Global Battery Alliance — Battery Passport Specification",
+          href:      "https://www.globalbattery.org/battery-passport/",
+          publisher: "Global Battery Alliance",
+          date:      "2024"
+        },
+        "RMI-RMAP": {
+          title:     "Responsible Minerals Initiative (RMI) — Responsible Minerals Assurance Process (RMAP)",
+          href:      "https://www.responsibleminerals.org/our-work/rmap/",
+          publisher: "Responsible Minerals Initiative"
+        },
+        "ICMM-FRAMEWORK": {
+          title:     "ICMM Mining Principles — Performance Expectations",
+          href:      "https://www.icmm.com/en-gb/about-us/member-commitments/icmm-mining-principles",
+          publisher: "International Council on Mining and Metals",
+          date:      "2020"
+        },
+        "CBAM": {
+          title:     "EU Carbon Border Adjustment Mechanism (CBAM) — Regulation (EU) 2023/956",
+          href:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R0956",
+          publisher: "European Union",
+          date:      "2023"
+        },
+
+        /* ── Security / methodology ───────────────────────────────── */
+        "STRIDE": {
+          title:     "The STRIDE Threat Model",
+          href:      "https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats",
+          publisher: "Microsoft"
+        },
+        "NIST-800-30": {
+          title:     "NIST SP 800-30 Rev. 1 — Guide for Conducting Risk Assessments",
+          href:      "https://csrc.nist.gov/publications/detail/sp/800-30/rev-1/final",
+          publisher: "NIST",
+          date:      "September 2012"
+        },
+
+        /* ── RFC ──────────────────────────────────────────────────── */
+        "RFC2119": {
+          title:     "Key words for use in RFCs to Indicate Requirement Levels",
+          href:      "https://www.rfc-editor.org/rfc/rfc2119",
+          publisher: "IETF",
+          date:      "March 1997"
+        },
+        "RFC8174": {
+          title:     "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words",
+          href:      "https://www.rfc-editor.org/rfc/rfc8174",
+          publisher: "IETF",
+          date:      "May 2017"
+        },
+
+        /* ── W3C methodology references ───────────────────────────── */
+        "SHACL-UCR": {
+          title:     "SHACL Use Cases and Requirements",
+          href:      "https://www.w3.org/TR/shacl-ucr/",
+          publisher: "W3C",
+          date:      "20 July 2017"
+        },
+        "DWBP-UCR": {
+          title:     "Data on the Web Best Practices Use Cases and Requirements",
+          href:      "https://www.w3.org/TR/dwbp-ucr/",
+          publisher: "W3C",
+          date:      "24 February 2015"
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* ─── Requirement boxes ─────────────────────────────────────────── */
+    .req-box {
+      border-left: 4px solid #005A9C;
+      background: #f0f7ff;
+      padding: 0.65em 1em;
+      margin: 1em 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .req-box .req-id {
+      font-weight: bold;
+      font-family: monospace;
+      color: #005A9C;
+    }
+    .req-box p { margin: 0.3em 0 0; }
+    .req-box ul { margin: 0.3em 0 0; padding-left: 1.4em; }
+
+    /* ─── Use-case tables ───────────────────────────────────────────── */
+    table.uc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8em 0 1.5em;
+      font-size: 0.94em;
+    }
+    table.uc-table th {
+      background: #1a5276;
+      color: #fff;
+      text-align: left;
+      padding: 0.45em 0.8em;
+      white-space: nowrap;
+      width: 20%;
+      vertical-align: top;
+    }
+    table.uc-table td {
+      border: 1px solid #b0c4de;
+      padding: 0.45em 0.8em;
+      vertical-align: top;
+    }
+    table.uc-table tr:nth-child(even) td { background: #f4f8ff; }
+
+    /* ─── Traceability matrix ───────────────────────────────────────── */
+    table.trace-matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85em;
+      margin: 0.8em 0;
+    }
+    table.trace-matrix th, table.trace-matrix td {
+      border: 1px solid #ccc;
+      padding: 0.4em 0.55em;
+      text-align: center;
+    }
+    table.trace-matrix th { background: #1a5276; color: #fff; }
+    table.trace-matrix td:first-child { text-align: left; font-weight: bold; font-family: monospace; }
+    .check { color: #1a7a1a; font-weight: bold; }
+    .dash  { color: #aaa; }
+
+    /* ─── Threat table ──────────────────────────────────────────────── */
+    table.threat-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88em;
+      margin: 0.8em 0;
+    }
+    table.threat-table th {
+      background: #6b1c1c;
+      color: #fff;
+      padding: 0.4em 0.7em;
+      text-align: left;
+    }
+    table.threat-table td {
+      border: 1px solid #e0b0b0;
+      padding: 0.4em 0.7em;
+      vertical-align: top;
+    }
+    table.threat-table tr:nth-child(even) td { background: #fff5f5; }
+
+    /* ─── Regulatory summary table ──────────────────────────────────── */
+    table.reg-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9em;
+      margin: 0.8em 0;
+    }
+    table.reg-table th {
+      background: #2e4053;
+      color: #fff;
+      padding: 0.4em 0.7em;
+      text-align: left;
+    }
+    table.reg-table td {
+      border: 1px solid #ccc;
+      padding: 0.4em 0.7em;
+      vertical-align: top;
+    }
+    table.reg-table tr:nth-child(even) td { background: #f8f9fa; }
+
+    /* ─── Contributing box ──────────────────────────────────────────── */
+    .contrib-box {
+      border: 1px solid #f0ad4e;
+      background: #fffbf0;
+      border-radius: 4px;
+      padding: 0.8em 1.2em;
+      margin: 1.2em 0;
+    }
+    .contrib-box h4 { margin-top: 0; color: #7a5200; }
+
+    /* ─── Informative section notice ────────────────────────────────── */
+    p.informative { font-style: italic; color: #555; font-size: 0.92em; }
+
+    /* ─── Mineral tag pills ─────────────────────────────────────────── */
+    .mineral-tag {
+      display: inline-block;
+      background: #d5e8f5;
+      color: #1a4a6e;
+      font-size: 0.78em;
+      font-family: monospace;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin: 1px 2px;
+      border: 1px solid #a8cce0;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     ABSTRACT
+════════════════════════════════════════════════════════════════════ -->
+<section id="abstract">
+  <p>
+    This document defines requirements and use cases for a
+    <strong>Verifiable Supply Chain (VSC) Critical Minerals Profile</strong>:
+    the application of the VSC framework — built on [[VC-DATA-MODEL]],
+    [[DID-CORE]], and [[EPCIS20]] — to the traceability, ESG due diligence,
+    and regulatory compliance of critical and strategic minerals supply chains.
+  </p>
+  <p>
+    Critical minerals are designated by governments worldwide as essential
+    to the clean energy transition, digital infrastructure, and national
+    security, yet their supply chains are among the most opaque,
+    geographically concentrated, and fraud-prone in global trade. This
+    document identifies the problem space, defines a domain-specific
+    vocabulary, and specifies the functional and non-functional requirements
+    for a VSC credential profile covering mine-to-market traceability of
+    minerals including
+    <span class="mineral-tag">lithium</span>
+    <span class="mineral-tag">cobalt</span>
+    <span class="mineral-tag">nickel</span>
+    <span class="mineral-tag">rare earth elements</span>
+    <span class="mineral-tag">graphite</span>
+    <span class="mineral-tag">manganese</span>
+    and all materials listed in [[CRMA]] and [[USGS-2025]].
+  </p>
+  <p>
+    This is a <strong>requirements and use cases document</strong>, not a
+    technical specification. It is a deliverable of the
+    <a href="https://www.w3.org/community/vsc/">W3C Verifiable Supply Chain
+    Community Group</a>, which lists Critical Minerals as a priority vertical
+    alongside Pharmaceuticals. The document is grounded in and references
+    [[CRMA]], [[EU-BATTERY-REG]], [[EU-DPP]], [[EU-CSDDD]], [[OECD-DD]],
+    [[OECD-TRACEABILITY]], [[RMI-RMAP]], [[GBA-BATTERY-PASSPORT]], and
+    [[SEC-CONFLICT]]. Methodology follows established W3C patterns including
+    [[SHACL-UCR]] and [[DWBP-UCR]].
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     STATUS OF THIS DOCUMENT
+════════════════════════════════════════════════════════════════════ -->
+<section id="sotd">
+  <p>
+    This document is a <strong>Community Group Draft</strong> produced by
+    the <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain
+    Community Group</a>, launched on 21 February 2026. It is not a W3C
+    Standard and is not on the W3C Standards Track. It may be updated,
+    replaced, or made obsolete at any time.
+  </p>
+  <p>
+    This specification is a vertical profile of the VSC base requirements
+    document [[VSC-REQUIREMENTS]]. It inherits and specializes all base
+    requirements; requirements defined here are additional to, not
+    replacements for, those in [[VSC-REQUIREMENTS]].
+  </p>
+  <p>
+    Feedback is welcome via the
+    <a href="https://github.com/w3c-cg/vsc/issues">GitHub issue tracker</a>.
+    See <a href="#contributing"></a> for contribution guidelines.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     1. INTRODUCTION
+════════════════════════════════════════════════════════════════════ -->
+<section id="introduction">
+  <h2>Introduction</h2>
+  <p class="informative">This section is non-normative.</p>
+
+  <section id="why-critical-minerals">
+    <h3>Why Critical Minerals?</h3>
+    <p>
+      Critical and strategic minerals underpin the clean energy transition,
+      digital infrastructure, and advanced manufacturing. The [[CRMA]]
+      (Regulation (EU) 2024/1252, in force May 2024) defines 34 critical
+      raw materials (CRMs) and 17 strategic raw materials (SRMs), including
+      <span class="mineral-tag">lithium</span>,
+      <span class="mineral-tag">cobalt</span>,
+      <span class="mineral-tag">nickel</span>,
+      <span class="mineral-tag">rare earth elements</span>, and
+      <span class="mineral-tag">graphite</span>, setting binding 2030
+      targets for domestic extraction, processing, and recycling. The
+      [[USGS-2025]] Critical Minerals List identifies 50 minerals essential
+      to U.S. economic and national security.
+    </p>
+    <p>
+      These supply chains share four structural characteristics that make
+      them uniquely difficult to govern with existing tools:
+    </p>
+    <dl>
+      <dt>Extreme geographic concentration</dt>
+      <dd>
+        China processes over 85% of rare earth elements and 90% of graphite.
+        The Democratic Republic of Congo produces 63% of global cobalt,
+        much of it from artisanal and small-scale mines (ASM). This
+        concentration creates systemic geopolitical risk and makes
+        supply-chain fraud difficult to detect through conventional means.
+      </dd>
+      <dt>Multi-tier opacity</dt>
+      <dd>
+        A lithium-ion battery cell may draw on minerals from a dozen
+        countries, processed through smelters, refiners, precursor
+        chemical producers, and cathode active material manufacturers
+        before reaching a cell manufacturer. Each tier transition
+        involves a new legal entity and typically a break in the
+        data trail. Existing EPCIS deployments cover Tier-1 logistics
+        well, but ASM mine-site data is rarely digitized.
+      </dd>
+      <dt>Blending and transformation loss of identity</dt>
+      <dd>
+        Unlike discrete manufactured goods, minerals are dissolved,
+        alloyed, and blended at refineries. A kilogram of cobalt sulfate
+        leaving a refinery may be derived from dozens of distinct mine-site
+        lots. Traceability standards must accommodate mass-balance and
+        chain-of-custody methodologies, not just serial-item tracking.
+      </dd>
+      <dt>Converging regulatory requirements</dt>
+      <dd>
+        The [[EU-BATTERY-REG]] (Digital Product Passport mandatory for
+        EV batteries by February 2027), [[CRMA]], [[EU-CSDDD]],
+        [[CBAM]], [[OECD-DD]], [[SEC-CONFLICT]], and the IEA–OECD
+        [[OECD-TRACEABILITY]] framework all impose overlapping but
+        non-identical traceability, due diligence, and disclosure
+        obligations on supply chain participants.
+      </dd>
+    </dl>
+  </section>
+
+  <section id="vsc-approach-minerals">
+    <h3>How VSC Addresses These Challenges</h3>
+    <p>
+      The VSC Critical Minerals Profile extends [[VSC-REQUIREMENTS]] with
+      domain-specific credential schemas, vocabulary extensions, and
+      traceability methodologies suited to the minerals sector:
+    </p>
+    <ul>
+      <li>
+        <strong>Mine-site attestation credentials:</strong>
+        New credential types for mine-site declarations, ASM cooperative
+        certifications, and audit certificates, anchored to [[DID-CORE]]
+        identifiers for mines, smelters, and refiners.
+      </li>
+      <li>
+        <strong>Mass-balance and chain-of-custody methods:</strong>
+        Credential schemas accommodating both item-level traceability
+        (where available) and mass-balance attribution for blended
+        commodities, following [[RMI-RMAP]] methodology.
+      </li>
+      <li>
+        <strong>ESG attribute binding:</strong>
+        Native support for binding carbon footprint, water usage,
+        human rights due diligence status, and conflict-free
+        certifications to material lots, enabling [[EU-BATTERY-REG]]
+        DPP and [[CBAM]] compliance.
+      </li>
+      <li>
+        <strong>Regulatory alignment:</strong>
+        Use cases and requirements explicitly mapped to [[CRMA]],
+        [[EU-BATTERY-REG]], [[OECD-DD]], and [[SEC-CONFLICT]] obligations.
+      </li>
+    </ul>
+  </section>
+
+  <section id="regulatory-landscape">
+    <h3>Regulatory Landscape Summary</h3>
+    <p class="informative">This section is non-normative.</p>
+
+    <table class="reg-table">
+      <thead>
+        <tr>
+          <th>Regulation / Framework</th>
+          <th>Jurisdiction</th>
+          <th>Key traceability obligation</th>
+          <th>In-force / deadline</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>[[CRMA]] (Reg. EU 2024/1252)</td>
+          <td>European Union</td>
+          <td>Supply chain traceability, diversification, and sustainability for 34 CRMs and 17 SRMs</td>
+          <td>In force May 2024; 2030 binding targets</td>
+        </tr>
+        <tr>
+          <td>[[EU-BATTERY-REG]] (Reg. EU 2023/1542)</td>
+          <td>European Union</td>
+          <td>Digital Product Passport for EV, industrial, and LMT batteries; due diligence on cobalt, lithium, nickel, natural graphite</td>
+          <td>DPP mandatory February 2027</td>
+        </tr>
+        <tr>
+          <td>[[EU-CSDDD]] (Dir. 2024/1760)</td>
+          <td>European Union</td>
+          <td>Human rights and environmental due diligence across the supply chain for companies above threshold</td>
+          <td>Transposition by 2026; phased application 2027–2029</td>
+        </tr>
+        <tr>
+          <td>[[CBAM]] (Reg. EU 2023/956)</td>
+          <td>European Union</td>
+          <td>Embedded carbon reporting for iron, steel, aluminium, and select materials; will extend to more CRMs</td>
+          <td>Transitional phase ended Dec 2025; full implementation 2026</td>
+        </tr>
+        <tr>
+          <td>[[OECD-DD]] (3rd edition)</td>
+          <td>OECD member states (and beyond)</td>
+          <td>Five-step due diligence framework for minerals from conflict-affected and high-risk areas (CAHRAs)</td>
+          <td>Policy standard; referenced in EU and US regulations</td>
+        </tr>
+        <tr>
+          <td>[[SEC-CONFLICT]] (Rule 13p-1)</td>
+          <td>United States</td>
+          <td>Annual disclosure for companies using 3TG minerals (tantalum, tin, tungsten, gold) in products</td>
+          <td>Annual reporting since 2014</td>
+        </tr>
+        <tr>
+          <td>[[USGS-2025]] Critical Minerals List</td>
+          <td>United States</td>
+          <td>50 minerals designated as critical; basis for domestic security and supply chain resilience policy</td>
+          <td>2025 list in effect</td>
+        </tr>
+        <tr>
+          <td>[[RMI-RMAP]] RMAP 2.0</td>
+          <td>Industry standard</td>
+          <td>Third-party audit standard for responsible sourcing of cobalt, tin, tantalum, tungsten, gold, and mica</td>
+          <td>RMAP 2.0 in public consultation 2024–2025</td>
+        </tr>
+        <tr>
+          <td>[[GBA-BATTERY-PASSPORT]]</td>
+          <td>Industry standard</td>
+          <td>Battery Passport specification covering provenance, ESG, and circularity data; aligned with [[EU-BATTERY-REG]]</td>
+          <td>2024 pilots; full deployment 2027</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="relationship-to-vsc">
+    <h3>Relationship to VSC Base Specification</h3>
+    <p>
+      This document is a <strong>vertical profile</strong> of [[VSC-REQUIREMENTS]].
+      All base requirements (REQ-F1 through REQ-F9 and REQ-NF1 through REQ-NF5
+      in [[VSC-REQUIREMENTS]]) apply to VSC Critical Minerals Profile
+      implementations in full. This document adds:
+    </p>
+    <ul>
+      <li>Domain-specific terminology and vocabulary extensions (see <a href="#terminology"></a>).</li>
+      <li>Critical-minerals-specific use cases beyond those in the base spec (see <a href="#use-cases"></a>).</li>
+      <li>Additional functional requirements specific to minerals traceability (see <a href="#requirements"></a>).</li>
+      <li>A minerals-specific security threat model (see <a href="#security"></a>).</li>
+    </ul>
+  </section>
+
+  <section id="document-structure">
+    <h3>Document Structure</h3>
+    <ul>
+      <li><a href="#conformance"></a> — normative language</li>
+      <li><a href="#scope"></a> — scope and boundaries</li>
+      <li><a href="#terminology"></a> — domain terminology</li>
+      <li><a href="#architecture"></a> — minerals supply chain architecture</li>
+      <li><a href="#use-cases"></a> — five structured use cases</li>
+      <li><a href="#requirements"></a> — functional and non-functional requirements</li>
+      <li><a href="#requirements-traceability"></a> — use-case to requirement matrix</li>
+      <li><a href="#security"></a> — minerals-specific threat model</li>
+      <li><a href="#privacy"></a> — privacy considerations</li>
+      <li><a href="#future-work"></a> — planned deliverables</li>
+      <li><a href="#contributing"></a> — how to contribute</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     2. CONFORMANCE
+════════════════════════════════════════════════════════════════════ -->
+<section id="conformance">
+  <p>
+    The key words <em class="rfc2119">MUST</em>,
+    <em class="rfc2119">MUST NOT</em>,
+    <em class="rfc2119">REQUIRED</em>,
+    <em class="rfc2119">SHALL</em>,
+    <em class="rfc2119">SHALL NOT</em>,
+    <em class="rfc2119">SHOULD</em>,
+    <em class="rfc2119">SHOULD NOT</em>,
+    <em class="rfc2119">RECOMMENDED</em>,
+    <em class="rfc2119">NOT RECOMMENDED</em>,
+    <em class="rfc2119">MAY</em>, and
+    <em class="rfc2119">OPTIONAL</em>
+    are to be interpreted as described in [[RFC2119]] and [[RFC8174]]
+    when, and only when, they appear in all capitals.
+  </p>
+  <p>
+    All examples, diagrams, and sections marked as non-normative are
+    informative only. Everything else is normative. This profile MUST be
+    read in conjunction with [[VSC-REQUIREMENTS]]; all normative
+    requirements of that document apply to conformant implementations
+    of this profile.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     3. SCOPE
+════════════════════════════════════════════════════════════════════ -->
+<section id="scope">
+  <h2>Scope</h2>
+
+  <section id="in-scope">
+    <h3>In Scope</h3>
+    <ul>
+      <li>
+        <strong>Mine-to-market credential schemas:</strong>
+        Normative requirements for credential schemas covering all
+        stages of the critical minerals value chain, from mine-site
+        extraction through refining, precursor chemical production,
+        and delivery to battery or component manufacturers.
+      </li>
+      <li>
+        <strong>Mass-balance and chain-of-custody traceability:</strong>
+        Requirements for credential types supporting both item-level
+        and mass-balance attribution methodologies for blended mineral
+        commodities.
+      </li>
+      <li>
+        <strong>ESG attribute binding:</strong>
+        Requirements for attaching verifiable ESG claims (carbon
+        footprint, human rights due diligence status, conflict-free
+        certification, water usage) to material lot credentials.
+      </li>
+      <li>
+        <strong>ASM (artisanal and small-scale mining) integration:</strong>
+        Requirements for low-barrier credential issuance supporting
+        ASM cooperative actors, including lightweight DID methods
+        suitable for resource-constrained environments.
+      </li>
+      <li>
+        <strong>Regulatory compliance alignment:</strong>
+        Use cases and requirements explicitly mapped to [[CRMA]],
+        [[EU-BATTERY-REG]], [[EU-CSDDD]], [[OECD-DD]], and [[SEC-CONFLICT]].
+      </li>
+      <li>
+        <strong>Third-party audit integration:</strong>
+        Requirements for incorporating [[RMI-RMAP]]-style audit
+        certificates as verifiable credentials referenced from
+        material lot credentials.
+      </li>
+      <li>
+        <strong>Interoperability with [[GBA-BATTERY-PASSPORT]]:</strong>
+        Requirements to ensure VSC Critical Minerals credentials are
+        consumable as inputs to [[GBA-BATTERY-PASSPORT]] and [[EU-DPP]]
+        Battery Passport assemblies.
+      </li>
+    </ul>
+  </section>
+
+  <section id="out-of-scope">
+    <h3>Out of Scope</h3>
+    <ul>
+      <li>
+        <strong>Mining operations software:</strong>
+        Production management, geological modelling, and mine planning
+        systems are out of scope.
+      </li>
+      <li>
+        <strong>Commodity pricing and trading:</strong>
+        Market price signals, hedging, and commodity exchange integration
+        are out of scope.
+      </li>
+      <li>
+        <strong>Financial instruments:</strong>
+        Letters of credit, trade finance, and payment mechanisms
+        are out of scope.
+      </li>
+      <li>
+        <strong>Physical testing and assay:</strong>
+        Laboratory assay methodologies and physical sampling are out
+        of scope; this profile references assay results as inputs
+        to credentials but does not define assay procedures.
+      </li>
+      <li>
+        <strong>National-level stockpiling strategy:</strong>
+        Government strategic reserve management (e.g., Project Vault) is
+        out of scope, though VSC credentials may inform such systems.
+      </li>
+    </ul>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     4. TERMINOLOGY
+════════════════════════════════════════════════════════════════════ -->
+<section id="terminology">
+  <h2>Terminology</h2>
+
+  <p>
+    Terms defined in [[VSC-REQUIREMENTS]], [[VC-DATA-MODEL]], [[DID-CORE]],
+    and [[EPCIS20]] retain their meanings. The following additional terms
+    are defined for this profile.
+  </p>
+
+  <dl>
+    <dt><dfn>Critical Mineral</dfn></dt>
+    <dd>
+      A mineral or material designated as critical or strategic by a
+      recognized government or intergovernmental body owing to its
+      economic importance and supply risk. This profile covers all
+      materials on the [[CRMA]] Annex I/II lists and the [[USGS-2025]]
+      Critical Minerals List. Examples include
+      <span class="mineral-tag">lithium</span>,
+      <span class="mineral-tag">cobalt</span>,
+      <span class="mineral-tag">nickel</span>,
+      <span class="mineral-tag">rare earth elements</span>,
+      <span class="mineral-tag">natural graphite</span>,
+      <span class="mineral-tag">manganese</span>,
+      <span class="mineral-tag">gallium</span>, and
+      <span class="mineral-tag">tantalum</span>.
+    </dd>
+
+    <dt><dfn>Mineral Lot</dfn></dt>
+    <dd>
+      A quantity of one or more [=Critical Mineral=]s with a defined
+      mass or volume, originating from a specific source (mine site,
+      smelter, or refinery), identified by a unique lot number, and
+      characterized by composition, grade, and provenance attributes.
+      A [=Mineral Lot=] is the primary subject of VSC Critical Minerals
+      credentials. Where [[GS1-DIGITALLINK]] identifiers exist for the
+      commodity type, they SHOULD be used.
+    </dd>
+
+    <dt><dfn>Mine Site</dfn></dt>
+    <dd>
+      A physical location where [=Critical Mineral=]s are extracted
+      from the earth, including both industrial-scale and artisanal
+      and small-scale mining (ASM) operations. Each [=Mine Site=] MUST
+      be identified by a [[DID-CORE]] identifier for the purposes of
+      this profile.
+    </dd>
+
+    <dt><dfn>Processing Facility</dfn></dt>
+    <dd>
+      An installation that transforms extracted mineral ore or concentrate
+      into an intermediate or refined form, including concentrators,
+      smelters, refineries, and precursor chemical plants. Each
+      [=Processing Facility=] MUST be identified by a [[DID-CORE]]
+      identifier.
+    </dd>
+
+    <dt><dfn>Mass-Balance Attribution</dfn></dt>
+    <dd>
+      A traceability methodology in which the quantity of material
+      attributed to a specific source (e.g., a responsible mine)
+      is tracked as a proportion of the total mass of blended output
+      from a [=Processing Facility=], rather than by maintaining
+      physical segregation of individual batches. Mass-balance
+      attribution is the standard methodology endorsed by [[RMI-RMAP]]
+      and [[GBA-BATTERY-PASSPORT]] for refined mineral commodities.
+    </dd>
+
+    <dt><dfn>Chain-of-Custody</dfn></dt>
+    <dd>
+      A traceability methodology in which physically distinct material
+      lots are maintained separate throughout the supply chain. The
+      VSC [=Event Chain=] mechanism (defined in [[VSC-REQUIREMENTS]])
+      supports full chain-of-custody where physical segregation is
+      practiced.
+    </dd>
+
+    <dt><dfn>ESG Attribute Credential</dfn></dt>
+    <dd>
+      A [=Verifiable Credential=] asserting one or more environmental,
+      social, and governance (ESG) claims about a [=Mineral Lot=] or
+      [=Mine Site=], such as carbon footprint (CO₂e per tonne),
+      water consumption, conflict-free status, or human rights
+      due diligence compliance. An [=ESG Attribute Credential=] is
+      issued by an authorized [=Third-Party Auditor=] or, where
+      self-declaration is permissible under the applicable framework,
+      by the [=Mine Site=] or [=Processing Facility=] operator.
+    </dd>
+
+    <dt><dfn>Third-Party Auditor</dfn></dt>
+    <dd>
+      An independent organization authorized under an applicable
+      [=Trust Framework=] (e.g., [[RMI-RMAP]], [[ICMM-FRAMEWORK]])
+      to conduct on-site audits of [=Mine Site=]s or [=Processing
+      Facility=]s and issue [=ESG Attribute Credential=]s. Each
+      [=Third-Party Auditor=] MUST be identified by a [[DID-CORE]]
+      identifier registered in the applicable trust framework.
+    </dd>
+
+    <dt><dfn>Conflict-Affected and High-Risk Area (CAHRA)</dfn></dt>
+    <dd>
+      A geographic area as defined in [[OECD-DD]] Annex II, characterized
+      by armed conflict, widespread violence, or fragile post-conflict
+      conditions, in which mineral extraction may contribute to or be
+      associated with human rights abuses. Credentials asserting
+      conflict-free status for minerals sourced from or transiting
+      through a CAHRA MUST reference an applicable audit standard
+      and a [[DID-CORE]]-identified [=Third-Party Auditor=].
+    </dd>
+
+    <dt><dfn>Artisanal and Small-Scale Mining (ASM) Actor</dfn></dt>
+    <dd>
+      An individual miner, cooperative, or small enterprise engaged in
+      informal or semi-formal mineral extraction, typically with limited
+      capital and technology. ASM actors represent a significant share
+      of cobalt and some rare earth production. This profile requires
+      that ASM-compatible credential issuance pathways exist, including
+      support for lightweight [[DID-CORE]] methods operable from
+      mobile devices with intermittent connectivity.
+    </dd>
+
+    <dt><dfn>Battery Passport</dfn></dt>
+    <dd>
+      A digital product passport for a battery product, as required by
+      [[EU-BATTERY-REG]] from February 2027, containing data on
+      mineral provenance, carbon footprint, recycled content,
+      and supply chain ESG performance. A [=Battery Passport=] is
+      realized as a [=Verifiable Presentation=] composed of VSC
+      Critical Minerals Profile credentials assembled from upstream tiers.
+      The format aligns with [[GBA-BATTERY-PASSPORT]].
+    </dd>
+
+    <dt><dfn>Carbon Border Adjustment Credential</dfn></dt>
+    <dd>
+      A [=Verifiable Credential=] asserting the verified embedded carbon
+      content (direct and indirect emissions) of a [=Mineral Lot=] or
+      processed material, issued or endorsed by a [[DID-CORE]]-identified
+      verifier. Such credentials support [[CBAM]] reporting obligations.
+    </dd>
+  </dl>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     5. CONCEPTUAL ARCHITECTURE
+════════════════════════════════════════════════════════════════════ -->
+<section id="architecture">
+  <h2>Conceptual Architecture</h2>
+  <p class="informative">This section is non-normative.</p>
+
+  <section id="value-chain-stages">
+    <h3>Critical Minerals Value Chain Stages</h3>
+    <p>
+      VSC Critical Minerals credentials span the following value chain
+      stages, each of which may involve distinct legal entities, geographic
+      jurisdictions, and applicable regulatory frameworks:
+    </p>
+
+    <table class="simple">
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>Description</th>
+          <th>Primary EPCIS 2.0 event type(s)</th>
+          <th>Primary credential type(s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Extraction</strong></td>
+          <td>Mining of ore or concentrate at a [=Mine Site=]</td>
+          <td><code>ObjectEvent</code> (commissioning)</td>
+          <td>Mine-site declaration, ASM cooperative credential, audit certificate</td>
+        </tr>
+        <tr>
+          <td><strong>Primary processing</strong></td>
+          <td>Concentrating, smelting, or initial chemical processing</td>
+          <td><code>TransformationEvent</code></td>
+          <td>Smelter/refiner declaration, mass-balance attestation</td>
+        </tr>
+        <tr>
+          <td><strong>Refining</strong></td>
+          <td>Production of battery-grade or specification-grade material</td>
+          <td><code>TransformationEvent</code></td>
+          <td>Refined lot credential, [[CBAM]] carbon credential</td>
+        </tr>
+        <tr>
+          <td><strong>Precursor / cathode production</strong></td>
+          <td>Chemical synthesis of battery precursor and active materials</td>
+          <td><code>TransformationEvent</code></td>
+          <td>Precursor lot credential linking input refined materials</td>
+        </tr>
+        <tr>
+          <td><strong>Cell / product manufacturing</strong></td>
+          <td>Incorporation of critical minerals into cells, magnets, or components</td>
+          <td><code>TransformationEvent</code>, <code>TransactionEvent</code></td>
+          <td>DPP assembly credential, [[EU-BATTERY-REG]] Battery Passport</td>
+        </tr>
+        <tr>
+          <td><strong>Transport / logistics</strong></td>
+          <td>Cross-border and domestic transport at each stage</td>
+          <td><code>ObjectEvent</code>, <code>TransactionEvent</code></td>
+          <td>Custody transfer credential, customs compliance credential</td>
+        </tr>
+        <tr>
+          <td><strong>Recycling</strong></td>
+          <td>Recovery of critical minerals from end-of-life products</td>
+          <td><code>TransformationEvent</code></td>
+          <td>Recycled content attestation, secondary material lot credential</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="trust-framework-minerals">
+    <h3>Trust Framework Structure for Critical Minerals</h3>
+    <p>
+      The [[VSC-REQUIREMENTS]] concept of a [=Trust Framework=] is
+      essential in the minerals sector, where regulatory bodies and
+      industry standards organizations play key authorization roles.
+      The expected layered trust structure is:
+    </p>
+    <ol>
+      <li>
+        <strong>Root anchors:</strong> Sector bodies such as [[RMI-RMAP]],
+        [[ICMM-FRAMEWORK]], and [[GBA-BATTERY-PASSPORT]] publish lists
+        of authorized smelters, refiners, and auditors as DID registries.
+      </li>
+      <li>
+        <strong>Authorized issuers:</strong> Mines, smelters, refiners,
+        and auditors hold [[DID-CORE]] identifiers registered in one or
+        more root anchors.
+      </li>
+      <li>
+        <strong>Credential issuance:</strong> Authorized issuers sign
+        lot credentials and ESG attribute credentials using [[VC-DI]].
+      </li>
+      <li>
+        <strong>Downstream verification:</strong> Battery manufacturers,
+        customs authorities, and market surveillance bodies verify
+        credentials against the root anchor registries.
+      </li>
+    </ol>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     6. USE CASES
+════════════════════════════════════════════════════════════════════ -->
+<section id="use-cases">
+  <h2>Use Cases</h2>
+  <p class="informative">
+    This section is non-normative. Use cases motivate the requirements
+    in <a href="#requirements"></a>. Each use case follows the structured
+    template established in [[SHACL-UCR]] and [[DWBP-UCR]].
+  </p>
+
+  <!-- ─── UC-CM-1 ──────────────────────────────────────────────────── -->
+  <section id="uc-mine-to-refinery">
+    <h3>UC-CM-1: Mine-Site to Refinery Provenance for OECD Due Diligence</h3>
+
+    <table class="uc-table">
+      <tr><th>Goal</th><td>A cobalt refiner verifies that incoming concentrate lots originated from mine sites that have been audited under [[RMI-RMAP]] and are not associated with [=Conflict-Affected and High-Risk Area (CAHRA)=] human rights risks, satisfying [[OECD-DD]] and [[EU-BATTERY-REG]] due diligence obligations.</td></tr>
+      <tr><th>Actors</th><td>
+        <ul>
+          <li><strong>Industrial mine operator</strong> — issuer of mine-site declaration credentials.</li>
+          <li><strong>ASM cooperative</strong> — issuer of cooperative-level declaration credentials.</li>
+          <li><strong>RMI-accredited third-party auditor</strong> — issuer of [[RMI-RMAP]] audit credentials.</li>
+          <li><strong>Cobalt refiner</strong> — holder and verifier.</li>
+          <li><strong>EU Battery Regulation compliance body</strong> — downstream verifier.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Regulatory context</th><td>[[OECD-DD]] five-step due diligence; [[EU-BATTERY-REG]] Art. 52–54 requiring cobalt, lithium, nickel, and natural graphite due diligence; [[EU-CSDDD]] human rights obligations.</td></tr>
+      <tr><th>Preconditions</th><td>
+        <ul>
+          <li>Industrial mines and ASM cooperatives hold [[DID-CORE]] identifiers registered in the RMI Responsible Minerals Assurance Process (RMAP) registry.</li>
+          <li>The [[RMI-RMAP]] accredited auditor holds a [[DID-CORE]] identifier in the same registry.</li>
+          <li>The cobalt refiner has defined a verification policy specifying accepted audit standards (RMAP, ICMM), CAHRA-risk thresholds, and minimum audit recency.</li>
+          <li>The refiner's system can resolve DIDs and validate [[VC-DI]] proofs.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Normal flow</th><td>
+        <ol>
+          <li>For each [=Mineral Lot=] (concentrate batch), the mine operator issues an <code>ObjectEvent</code> credential (<code>bizStep: commissioning</code>) containing: mine-site DID, GPS coordinates, extraction date range, mineral type and grade, lot mass (wet and dry), and lot identifier.</li>
+          <li>The [[RMI-RMAP]] auditor issues an <code>ObjectEvent</code> audit credential referencing the mine-site DID, audit date, scope (RMAP standard version), outcome (conformant / conditionally conformant / non-conformant), and audit report hash. The credential includes an <code>expiryDate</code> of 12 months from audit date.</li>
+          <li>If the mine-site lot is sourced from an ASM cooperative, the cooperative issues a cooperative-level declaration credential (lightweight <code>ObjectEvent</code>) referencing member miner identifiers where digitally available.</li>
+          <li>The mine operator assembles a [=Verifiable Presentation=] containing the lot credential and the current audit credential and submits it to the refiner alongside the physical shipment.</li>
+          <li>The refiner's system verifies: DID resolution, proof validity, audit credential not expired, auditor DID registered in RMAP registry, no CAHRA flags in OECD country risk data (accessed via policy engine).</li>
+          <li>On successful verification, the refiner accepts the lot and stores the presentation as OECD Step 3 due-diligence documentation.</li>
+        </ol>
+      </td></tr>
+      <tr><th>Alternative flows</th><td>
+        <ul>
+          <li><em>Expired audit credential:</em> Verifier detects <code>expiryDate</code> has passed. Returns error <code>AUDIT_EXPIRED</code>; refiner initiates re-audit request with supplier.</li>
+          <li><em>CAHRA risk flag:</em> Mine GPS coordinates fall within an [[OECD-DD]] Annex II CAHRA. Refiner escalates to enhanced due diligence procedure; lot is quarantined pending outcome.</li>
+          <li><em>ASM mobile issuance:</em> ASM cooperative uses a mobile-compatible lightweight DID method and issues credentials offline, syncing when connectivity is available. Verifier checks credential timestamp and DID document version.</li>
+          <li><em>Blended concentrate:</em> Smelter input is blended from multiple mine-site lots. The smelter issues a <code>TransformationEvent</code> credential listing all input lot credentials and their respective mass fractions.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Postconditions</th><td>
+        <ul>
+          <li>Refiner holds machine-verifiable OECD Step 3 documentation for each accepted lot.</li>
+          <li>Evidence package is sufficient for [[EU-BATTERY-REG]] Art. 52 cobalt/lithium due diligence reporting and [[EU-CSDDD]] audit trail.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Failure modes</th><td>Fabricated GPS coordinates; audit credential issued by auditor not in RMAP registry; mass discrepancy between credential and physical lot; lot identity switched at port of entry.</td></tr>
+      <tr><th>Derived requirements</th><td>REQ-CM-F1, REQ-CM-F2, REQ-CM-F3, REQ-CM-F4, REQ-CM-F5, REQ-CM-F7, REQ-CM-NF1, REQ-CM-NF2</td></tr>
+    </table>
+  </section>
+
+  <!-- ─── UC-CM-2 ──────────────────────────────────────────────────── -->
+  <section id="uc-mass-balance-refinery">
+    <h3>UC-CM-2: Mass-Balance Attribution at a Blending Refinery</h3>
+
+    <table class="uc-table">
+      <tr><th>Goal</th><td>A nickel sulfate refinery that receives ore concentrates from multiple sources — some certified responsible, some uncertified — issues verifiable mass-balance attribution credentials for its output lots, enabling downstream battery manufacturers to claim a specific percentage of responsibly-sourced input material in their [[EU-BATTERY-REG]] Battery Passport.</td></tr>
+      <tr><th>Actors</th><td>
+        <strong>Nickel refinery</strong> (issuer of mass-balance credentials); <strong>responsible mine operators</strong> (issuers of input lot credentials); <strong>battery manufacturer</strong> (verifier and downstream holder).
+      </td></tr>
+      <tr><th>Regulatory context</th><td>[[EU-BATTERY-REG]] Art. 8 (recycled content) and Art. 52–54 (due diligence); [[RMI-RMAP]] mass-balance methodology; [[GBA-BATTERY-PASSPORT]] data requirements.</td></tr>
+      <tr><th>Preconditions</th><td>
+        <ul>
+          <li>The refinery holds a [[DID-CORE]] identifier registered in the [[RMI-RMAP]] Responsible Nickel pathway.</li>
+          <li>Responsible input lots are accompanied by [[VSC-REQUIREMENTS]]-conformant lot credentials with valid audit credentials.</li>
+          <li>The refinery has calculated the mass-balance attribution ratio for the period covering the output lot, following [[RMI-RMAP]] methodology.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Normal flow</th><td>
+        <ol>
+          <li>The refinery receives input concentrate from multiple sources over a defined period (e.g., one calendar month). For each responsible-certified input lot, it holds a verified input credential.</li>
+          <li>At the end of the period, the refinery calculates the total responsible-attributed input mass as a percentage of total input mass.</li>
+          <li>For each output lot shipped to battery manufacturers, the refinery issues a <code>TransformationEvent</code> credential with a <code>massBalanceAttestation</code> extension containing: responsible-attributed percentage, calculation methodology URI (pointing to [[RMI-RMAP]] mass-balance standard), evidence period (start/end date), and a list of input lot credential identifiers with individual mass fractions.</li>
+          <li>The battery manufacturer verifies the mass-balance credential: DID resolution, proof validity, auditor status, methodology URI recognized in the manufacturer's trust framework.</li>
+          <li>The manufacturer uses the verified percentage as the responsibly-sourced nickel input figure in its [[EU-BATTERY-REG]] Battery Passport assembly.</li>
+        </ol>
+      </td></tr>
+      <tr><th>Alternative flows</th><td>
+        <ul>
+          <li><em>100% chain-of-custody available:</em> Where the refinery practices full physical segregation, the <code>TransformationEvent</code> credential references input lots directly without a mass-balance calculation, and the attributed percentage is 100%.</li>
+          <li><em>Recycled content inclusion:</em> Recycled nickel input lots are issued a secondary material lot credential with a <code>recycledContent: true</code> flag. The mass-balance credential separately attributes responsible primary and recycled input fractions, enabling [[EU-BATTERY-REG]] Art. 8 recycled content disclosure.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Postconditions</th><td>
+        Battery manufacturer holds a verifiable mass-balance attribution figure for each nickel sulfate input lot, sufficient for [[EU-BATTERY-REG]] Art. 52 disclosure and [[GBA-BATTERY-PASSPORT]] provenance data fields.
+      </td></tr>
+      <tr><th>Failure modes</th><td>Over-attribution (responsible percentage exceeds verified responsible input mass); falsified input lot credentials used to inflate attribution; methodology URI pointing to a non-standard calculation.</td></tr>
+      <tr><th>Derived requirements</th><td>REQ-CM-F1, REQ-CM-F3, REQ-CM-F4, REQ-CM-F6, REQ-CM-F7, REQ-CM-NF1</td></tr>
+    </table>
+  </section>
+
+  <!-- ─── UC-CM-3 ──────────────────────────────────────────────────── -->
+  <section id="uc-battery-passport-assembly">
+    <h3>UC-CM-3: EU Battery Regulation Digital Product Passport Assembly</h3>
+
+    <table class="uc-table">
+      <tr><th>Goal</th><td>A battery cell manufacturer assembles a [[EU-BATTERY-REG]]-compliant [=Battery Passport=] for an EV battery module by composing verifiable credentials from upstream mineral suppliers, refiners, and precursor producers, and submits it to an EU market surveillance authority.</td></tr>
+      <tr><th>Actors</th><td>
+        Mine operators, ASM cooperatives, smelters, refiners, and precursor producers (upstream issuers); <strong>cell manufacturer</strong> (holder and DPP assembler); <strong>EU type-approval / market surveillance authority</strong> (verifier); <strong>end customer / OEM</strong> (downstream holder).
+      </td></tr>
+      <tr><th>Regulatory context</th><td>[[EU-BATTERY-REG]] Art. 13 (DPP via QR code, mandatory February 2027 for EV batteries); [[EU-DPP]] (ESPR Regulation 2024/1781); [[GBA-BATTERY-PASSPORT]] data specification.</td></tr>
+      <tr><th>Preconditions</th><td>
+        <ul>
+          <li>All upstream suppliers have issued VSC Critical Minerals Profile credentials for their respective outputs (mine-site lot, smelter output, refined lot, precursor lot).</li>
+          <li>All issuers hold [[DID-CORE]] identifiers recognized in applicable trust frameworks.</li>
+          <li>The battery module is identified by a GS1 GTIN expressible as a [[GS1-DIGITALLINK]] URI.</li>
+          <li>The manufacturer's system can resolve all upstream credential chains.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Normal flow</th><td>
+        <ol>
+          <li>The manufacturer collects upstream credentials for each critical mineral input (cobalt, lithium, nickel, natural graphite) covering all value chain stages from mine to precursor.</li>
+          <li>Using selective disclosure, the manufacturer filters commercially sensitive fields (supplier pricing, proprietary refinery process details) from each credential while retaining all fields required by [[EU-BATTERY-REG]] Annex XIII.</li>
+          <li>The manufacturer issues a <code>TransformationEvent</code> credential for the cell manufacturing event, listing all precursor input lot credentials and the output cell GTIN. This credential includes the verified carbon footprint of the cell (CO₂e/kWh) calculated from upstream [[Carbon Border Adjustment Credential=]]s.</li>
+          <li>The manufacturer assembles a [=Battery Passport=] as a [=Verifiable Presentation=] containing all upstream credentials and the cell manufacturing credential, bound to the GTIN via [[GS1-DIGITALLINK]].</li>
+          <li>The presentation is registered in the EU Digital Product Passport registry (accessible via QR code on the physical battery).</li>
+          <li>The market surveillance authority's automated system verifies the complete credential chain, checks all issuer DIDs, validates audit credential currency, and evaluates the assembled data against [[EU-BATTERY-REG]] Annex XIII completeness requirements.</li>
+        </ol>
+      </td></tr>
+      <tr><th>Alternative flows</th><td>
+        <ul>
+          <li><em>Missing Tier-2 credential:</em> A precursor producer cannot supply mine-level credentials for one mineral input. The manufacturer applies a [[RMI-RMAP]] mass-balance credential at the refiner level as the deepest available verifiable evidence, disclosing the gap in the DPP metadata.</li>
+          <li><em>Recycled content:</em> A portion of lithium input is recovered from end-of-life batteries. The recycling operator issues a secondary lot credential with <code>recycledContent: true</code>. The DPP correctly attributes primary and recycled fractions under [[EU-BATTERY-REG]] Art. 8.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Postconditions</th><td>
+        <ul>
+          <li>A machine-verifiable [[EU-BATTERY-REG]]-compliant DPP exists, accessible via QR code.</li>
+          <li>Market surveillance authority can independently verify the upstream mineral provenance chain and carbon footprint claim.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Failure modes</th><td>Missing credential for a required [[EU-BATTERY-REG]] Annex XIII field; carbon footprint credential based on unverified upstream data; DPP QR code pointing to revoked presentation.</td></tr>
+      <tr><th>Derived requirements</th><td>REQ-CM-F1, REQ-CM-F2, REQ-CM-F3, REQ-CM-F4, REQ-CM-F5, REQ-CM-F6, REQ-CM-F7, REQ-CM-F8, REQ-CM-NF2, REQ-CM-NF3</td></tr>
+    </table>
+  </section>
+
+  <!-- ─── UC-CM-4 ──────────────────────────────────────────────────── -->
+  <section id="uc-cbam-carbon-reporting">
+    <h3>UC-CM-4: CBAM Embedded Carbon Reporting for Refined Minerals</h3>
+
+    <table class="uc-table">
+      <tr><th>Goal</th><td>An EU importer of refined nickel demonstrates to customs authorities that the declared embedded carbon content of each shipment is verifiable, satisfying [[CBAM]] reporting obligations and avoiding re-declaration by customs.</td></tr>
+      <tr><th>Actors</th><td>
+        <strong>Non-EU refinery</strong> (issuer of [[Carbon Border Adjustment Credential=]]s); <strong>accredited verifier</strong> (issuer of carbon verification credential); <strong>EU importer</strong> (holder); <strong>EU customs / CBAM authority</strong> (verifier).
+      </td></tr>
+      <tr><th>Regulatory context</th><td>[[CBAM]] (Reg. EU 2023/956), full implementation from 2026; requires importers to declare verified embedded direct and indirect emissions of covered goods.</td></tr>
+      <tr><th>Preconditions</th><td>
+        <ul>
+          <li>The non-EU refinery holds a [[DID-CORE]] identifier and has completed a third-party carbon verification audit.</li>
+          <li>The accredited verifier holds a [[DID-CORE]] identifier recognized in the EU CBAM accredited verifier registry.</li>
+          <li>The shipment lot is identified by combined TARIC code and lot number.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Normal flow</th><td>
+        <ol>
+          <li>For each refined metal lot, the refinery issues an <code>ObjectEvent</code> [=Carbon Border Adjustment Credential=] containing: lot identifier, TARIC commodity code, direct emission factor (tCO₂e per tonne), indirect emission factor, calculation boundary (Scope 1 / Scope 2), calculation methodology reference, and reporting period.</li>
+          <li>The accredited verifier issues a carbon verification credential referencing the refinery's credential, confirming the calculation was independently verified under the applicable [[CBAM]] verification standard, and providing the verifier's DID and accreditation certificate reference.</li>
+          <li>The EU importer assembles a CBAM reporting presentation containing both credentials and submits it via the EU CBAM registry API alongside the customs import declaration.</li>
+          <li>The CBAM authority verifies: refinery DID, verifier DID (in EU accreditation registry), proof validity, emission factor within plausible range for the commodity and production process.</li>
+          <li>CBAM certificates are calculated automatically from the verified emission factor; manual re-declaration is not required.</li>
+        </ol>
+      </td></tr>
+      <tr><th>Alternative flows</th><td>
+        <ul>
+          <li><em>Default value fallback:</em> No verified carbon credential is available for a lot. The CBAM authority applies the EU default emission factor for the commodity (typically the 75th percentile of installations in third countries), which is significantly higher than actual. This creates a financial incentive for importers to obtain VSC credentials.</li>
+          <li><em>Verification credential expired:</em> The carbon verification is more than 12 months old. CBAM authority rejects the credential and applies the default value for that lot.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Postconditions</th><td>
+        Importer has fulfilled [[CBAM]] Art. 6 declaration obligation for the shipment with verified emission data; CBAM certificate cost reflects actual embedded emissions.
+      </td></tr>
+      <tr><th>Failure modes</th><td>Fabricated emission factors; verifier DID not in EU accreditation registry; credential replay from a prior shipment with different emission profile.</td></tr>
+      <tr><th>Derived requirements</th><td>REQ-CM-F1, REQ-CM-F3, REQ-CM-F5, REQ-CM-F7, REQ-CM-F8, REQ-CM-NF2, REQ-CM-NF3</td></tr>
+    </table>
+  </section>
+
+  <!-- ─── UC-CM-5 ──────────────────────────────────────────────────── -->
+  <section id="uc-asm-cooperative">
+    <h3>UC-CM-5: ASM Cooperative Inclusion in Responsible Sourcing Programs</h3>
+
+    <table class="uc-table">
+      <tr><th>Goal</th><td>An artisanal and small-scale mining (ASM) cooperative in the Democratic Republic of Congo enables its member miners to issue verifiable mine-site declaration credentials using a mobile-compatible, low-bandwidth [[DID-CORE]] method, so that their cobalt lots can enter a responsible sourcing program and command a premium from a European buyer.</td></tr>
+      <tr><th>Actors</th><td>
+        <strong>Individual ASM miners</strong> (leaf issuers of miner-level declarations); <strong>ASM cooperative</strong> (aggregating issuer of cooperative-level lot credentials); <strong>NGO field auditor</strong> (issuer of cooperative audit credential); <strong>European cobalt buyer</strong> (verifier).
+      </td></tr>
+      <tr><th>Regulatory context</th><td>[[OECD-DD]] Annex II (CAHRA due diligence); [[EU-BATTERY-REG]] Art. 52 (cobalt due diligence); [[RMI-RMAP]] ASM pathway; ICMM ASM guidance ([[ICMM-FRAMEWORK]]).</td></tr>
+      <tr><th>Preconditions</th><td>
+        <ul>
+          <li>Each miner in the cooperative has been registered in a mobile-accessible DID registry and issued a personal [[DID-CORE]] identifier via the cooperative onboarding program.</li>
+          <li>The cooperative holds a [[DID-CORE]] identifier registered in the [[RMI-RMAP]] ASM pathway registry.</li>
+          <li>The NGO field auditor holds a [[DID-CORE]] identifier in the same registry.</li>
+          <li>The cooperative's mobile coordinator app supports offline credential signing with sync on reconnection.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Normal flow</th><td>
+        <ol>
+          <li>Each miner tags their daily output with a unique lot tag (QR code, RFID, or handwritten serial). Using the cooperative mobile app, the miner's personal DID signs an <code>ObjectEvent</code> declaration credential for that daily output lot: miner DID, location (GPS or approximate site name), mineral type, estimated mass, date.</li>
+          <li>The cooperative coordinator collects individual miner credentials and aggregates daily outputs into a weekly collective lot. The cooperative issues an <code>AggregationEvent</code> credential listing input miner-lot credentials and total mass.</li>
+          <li>The NGO field auditor makes quarterly site visits and issues an audit credential for the cooperative covering: site safety compliance, child labour checks, chain-of-custody procedure adherence, and [[OECD-DD]] Step 3 assessment outcome.</li>
+          <li>At sale, the cooperative assembles a [=Verifiable Presentation=] containing the collective lot credential and the current audit credential and presents it to the European buyer's procurement system.</li>
+          <li>The buyer verifies: cooperative DID in RMAP ASM registry, auditor DID authorized, audit not expired, lot mass plausible against historical baseline.</li>
+          <li>On successful verification, the buyer pays a responsible sourcing premium and logs the presentation as [[EU-BATTERY-REG]] due diligence documentation.</li>
+        </ol>
+      </td></tr>
+      <tr><th>Alternative flows</th><td>
+        <ul>
+          <li><em>Offline operation:</em> A miner in a remote area has no connectivity for three days. Credentials are queued locally, signed with a time-locked DID key, and synced to the cooperative server on reconnection. The verifier checks that the credential's <code>validFrom</code> timestamp precedes the sync timestamp.</li>
+          <li><em>Lost or stolen DID device:</em> A miner reports their device lost. The cooperative rotates the miner's DID key. All previously valid credentials remain valid (signed under the prior key, valid at issuance time). The verifier's policy accepts credentials signed by keys valid at issuance.</li>
+          <li><em>New cooperative joining:</em> A new cooperative applies to join the [[RMI-RMAP]] ASM pathway. Until registered, its credentials cannot be verified against the RMAP trust framework. The buyer's policy applies a provisional category with additional manual due diligence during the onboarding window.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Postconditions</th><td>
+        <ul>
+          <li>ASM cooperative lot has a verifiable, timestamped credential chain from individual miner output to aggregate lot.</li>
+          <li>European buyer holds OECD Step 3 due diligence documentation sufficient for [[EU-BATTERY-REG]] Art. 52 cobalt compliance.</li>
+          <li>ASM miners receive a responsible sourcing premium, creating economic incentive for continued participation.</li>
+        </ul>
+      </td></tr>
+      <tr><th>Failure modes</th><td>Mass inflation (cooperative claims more output than verifiable individual miner lots support); miner DID key compromised; cooperative not yet registered in RMAP registry; audit credential issued by NGO not authorized in applicable trust framework.</td></tr>
+      <tr><th>Derived requirements</th><td>REQ-CM-F1, REQ-CM-F2, REQ-CM-F3, REQ-CM-F4, REQ-CM-F9, REQ-CM-NF1, REQ-CM-NF2, REQ-CM-NF3</td></tr>
+    </table>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     7. REQUIREMENTS
+════════════════════════════════════════════════════════════════════ -->
+<section id="requirements">
+  <h2>Requirements</h2>
+
+  <p>
+    All base requirements from [[VSC-REQUIREMENTS]] (REQ-F1 through
+    REQ-F9 and REQ-NF1 through REQ-NF5) apply in full to VSC Critical
+    Minerals Profile implementations. The requirements below are
+    <em>additional</em> to those base requirements, identified by the
+    prefix <code>REQ-CM-</code>. Each requirement carries a unique
+    identifier to support traceability to use cases (see
+    <a href="#requirements-traceability"></a>) and to future
+    conformance tests.
+  </p>
+
+  <section id="functional-requirements">
+    <h3>Functional Requirements</h3>
+
+    <div class="req-box" id="req-CM-F1">
+      <span class="req-id">REQ-CM-F1 — Mine-Site Declaration Credential Schema</span>
+      <p>
+        VSC Critical Minerals Profile implementations MUST define a
+        normative credential schema for mine-site declaration credentials,
+        extending the <code>ObjectEvent</code> [[EPCIS20]] mapping with
+        the following fields:
+      </p>
+      <ul>
+        <li><code>mineSiteId</code>: [[DID-CORE]] URI of the [=Mine Site=].</li>
+        <li><code>commodityType</code>: [[CRMA]]- or [[USGS-2025]]-registered
+            mineral identifier.</li>
+        <li><code>extractionLocationGeoJSON</code>: GeoJSON polygon
+            (not just a point) representing the mine-site boundary,
+            enabling [[OECD-DD]] CAHRA geographic checks.</li>
+        <li><code>extractionStartDate</code> / <code>extractionEndDate</code>:
+            Date range for the lot, as <code>xsd:date</code>.</li>
+        <li><code>lotMassKg</code>: Declared dry mass in kilograms.</li>
+        <li><code>gradePercent</code>: Assay grade as percentage (MAY be
+            disclosed selectively).</li>
+        <li><code>miningMethodCode</code>: Controlled vocabulary value
+            (e.g., <code>underground</code>, <code>open_pit</code>,
+            <code>asm</code>).</li>
+        <li><code>auditCredentialRef</code>: Reference to a current,
+            valid audit credential (SHOULD).</li>
+      </ul>
+      <p>
+        <em>Testability:</em> A conformance test MUST verify that a
+        credential schema instance validates against the normative JSON
+        Schema and that all required fields produce non-null values.
+      </p>
+    </div>
+
+    <div class="req-box" id="req-CM-F2">
+      <span class="req-id">REQ-CM-F2 — ESG Attribute Credential Schema</span>
+      <p>
+        VSC Critical Minerals Profile implementations MUST define a
+        normative schema for [=ESG Attribute Credential=]s. An
+        [=ESG Attribute Credential=] MUST include:
+      </p>
+      <ul>
+        <li><code>subjectLotId</code>: Identifier of the [=Mineral Lot=]
+            or [=Mine Site=] to which the ESG claim applies.</li>
+        <li><code>esgDimension</code>: Controlled vocabulary entry from
+            a defined list (e.g., <code>carbonFootprint</code>,
+            <code>humanRightsDueDiligence</code>, <code>conflictFree</code>,
+            <code>waterUsage</code>, <code>childLabourCompliance</code>).</li>
+        <li><code>assessmentStandard</code>: URI of the applicable standard
+            (e.g., [[OECD-DD]], [[RMI-RMAP]], ISO 14064).</li>
+        <li><code>assessmentOutcome</code>: Controlled vocabulary outcome
+            (e.g., <code>conformant</code>, <code>conditionallyConformant</code>,
+            <code>nonConformant</code>).</li>
+        <li><code>assessmentDate</code>: Date of assessment or verification.</li>
+        <li><code>validUntil</code>: Expiry date of the credential (MUST).</li>
+        <li><code>auditorDid</code>: [[DID-CORE]] URI of the
+            [=Third-Party Auditor=] (MUST where third-party verification
+            is required; SHOULD for self-declaration).</li>
+      </ul>
+      <p>
+        <em>Testability:</em> A conformance test MUST verify that an
+        [=ESG Attribute Credential=] with a past <code>validUntil</code>
+        date fails verification.
+      </p>
+    </div>
+
+    <div class="req-box" id="req-CM-F3">
+      <span class="req-id">REQ-CM-F3 — Transformation Credential for Blending and Refining</span>
+      <p>
+        VSC Critical Minerals Profile implementations MUST define a
+        normative <code>TransformationEvent</code> credential schema
+        for smelter and refinery operations. This schema MUST support:
+      </p>
+      <ul>
+        <li>Multiple input lot credentials (each with lot ID, mass fraction,
+            and credential reference), supporting blending from N source lots.</li>
+        <li>Multiple output lot credentials, supporting split-output refinery
+            products (e.g., cobalt sulfate and cobalt hydroxide from one input).</li>
+        <li>A <code>traceabilityMethodCode</code> field with values
+            <code>chainOfCustody</code> or <code>massBalance</code>.</li>
+        <li>Where <code>massBalance</code> is declared: a
+            <code>massBalanceAttribution</code> sub-object containing
+            responsible mass percentage, calculation period, and methodology URI.</li>
+        <li>A <code>processingFacilityDid</code> field (MUST) referencing
+            the [[DID-CORE]] identifier of the [=Processing Facility=].</li>
+      </ul>
+    </div>
+
+    <div class="req-box" id="req-CM-F4">
+      <span class="req-id">REQ-CM-F4 — OECD CAHRA Geographic Binding</span>
+      <p>
+        Mine-site declaration credentials (see REQ-CM-F1) MUST include a
+        GeoJSON polygon for the mine-site boundary. VSC Critical Minerals
+        Profile verifiers SHOULD implement or integrate a geographic
+        policy check that evaluates mine-site polygon coordinates against
+        the current [[OECD-DD]] Annex II CAHRA list and surfaces a
+        specific CAHRA-risk flag (not a generic verification failure)
+        when a coordinate intersection is detected. The CAHRA check MUST
+        NOT cause automatic rejection; it MUST trigger an enhanced
+        due-diligence workflow in the verifier's policy engine.
+      </p>
+    </div>
+
+    <div class="req-box" id="req-CM-F5">
+      <span class="req-id">REQ-CM-F5 — Third-Party Audit Credential Integration</span>
+      <p>
+        VSC Critical Minerals Profile implementations MUST support
+        referencing one or more [=ESG Attribute Credential=]s from within
+        a mine-site declaration credential or transformation credential via
+        a <code>auditCredentialRef</code> property. Verifiers MUST
+        resolve and validate referenced audit credentials as part of the
+        verification flow for the parent credential. A parent credential
+        whose referenced audit credential is expired or revoked MUST
+        be treated as unverified with respect to the ESG dimensions
+        covered by that audit.
+      </p>
+    </div>
+
+    <div class="req-box" id="req-CM-F6">
+      <span class="req-id">REQ-CM-F6 — Carbon Footprint Credential Schema</span>
+      <p>
+        VSC Critical Minerals Profile implementations MUST define a
+        [=Carbon Border Adjustment Credential=] schema aligned with
+        [[CBAM]] Art. 7 reporting requirements. This schema MUST include:
+        TARIC commodity code; direct emission factor (tCO₂e per tonne
+        of output); indirect emission factor; Scope 1 / Scope 2
+        boundary declaration; calculation methodology URI; reporting
+        period; and a reference to a third-party carbon verification
+        credential. The credential MUST include a <code>validUntil</code>
+        of no more than 12 months from the verification date.
+      </p>
+    </div>
+
+    <div class="req-box" id="req-CM-F7">
+      <span class="req-id">REQ-CM-F7 — Battery Passport Composition Alignment</span>
+      <p>
+        VSC Critical Minerals Profile credential schemas MUST be
+        designed so that their field values can be directly mapped to
+        [[GBA-BATTERY-PASSPORT]] and [[EU-BATTERY-REG]] Annex XIII
+        data fields without loss of required data. The VSC Community
+        Group SHOULD publish and maintain a normative mapping table
+        from VSC Critical Minerals credential fields to [[EU-BATTERY-REG]]
+        Annex XIII fields. Battery Passport assemblies MUST be
+        realizable as [[VSC-REQUIREMENTS]] [=Verifiable Presentation=]s.
+      </p>
+    </div>
+
+    <div class="req-box" id="req-CM-F8">
+      <span class="req-id">REQ-CM-F8 — Recycled Content Credential</span>
+      <p>
+        VSC Critical Minerals Profile implementations MUST support a
+        recycled content declaration as a normative extension to
+        the <code>ObjectEvent</code> credential schema for secondary
+        mineral lots. This extension MUST include:
+        <code>recycledContent: true</code>;
+        <code>recyclingOperatorDid</code> (the [[DID-CORE]] identifier
+        of the recycling facility);
+        <code>feedstockType</code> (controlled vocabulary: e.g.,
+        <code>endOfLifeBattery</code>, <code>industrialScrap</code>,
+        <code>miningWaste</code>); and a reference to a third-party
+        verification credential where required by [[EU-BATTERY-REG]]
+        Art. 8.
+      </p>
+    </div>
+
+    <div class="req-box" id="req-CM-F9">
+      <span class="req-id">REQ-CM-F9 — ASM-Compatible Credential Issuance</span>
+      <p>
+        VSC Critical Minerals Profile implementations MUST NOT require
+        credential issuance mechanisms that are incompatible with
+        mobile-only, intermittent-connectivity environments. Specifically:
+      </p>
+      <ul>
+        <li>The DID method(s) used for [=ASM Actor=] identifiers MUST be
+            operable from a mobile device with a 2G or better connection
+            for DID registration and key publication.</li>
+        <li>Credential signing MUST be possible offline (with sync-on-reconnect),
+            using time-locked key material where the DID document
+            supports versioning.</li>
+        <li>The credential schema for ASM miner-level declarations
+            (see REQ-CM-F1, <code>miningMethodCode: asm</code>) MAY
+            omit assay grade (<code>gradePercent</code>) and precise
+            GPS polygon fields where the ASM actor can only supply
+            an approximate site identifier; such omissions MUST be
+            flagged in the credential's <code>credentialStatus</code>
+            extension for downstream verifier awareness.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="non-functional-requirements">
+    <h3>Non-Functional Requirements</h3>
+
+    <div class="req-box" id="req-CM-NF1">
+      <span class="req-id">REQ-CM-NF1 — Multi-Tier Chain Support at Scale</span>
+      <p>
+        VSC Critical Minerals Profile implementations MUST support
+        event chains spanning at minimum seven distinct value chain
+        tiers (mine → concentrator → smelter → refiner → precursor
+        producer → cathode manufacturer → cell manufacturer) without
+        degradation of verification performance. Total chain verification
+        time (resolving all DIDs, validating all proofs, checking all
+        revocation statuses) for a seven-tier chain SHOULD complete
+        in under 10 seconds on commodity hardware with reasonable
+        network latency.
+      </p>
+    </div>
+
+    <div class="req-box" id="req-CM-NF2">
+      <span class="req-id">REQ-CM-NF2 — Commercially Sensitive Data Protection</span>
+      <p>
+        VSC Critical Minerals Profile credential schemas MUST be
+        designed so that each commercially sensitive field
+        (supplier identity, pricing, assay grade, processing yields,
+        and trading relationships) can be independently omitted via
+        selective disclosure without invalidating the proof over
+        disclosed fields. Verifier policies published under applicable
+        regulatory frameworks (e.g., [[EU-BATTERY-REG]] Annex XIII)
+        SHOULD specify the minimum field set required for compliance,
+        and implementations MUST NOT require disclosure of fields
+        beyond that minimum.
+      </p>
+    </div>
+
+    <div class="req-box" id="req-CM-NF3">
+      <span class="req-id">REQ-CM-NF3 — Regulatory Completeness Checking</span>
+      <p>
+        VSC Critical Minerals Profile verifier implementations SHOULD
+        provide a structured, machine-readable compliance report when
+        verifying a [=Battery Passport=] presentation, identifying
+        for each [[EU-BATTERY-REG]] Annex XIII required field: whether
+        a credential providing that field was present, verified, and
+        non-expired. The report MUST distinguish between
+        <em>missing credential</em> (not provided), <em>unverifiable
+        credential</em> (present but proof or DID resolution failed),
+        and <em>expired credential</em> (present and verifiable but
+        past <code>validUntil</code>).
+      </p>
+    </div>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     8. REQUIREMENTS TRACEABILITY
+════════════════════════════════════════════════════════════════════ -->
+<section id="requirements-traceability">
+  <h2>Requirements Traceability</h2>
+
+  <p>
+    The matrix below maps each critical-minerals use case to the
+    additional requirements (REQ-CM-*) it motivates. Base VSC
+    requirements (REQ-F* and REQ-NF* from [[VSC-REQUIREMENTS]])
+    apply to all use cases and are not repeated here.
+  </p>
+
+  <table class="trace-matrix">
+    <thead>
+      <tr>
+        <th>Requirement</th>
+        <th><a href="#uc-mine-to-refinery">UC-CM-1</a></th>
+        <th><a href="#uc-mass-balance-refinery">UC-CM-2</a></th>
+        <th><a href="#uc-battery-passport-assembly">UC-CM-3</a></th>
+        <th><a href="#uc-cbam-carbon-reporting">UC-CM-4</a></th>
+        <th><a href="#uc-asm-cooperative">UC-CM-5</a></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>REQ-CM-F1</td>
+        <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>REQ-CM-F2</td>
+        <td class="check">✓</td><td class="dash">—</td><td class="check">✓</td><td class="dash">—</td><td class="check">✓</td></tr>
+      <tr><td>REQ-CM-F3</td>
+        <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td>REQ-CM-F4</td>
+        <td class="check">✓</td><td class="dash">—</td><td class="check">✓</td><td class="dash">—</td><td class="check">✓</td></tr>
+      <tr><td>REQ-CM-F5</td>
+        <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>REQ-CM-F6</td>
+        <td class="dash">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="dash">—</td></tr>
+      <tr><td>REQ-CM-F7</td>
+        <td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td>REQ-CM-F8</td>
+        <td class="dash">—</td><td class="dash">—</td><td class="check">✓</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td>REQ-CM-F9</td>
+        <td class="check">✓</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+      <tr><td>REQ-CM-NF1</td>
+        <td class="check">✓</td><td class="check">✓</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+      <tr><td>REQ-CM-NF2</td>
+        <td class="check">✓</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      <tr><td>REQ-CM-NF3</td>
+        <td class="dash">—</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td><td class="dash">—</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     9. SECURITY CONSIDERATIONS
+════════════════════════════════════════════════════════════════════ -->
+<section id="security">
+  <h2>Security Considerations</h2>
+
+  <p>
+    All security considerations in [[VSC-REQUIREMENTS]] and [[VC-DATA-MODEL]]
+    apply. The following additional threats are specific to critical
+    minerals supply chains, assessed using the [[STRIDE]] framework and
+    [[NIST-800-30]] severity methodology.
+  </p>
+
+  <table class="threat-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Threat</th>
+        <th>STRIDE</th>
+        <th>Severity</th>
+        <th>Mitigation</th>
+        <th>Req.</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>T-CM-1</td>
+        <td><strong>Geographic spoofing:</strong> An attacker provides false GPS coordinates in a mine-site credential, placing a CAHRA-located mine outside the risk zone, or attributing material to a compliant mine they do not operate.</td>
+        <td>Spoofing / Tampering</td>
+        <td>Critical</td>
+        <td>Mine-site DID documents SHOULD include a <code>serviceEndpoint</code> for satellite imagery verification (e.g., integration with public remote sensing APIs) so verifiers can cross-check the declared polygon against publicly available land-use data. Audit credentials (REQ-CM-F5) MUST include physical verification of the mine boundary. CAHRA geographic checks (REQ-CM-F4) MUST be run on every mine-site credential.</td>
+        <td>REQ-CM-F1, REQ-CM-F4, REQ-CM-F5</td>
+      </tr>
+      <tr>
+        <td>T-CM-2</td>
+        <td><strong>Mass inflation / over-attribution:</strong> A refinery or cooperative claims to have received more responsible-attributed mass than the verified input credentials can account for, inflating the responsible percentage for downstream buyers.</td>
+        <td>Tampering</td>
+        <td>High</td>
+        <td>Transformation credential schemas (REQ-CM-F3) MUST enforce a conservation-of-mass constraint: the sum of declared input masses MUST be ≥ the declared output mass (accounting for processing losses stated in the methodology URI). Verifiers SHOULD implement a mass-balance audit function that checks this constraint across all input lot credentials in a transformation event.</td>
+        <td>REQ-CM-F3, REQ-CM-NF1</td>
+      </tr>
+      <tr>
+        <td>T-CM-3</td>
+        <td><strong>Laundering through non-RMAP smelters:</strong> Material from a non-compliant mine is routed through a compliant smelter and mixed with legitimate lots. The smelter's mass-balance credential masks the non-compliant origin.</td>
+        <td>Elevation of privilege</td>
+        <td>High</td>
+        <td>Transformation credentials MUST list all input lot credential references, not just responsible-certified lots. Verifiers MUST distinguish "responsible-attributed percentage" from "all inputs verified." A smelter that omits uncertified input lots from its transformation credential is committing a fraudulent attestation, detectable by cross-referencing total declared input mass against the verified responsible input mass sum.</td>
+        <td>REQ-CM-F3, REQ-CM-F5</td>
+      </tr>
+      <tr>
+        <td>T-CM-4</td>
+        <td><strong>Audit credential forgery:</strong> A fraudulent actor creates a fake audit credential purportedly issued by an [[RMI-RMAP]]-accredited auditor, using a DID that is not actually registered in the RMAP trust framework.</td>
+        <td>Spoofing</td>
+        <td>High</td>
+        <td>Verifiers MUST check the auditor DID against the authoritative [[RMI-RMAP]] / [[ICMM-FRAMEWORK]] trust framework registry before accepting any audit credential (REQ-CM-F5). Trust framework registries SHOULD be hosted as publicly resolvable DID documents or Verifiable Data Registries to enable automated, real-time lookup.</td>
+        <td>REQ-CM-F2, REQ-CM-F5</td>
+      </tr>
+      <tr>
+        <td>T-CM-5</td>
+        <td><strong>Carbon factor manipulation:</strong> A refinery inflates its declared direct emission factors or manipulates the calculation boundary to reduce [[CBAM]] certificate costs for importers.</td>
+        <td>Tampering</td>
+        <td>Medium</td>
+        <td>Carbon footprint credentials (REQ-CM-F6) MUST include a reference to a third-party carbon verification credential signed by a verifier registered in the EU CBAM accredited verifier registry. CBAM verifiers SHOULD apply an anomaly detection check: emission factors outside the interquartile range for the commodity and production process type SHOULD trigger escalation.</td>
+        <td>REQ-CM-F6, REQ-CM-NF3</td>
+      </tr>
+      <tr>
+        <td>T-CM-6</td>
+        <td><strong>ASM device compromise:</strong> A miner's mobile device or DID key material is stolen or cloned, enabling fraudulent credential issuance in the miner's name.</td>
+        <td>Spoofing</td>
+        <td>Medium</td>
+        <td>ASM DID methods SHOULD support key rotation, with cooperative coordinators acting as key-recovery guardians. The cooperative's verification system SHOULD flag credentials signed after a reported key compromise. Time-locked offline signing SHOULD include a device attestation or biometric binding where the mobile platform supports it (optional; SHOULD NOT be a hard requirement that excludes low-cost devices).</td>
+        <td>REQ-CM-F9</td>
+      </tr>
+      <tr>
+        <td>T-CM-7</td>
+        <td><strong>Supply chain data correlation:</strong> Adversaries monitoring credential presentations correlate mineral supply relationships, quantities, and trading partner identities across competing enterprises.</td>
+        <td>Information disclosure</td>
+        <td>Medium</td>
+        <td>Selective disclosure (REQ-CM-NF2) MUST be applied to conceal commercially sensitive fields in each presentation. Pairwise [[DID-CORE]] identifiers SHOULD be used for bilateral trading relationships. Verifiers SHOULD NOT log full credential content beyond what is required for the specific compliance purpose.</td>
+        <td>REQ-CM-NF2</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     10. PRIVACY CONSIDERATIONS
+════════════════════════════════════════════════════════════════════ -->
+<section id="privacy">
+  <h2>Privacy Considerations</h2>
+
+  <p>
+    All privacy considerations in [[VSC-REQUIREMENTS]] and [[VC-DATA-MODEL]]
+    apply. The following additional considerations apply specifically to
+    the critical minerals domain:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Individual miner identity protection:</strong>
+      In ASM contexts (UC-CM-5), miner-level [[DID-CORE]] identifiers
+      MUST NOT be exposed outside the cooperative's internal trust
+      boundary without the miner's consent. Cooperative-level aggregation
+      credentials SHOULD pseudonymize individual miner contributions.
+      Implementations SHOULD support cooperative-issued pseudonymous
+      credentials that demonstrate aggregate provenance without identifying
+      individual persons.
+    </li>
+    <li>
+      <strong>Supplier relationship confidentiality:</strong>
+      Mine-to-refinery and refinery-to-manufacturer relationships
+      constitute commercially sensitive trade secrets. Implementations
+      MUST support selective disclosure that conceals counterparty
+      identities from downstream verifiers while retaining
+      cryptographic proof of the underlying chain. This applies
+      particularly to the DID identifiers of upstream suppliers
+      referenced in transformation credentials.
+    </li>
+    <li>
+      <strong>Assay grade and production yield:</strong>
+      Mineral grade and processing yield data are commercially sensitive.
+      These fields MUST be individually disclosable; [[EU-BATTERY-REG]]
+      Annex XIII and [[CBAM]] reporting SHOULD NOT require disclosure
+      of grade or yield beyond what is strictly necessary for the
+      regulatory calculation. Implementations SHOULD default to
+      selectively disclosing grade data only to verifiers with an
+      explicit policy requirement.
+    </li>
+    <li>
+      <strong>Geopolitical sensitivity of mine locations:</strong>
+      Precise mine-site boundary polygons may reveal strategic
+      mineral reserve information of national sensitivity. GeoJSON
+      polygons in mine-site credentials SHOULD be subject to
+      access control; full precision SHOULD be disclosed only to
+      verifiers with a specific geographic verification need
+      (e.g., CAHRA risk assessment). Downstream verifiers not
+      requiring geographic data SHOULD receive a redacted
+      credential with only a country code.
+    </li>
+    <li>
+      <strong>Data retention and right to erasure:</strong>
+      Critical minerals supply chain data, once incorporated into
+      a [[EU-BATTERY-REG]] Battery Passport registered in the EU
+      DPP registry, may be subject to regulatory minimum retention
+      periods (10 years under [[EU-BATTERY-REG]] Art. 64). VSC
+      implementations SHOULD use [[VC-BITSTRING-STATUS]] revocation
+      to allow credentials to be suspended for further disclosure
+      while the underlying data remains available to authorized
+      regulators within the retention window.
+    </li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     11. FUTURE WORK
+════════════════════════════════════════════════════════════════════ -->
+<section id="future-work">
+  <h2>Future Work</h2>
+  <p class="informative">This section is non-normative.</p>
+
+  <dl>
+    <dt>VSC Critical Minerals Core Data Model</dt>
+    <dd>
+      Normative JSON-LD context documents and JSON Schema definitions
+      for all credential types defined in this profile, including mine-site
+      declaration, ESG attribute, mass-balance transformation, carbon
+      footprint, and recycled content schemas.
+    </dd>
+
+    <dt>CRMA / EU Battery Regulation Annex XIII Mapping Table</dt>
+    <dd>
+      A normative, field-by-field mapping from VSC Critical Minerals
+      credential properties to [[EU-BATTERY-REG]] Annex XIII required
+      data elements and [[GBA-BATTERY-PASSPORT]] data categories,
+      enabling automated compliance checking (REQ-CM-NF3).
+    </dd>
+
+    <dt>OECD CAHRA Integration Specification</dt>
+    <dd>
+      Technical guidance on integrating [[OECD-DD]] Annex II CAHRA
+      geographic data with mine-site credential GeoJSON polygon
+      verification, including a recommended API contract for
+      CAHRA-check service providers.
+    </dd>
+
+    <dt>ASM Credential Issuance Profile</dt>
+    <dd>
+      A specification for lightweight [[DID-CORE]] method selection,
+      mobile wallet integration, and offline signing for [=ASM Actor=]s,
+      addressing REQ-CM-F9 in detail with reference implementations.
+    </dd>
+
+    <dt>VSC Critical Minerals Interoperability Test Suite</dt>
+    <dd>
+      Conformance tests covering all REQ-CM-F* and REQ-CM-NF*
+      requirements, including mass-conservation checks, CAHRA
+      geographic intersection tests, and [[EU-BATTERY-REG]] Annex XIII
+      completeness evaluation.
+    </dd>
+
+    <dt>Liaison with Global Battery Alliance (GBA)</dt>
+    <dd>
+      Formal coordination with the [[GBA-BATTERY-PASSPORT]] technical
+      working group to align VSC Critical Minerals credential schemas
+      with the GBA Battery Passport data specification and ensure
+      mutual recognition in EU type-approval workflows.
+    </dd>
+  </dl>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     12. CONTRIBUTING
+════════════════════════════════════════════════════════════════════ -->
+<section id="contributing" class="appendix">
+  <h2>Contributing to this Document</h2>
+  <p class="informative">This section is non-normative.</p>
+
+  <div class="contrib-box">
+    <h4>All contributions welcome — here is how to get started.</h4>
+    <p>
+      You do not need to be a W3C Member to contribute. The
+      <a href="https://www.w3.org/community/vsc/">VSC Community Group</a>
+      is open to all. Join at
+      <a href="https://www.w3.org/community/vsc/join">w3.org/community/vsc/join</a>
+      and accept the
+      <a href="https://www.w3.org/community/about/process/cla/">W3C Community CLA</a>.
+    </p>
+  </div>
+
+  <section id="contributing-priority-areas">
+    <h3>Priority Contribution Areas</h3>
+    <p>
+      The VSC Community Group is actively seeking contributions in
+      the following areas for the Critical Minerals profile:
+    </p>
+    <ul>
+      <li>
+        <strong>Minerals industry expertise:</strong> Input on mine-site
+        declaration schema field completeness from mining operators,
+        refiners, and smelters (especially for under-represented minerals
+        such as rare earth elements, gallium, and natural graphite).
+      </li>
+      <li>
+        <strong>Regulatory expertise:</strong> Detailed review of the
+        [[EU-BATTERY-REG]] Annex XIII mapping table (forthcoming)
+        and [[CBAM]] carbon credential schema alignment.
+      </li>
+      <li>
+        <strong>ASM and developing-world deployment:</strong>
+        Field experience from organizations deploying traceability
+        tools with ASM communities in DRC, Indonesia, and other
+        major ASM geographies.
+      </li>
+      <li>
+        <strong>DID method recommendations:</strong> Evaluation of
+        lightweight [[DID-CORE]] methods suitable for REQ-CM-F9
+        (mobile, intermittent connectivity) with concrete performance
+        data.
+      </li>
+      <li>
+        <strong>Trust framework liaison:</strong> Representatives from
+        [[RMI-RMAP]], [[GBA-BATTERY-PASSPORT]], and [[ICMM-FRAMEWORK]]
+        organizations to formalize registry interoperability.
+      </li>
+    </ul>
+  </section>
+
+  <section id="contributing-issues">
+    <h3>Filing Issues</h3>
+    <p>
+      Open an issue at
+      <a href="https://github.com/w3c-cg/vsc/issues/new/choose">github.com/w3c-cg/vsc/issues</a>.
+      Please:
+    </p>
+    <ul>
+      <li>Label issues as: <code>editorial</code>, <code>requirement</code>,
+          <code>use-case</code>, <code>security</code>, <code>regulatory</code>,
+          or <code>question</code>.</li>
+      <li>For new use cases: include goal, actors, regulatory context, and
+          a sketch of the normal flow in the issue body.</li>
+      <li>For new or modified requirements: include the plain-language statement,
+          motivating use case(s), and a testability criterion.</li>
+      <li>One discrete comment per issue; do not bundle unrelated topics.</li>
+    </ul>
+  </section>
+
+  <section id="contributing-prs">
+    <h3>Pull Requests</h3>
+    <ul>
+      <li>Fork the repository and create a feature branch:
+          <code>feat/uc-cm-recycling</code>, <code>fix/req-CM-F3-conservation</code>, etc.</li>
+      <li>Validate the document locally in a browser with ReSpec loaded.
+          Check the browser console for ReSpec errors before submitting.</li>
+      <li>Link PRs to issues with <code>Closes #NNN</code> or <code>Addresses #NNN</code>.</li>
+      <li>New requirements MUST be added to the traceability matrix in
+          <a href="#requirements-traceability"></a>.</li>
+      <li>All new regulatory references MUST be added to <code>localBiblio</code>
+          in <code>respecConfig</code> before citing in text.</li>
+    </ul>
+  </section>
+
+  <section id="contributing-meetings">
+    <h3>Meetings</h3>
+    <p>
+      The VSC Community Group meets bi-weekly. Agendas and minutes are
+      published to the
+      <a href="https://lists.w3.org/Archives/Public/public-vsc/">public-vsc mailing list</a>
+      and the GitHub repository's
+      <a href="https://github.com/w3c-cg/vsc/tree/main/meetings">meetings folder</a>.
+      The Critical Minerals sub-group may schedule additional focused calls;
+      announcements will be made on the same mailing list.
+    </p>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     ACKNOWLEDGMENTS
+════════════════════════════════════════════════════════════════════ -->
+<section id="acknowledgments" class="appendix">
+  <h2>Acknowledgments</h2>
+  <p>
+    The editors thank the participants of the
+    <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain
+    Community Group</a> for their contributions and review. This document
+    draws on regulatory text from [[CRMA]], [[EU-BATTERY-REG]],
+    [[EU-CSDDD]], [[CBAM]], and [[OECD-DD]]; industry frameworks from
+    [[RMI-RMAP]], [[GBA-BATTERY-PASSPORT]], and [[ICMM-FRAMEWORK]]; and
+    the IEA–OECD [[OECD-TRACEABILITY]] report. W3C specification
+    methodology is informed by [[SHACL-UCR]] and [[DWBP-UCR]].
+    The ASM-inclusive design in UC-CM-5 and REQ-CM-F9 was informed by
+    analysis of OECD Forum on Responsible Mineral Supply Chains
+    proceedings (2024–2025).
+  </p>
+</section>
+
+</body>
+</html>
