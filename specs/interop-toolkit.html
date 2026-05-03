@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>VSC Interoperability Toolkit — Specification v0.1</title>
+
+  <meta name="description"
+    content="Specifications and software tool requirements for translating between
+    existing supply chain event data (EPCIS 2.0) and verifiable,
+    DID-anchored attestations — the Interoperability Toolkit deliverable
+    of the Verifiable Supply Chain Community Group." />
+
+  <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
+
+  <script class="remove">
+    var respecConfig = {
+      specStatus:     "CG-DRAFT",
+      shortName:      "vsc-interop-toolkit",
+      group:          "vsc",
+
+      editors: [
+        {
+          name:       "Amir Hameed Mir",
+          company:    "Verifiable Supply Chain Community Group",
+          companyURL: "https://www.w3.org/community/vsc/"
+        }
+      ],
+      authors: [
+        {
+          name: "VSC Community Group Participants",
+          url:  "https://www.w3.org/community/vsc/"
+        }
+      ],
+
+      github: {
+        repoURL: "https://github.com/w3c-cg/vsc-interop-toolkit",
+        branch:  "main"
+      },
+
+      edDraftURI:     "https://w3c-cg.github.io/vsc-interop-toolkit/",
+      license:        "w3c-software-doc",
+      copyrightStart: 2026,
+      maxTocLevel:    3,
+      noRecTrack:     true,
+
+      xref: ["did-core", "vc-data-model-2.0"],
+
+      localBiblio: {
+        "VSC-REQUIREMENTS": {
+          title:     "Verifiable Supply Chain — Requirements and Use Cases",
+          href:      "https://w3c-cg.github.io/vsc-requirements/",
+          publisher: "W3C Verifiable Supply Chain Community Group"
+        },
+        "EPCIS20": {
+          title:     "EPC Information Services (EPCIS) Standard, Release 2.0",
+          href:      "https://ref.gs1.org/standards/epcis/",
+          publisher: "GS1",
+          date:      "June 2022"
+        },
+        "CBV20": {
+          title:     "GS1 Core Business Vocabulary (CBV) Standard, Release 2.0",
+          href:      "https://ref.gs1.org/standards/cbv/",
+          publisher: "GS1",
+          date:      "June 2022"
+        },
+        "ISO19987": {
+          title:     "ISO/IEC 19987:2024 — EPC Information Services (EPCIS)",
+          href:      "https://www.iso.org/standard/85557.html",
+          publisher: "ISO/IEC",
+          date:      "2024"
+        },
+        "VC-DATA-MODEL": {
+          title:     "Verifiable Credentials Data Model v2.0",
+          href:      "https://www.w3.org/TR/vc-data-model-2.0/",
+          publisher: "W3C",
+          date:      "15 May 2025"
+        },
+        "VC-DI": {
+          title:     "Verifiable Credential Data Integrity 1.0",
+          href:      "https://www.w3.org/TR/vc-data-integrity/",
+          publisher: "W3C",
+          date:      "15 May 2025"
+        },
+        "VC-DI-EDDSA": {
+          title:     "Data Integrity EdDSA Cryptosuites v1.0",
+          href:      "https://www.w3.org/TR/vc-di-eddsa/",
+          publisher: "W3C",
+          date:      "15 May 2025"
+        },
+        "VC-DI-ECDSA": {
+          title:     "Data Integrity ECDSA Cryptosuites v1.0",
+          href:      "https://www.w3.org/TR/vc-di-ecdsa/",
+          publisher: "W3C",
+          date:      "15 May 2025"
+        },
+        "VC-JOSE-COSE": {
+          title:     "Securing Verifiable Credentials using JOSE and COSE",
+          href:      "https://www.w3.org/TR/vc-jose-cose/",
+          publisher: "W3C",
+          date:      "15 May 2025"
+        },
+        "SD-JWT": {
+          title:     "Selective Disclosure for JWTs (SD-JWT)",
+          href:      "https://datatracker.ietf.org/doc/draft-ietf-oauth-selective-disclosure-jwt/",
+          publisher: "IETF OAuth Working Group"
+        },
+        "VC-BITSTRING-STATUS": {
+          title:     "Bitstring Status List v1.0",
+          href:      "https://www.w3.org/TR/vc-bitstring-status-list/",
+          publisher: "W3C",
+          date:      "15 May 2025"
+        },
+        "VC-API": {
+          title:     "Verifiable Credentials API (VC API) — W3C CCG",
+          href:      "https://w3c-ccg.github.io/vc-api/",
+          publisher: "W3C Credentials Community Group"
+        },
+        "TRACE-INTEROP": {
+          title:     "Traceability Interoperability v1.0 — W3C CCG Final Report",
+          href:      "https://www.w3.org/community/reports/credentials/CG-FINAL-traceability-interop-20241204/",
+          publisher: "W3C Credentials Community Group",
+          date:      "4 December 2024"
+        },
+        "TRACE-VOCAB": {
+          title:     "Traceability Vocabulary — W3C CCG",
+          href:      "https://w3c-ccg.github.io/traceability-vocab/",
+          publisher: "W3C Credentials Community Group"
+        },
+        "DID-CORE": {
+          title:     "Decentralized Identifiers (DIDs) v1.0",
+          href:      "https://www.w3.org/TR/did-core/",
+          publisher: "W3C",
+          date:      "19 July 2022"
+        },
+        "DID-WEB": {
+          title:     "The did:web Method Specification",
+          href:      "https://w3c-ccg.github.io/did-method-web/",
+          publisher: "W3C Credentials Community Group"
+        },
+        "GS1-DIGITALLINK": {
+          title:     "GS1 Digital Link Standard",
+          href:      "https://ref.gs1.org/standards/digital-link/",
+          publisher: "GS1"
+        },
+        "DSCSA": {
+          title:     "Drug Supply Chain Security Act (DSCSA)",
+          href:      "https://www.fda.gov/drugs/drug-supply-chain-security-act-dscsa",
+          publisher: "U.S. Food and Drug Administration",
+          date:      "2013, amended 2023"
+        },
+        "EUDR": {
+          title:     "EU Deforestation Regulation (EUDR) — Regulation (EU) 2023/1115",
+          href:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R1115",
+          publisher: "European Union",
+          date:      "June 2023"
+        },
+        "EU-DPP": {
+          title:     "EU Digital Product Passport — ESPR Regulation (EU) 2024/1781",
+          href:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024R1781",
+          publisher: "European Union",
+          date:      "2024"
+        },
+        "CBAM": {
+          title:     "EU Carbon Border Adjustment Mechanism (CBAM) — Regulation (EU) 2023/956",
+          href:      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R0956",
+          publisher: "European Union",
+          date:      "May 2023"
+        },
+        "RFC2119": {
+          title:     "Key words for use in RFCs to Indicate Requirement Levels",
+          href:      "https://www.rfc-editor.org/rfc/rfc2119",
+          publisher: "IETF",
+          date:      "March 1997"
+        },
+        "RFC8174": {
+          title:     "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words",
+          href:      "https://www.rfc-editor.org/rfc/rfc8174",
+          publisher: "IETF",
+          date:      "May 2017"
+        },
+        "RFC7515": {
+          title:     "JSON Web Signature (JWS) — RFC 7515",
+          href:      "https://www.rfc-editor.org/rfc/rfc7515",
+          publisher: "IETF",
+          date:      "May 2015"
+        },
+        "RFC9052": {
+          title:     "CBOR Object Signing and Encryption (COSE) — RFC 9052",
+          href:      "https://www.rfc-editor.org/rfc/rfc9052",
+          publisher: "IETF",
+          date:      "August 2022"
+        },
+        "OPENAPI": {
+          title:     "OpenAPI Specification v3.1.0",
+          href:      "https://spec.openapis.org/oas/v3.1.0",
+          publisher: "OpenAPI Initiative",
+          date:      "February 2021"
+        },
+        "JSON-SCHEMA": {
+          title:     "JSON Schema: A Media Type for Describing JSON Documents",
+          href:      "https://json-schema.org/draft/2020-12/json-schema-core",
+          publisher: "IETF JSON Schema WG",
+          date:      "Draft 2020-12"
+        },
+        "JSON-LD11": {
+          title:     "JSON-LD 1.1",
+          href:      "https://www.w3.org/TR/json-ld11/",
+          publisher: "W3C",
+          date:      "16 July 2020"
+        },
+        "SEMVER": {
+          title:     "Semantic Versioning 2.0.0",
+          href:      "https://semver.org/spec/v2.0.0.html",
+          publisher: "semver.org"
+        },
+        "GS1-DSCSA-GUIDE": {
+          title:     "GS1 Healthcare DSCSA Implementation Guideline",
+          href:      "https://www.gs1.org/industries/healthcare/dscsa",
+          publisher: "GS1 US"
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* ── Requirement callout boxes ───────────────────────────────── */
+    .req-box {
+      border-left: 4px solid #005A9C;
+      background: #f0f7ff;
+      padding: 0.65em 1em;
+      margin: 1em 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .req-box .req-id {
+      font-weight: bold;
+      font-family: monospace;
+      color: #005A9C;
+    }
+    .req-box p { margin: 0.3em 0 0; }
+
+    /* ── Conformance class tags ──────────────────────────────────── */
+    .cc {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.8em;
+      font-weight: bold;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+    .cc-issuer   { background: #d4edda; color: #155724; }
+    .cc-verifier { background: #cce5ff; color: #004085; }
+    .cc-mapper   { background: #fff3cd; color: #856404; }
+    .cc-harness  { background: #f8d7da; color: #721c24; }
+
+    /* ── Endpoint/API boxes ──────────────────────────────────────── */
+    .endpoint-box {
+      font-family: monospace;
+      font-size: 0.88em;
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 6px;
+      padding: 1em 1.2em;
+      margin: 0.8em 0;
+      overflow-x: auto;
+    }
+    .endpoint-box .method-post   { color: #a6e3a1; font-weight: bold; }
+    .endpoint-box .method-get    { color: #89b4fa; font-weight: bold; }
+    .endpoint-box .path          { color: #cba6f7; }
+    .endpoint-box .comment       { color: #6c7086; }
+
+    /* ── Test matrix ─────────────────────────────────────────────── */
+    table.test-matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85em;
+      margin: 1em 0 1.5em;
+    }
+    table.test-matrix th {
+      background: #005A9C;
+      color: #fff;
+      padding: 0.4em 0.7em;
+      text-align: left;
+    }
+    table.test-matrix td {
+      border: 1px solid #ccc;
+      padding: 0.4em 0.7em;
+      vertical-align: top;
+    }
+    table.test-matrix tr:nth-child(even) td { background: #f7f7f7; }
+    .pass  { color: #155724; font-weight: bold; }
+    .fail  { color: #721c24; font-weight: bold; }
+    .opt   { color: #856404; }
+
+    /* ── JSON-LD / code fragments ────────────────────────────────── */
+    pre.example-fragment {
+      background: #f4f4f4;
+      border-left: 3px solid #005A9C;
+      padding: 0.8em 1em;
+      font-size: 0.82em;
+      overflow-x: auto;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* ── Profile table ───────────────────────────────────────────── */
+    table.profile-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88em;
+      margin: 0.8em 0;
+    }
+    table.profile-table th {
+      background: #2d3748;
+      color: #fff;
+      padding: 0.45em 0.75em;
+      text-align: left;
+    }
+    table.profile-table td {
+      border: 1px solid #ccc;
+      padding: 0.45em 0.75em;
+      vertical-align: top;
+    }
+    table.profile-table tr:nth-child(even) td { background: #f9f9f9; }
+
+    /* ── Contrib box ─────────────────────────────────────────────── */
+    .contrib-box {
+      border: 1px solid #f0ad4e;
+      background: #fffbf0;
+      border-radius: 4px;
+      padding: 0.8em 1.2em;
+      margin: 1.5em 0;
+    }
+    .contrib-box h4 { margin-top: 0; color: #7a5200; }
+
+    /* ── Info notice ─────────────────────────────────────────────── */
+    .informative-notice {
+      font-style: italic;
+      color: #555;
+      font-size: 0.92em;
+    }
+
+    /* ── Milestone timeline ──────────────────────────────────────── */
+    .milestone-row { display: flex; gap: 1em; flex-wrap: wrap; margin: 1em 0; }
+    .milestone-card {
+      flex: 1 1 180px;
+      border: 1px solid #005A9C;
+      border-radius: 6px;
+      padding: 0.6em 0.9em;
+      background: #f0f7ff;
+    }
+    .milestone-card h5 { margin: 0 0 0.3em; font-size: 0.9em; color: #005A9C; }
+    .milestone-card p  { margin: 0; font-size: 0.82em; }
+  </style>
+</head>
+
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     ABSTRACT
+═══════════════════════════════════════════════════════════════════ -->
+<section id="abstract">
+  <p>
+    This document specifies the <strong>VSC Interoperability Toolkit</strong>:
+    the normative API surface, data transformation rules, conformance
+    classes, and test-suite architecture that enable any compliant
+    implementation to translate between existing supply chain event data
+    (principally [[EPCIS20]] / [[ISO19987]]) and verifiable,
+    DID-anchored attestations built on [[VC-DATA-MODEL]] and [[DID-CORE]].
+  </p>
+  <p>
+    The toolkit is the second major deliverable of the
+    <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain
+    Community Group</a>. It builds directly on the requirements established
+    in [[VSC-REQUIREMENTS]] and on the prior art of the W3C CCG
+    [[TRACE-INTEROP]] Final Report (December 2024). Implementers who satisfy
+    the conformance criteria of this specification can demonstrate
+    interoperability through the VSC Conformance Test Suite defined herein.
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     STATUS
+═══════════════════════════════════════════════════════════════════ -->
+<section id="sotd">
+  <p>
+    This document is a <strong>Community Group Draft</strong> produced by
+    the <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain
+    Community Group</a>. It is not a W3C Standard and is not on the W3C
+    Standards Track. It may be updated, replaced, or obsoleted at any time.
+  </p>
+  <p>
+    The specification is versioned at <strong>0.1</strong> (pre-interoperability-event).
+    Version history is tracked in the
+    <a href="https://github.com/w3c-cg/vsc-interop-toolkit/blob/main/CHANGELOG.md">CHANGELOG</a>.
+    Feedback is welcome via the
+    <a href="https://github.com/w3c-cg/vsc-interop-toolkit/issues">GitHub issue tracker</a>
+    or the <a href="https://lists.w3.org/Archives/Public/public-vsc/">public-vsc
+    mailing list</a>. See <a href="#contributing"></a> for contribution guidelines.
+  </p>
+  <p>
+    This draft references [[TRACE-INTEROP]], which achieved W3C CCG Final
+    Report status in December 2024 and represents the closest published
+    prior art. VSC extends that work with EPCIS-specific transformation rules,
+    sector-specific conformance profiles, and a multi-format proof strategy.
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     1. INTRODUCTION
+═══════════════════════════════════════════════════════════════════ -->
+<section id="introduction">
+  <h2>Introduction</h2>
+  <p class="informative-notice">This section is non-normative.</p>
+
+  <section id="intro-motivation">
+    <h3>Motivation</h3>
+    <p>
+      The [[VSC-REQUIREMENTS]] document established that global supply
+      chains face three structural gaps: fragmentation of event data
+      formats, absence of cryptographic verifiability, and growing
+      regulatory pressure from [[DSCSA]], [[EUDR]], [[EU-DPP]], and
+      [[CBAM]]. The present specification addresses the fragmentation
+      gap by providing a standardized, implementable bridge between
+      the dominant supply chain event standard ([[EPCIS20]]) and the
+      W3C Verifiable Credentials ecosystem.
+    </p>
+    <p>
+      The VSC Interoperability Toolkit ("<strong>the Toolkit</strong>")
+      comprises three interlocking components:
+    </p>
+    <ol>
+      <li>
+        <strong>The VSC Translation API</strong> — a set of HTTP
+        endpoints, based on [[VC-API]], that accept [[EPCIS20]] event
+        documents and return signed [=Verifiable Credential=]s (and
+        vice versa).
+      </li>
+      <li>
+        <strong>The EPCIS-VC Mapping Rules</strong> — normative,
+        field-level transformation rules for all five [[EPCIS20]]
+        event types, including round-trip fidelity requirements.
+      </li>
+      <li>
+        <strong>The VSC Conformance Test Suite (VSC-CTS)</strong> — a
+        machine-executable test harness, structured around the model
+        established by [[TRACE-INTEROP]] and the W3C VC Data Model
+        test suites, that allows any implementation to demonstrate
+        compliance and report interoperability results.
+      </li>
+    </ol>
+  </section>
+
+  <section id="intro-prior-art">
+    <h3>Relationship to Prior Art</h3>
+    <p>
+      The VSC Toolkit is intentionally downstream of and compatible with:
+    </p>
+    <ul>
+      <li>
+        <strong>[[TRACE-INTEROP]] (W3C CCG, Dec 2024):</strong>
+        Defines discovery and exchange mechanisms for supply chain VCs.
+        VSC inherits its HTTP authentication model (OAuth 2.0 Client
+        Credentials), its Postman/GitHub Actions test harness pattern,
+        and its conformance vs. interoperability report separation.
+        VSC extends it with normative EPCIS translation rules and
+        sector-specific profiles.
+      </li>
+      <li>
+        <strong>[[VC-API]] (W3C CCG):</strong>
+        The VSC Translation API is a profile of the VC-API, adding
+        EPCIS-specific request/response fields and error codes without
+        breaking VC-API conformance.
+      </li>
+      <li>
+        <strong>[[VC-DATA-MODEL]] (W3C Rec, May 2025):</strong>
+        All VSC credentials are conformant VC Data Model 2.0 documents.
+      </li>
+      <li>
+        <strong>[[EPCIS20]] / [[ISO19987]] (GS1/ISO, June 2022):</strong>
+        The authoritative source of event semantics and the five EPCIS
+        dimensions preserved in all VSC credentials.
+      </li>
+    </ul>
+  </section>
+
+  <section id="intro-structure">
+    <h3>Document Structure</h3>
+    <ul>
+      <li><a href="#conformance"></a> — normative language and conformance classes</li>
+      <li><a href="#terminology"></a> — key terms</li>
+      <li><a href="#architecture"></a> — component architecture and information flow</li>
+      <li><a href="#translation-api"></a> — VSC Translation API specification</li>
+      <li><a href="#mapping-rules"></a> — EPCIS-to-VC and VC-to-EPCIS mapping rules</li>
+      <li><a href="#proof-formats"></a> — supported cryptographic proof formats</li>
+      <li><a href="#conformance-profiles"></a> — sector-specific conformance profiles</li>
+      <li><a href="#test-suite"></a> — VSC Conformance Test Suite architecture</li>
+      <li><a href="#error-handling"></a> — error codes and error response schema</li>
+      <li><a href="#security"></a> — security considerations</li>
+      <li><a href="#privacy"></a> — privacy considerations</li>
+      <li><a href="#contributing"></a> — contribution guidelines</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     2. CONFORMANCE
+═══════════════════════════════════════════════════════════════════ -->
+<section id="conformance">
+  <p>
+    The key words
+    <em class="rfc2119">MUST</em>, <em class="rfc2119">MUST NOT</em>,
+    <em class="rfc2119">REQUIRED</em>, <em class="rfc2119">SHALL</em>,
+    <em class="rfc2119">SHALL NOT</em>, <em class="rfc2119">SHOULD</em>,
+    <em class="rfc2119">SHOULD NOT</em>, <em class="rfc2119">RECOMMENDED</em>,
+    <em class="rfc2119">NOT RECOMMENDED</em>, <em class="rfc2119">MAY</em>,
+    and <em class="rfc2119">OPTIONAL</em> are to be interpreted as
+    described in [[RFC2119]] and [[RFC8174]] when, and only when, they
+    appear in all capitals.
+  </p>
+
+  <section id="conformance-classes">
+    <h3>Conformance Classes</h3>
+    <p>
+      This specification defines four conformance classes. An implementation
+      declares which class(es) it conforms to; each class has its own
+      mandatory test subset in the VSC Conformance Test Suite.
+    </p>
+    <dl>
+      <dt>
+        <span class="cc cc-mapper">VSC-MAPPER</span>
+        <dfn>VSC Mapper</dfn>
+      </dt>
+      <dd>
+        A software component that transforms [[EPCIS20]] event documents
+        into VSC-conformant [=Verifiable Credential=] documents (forward
+        mapping) and/or transforms VSC credentials back into valid
+        [[EPCIS20]] documents (reverse mapping). A VSC Mapper MUST
+        implement at least the forward mapping for all five [[EPCIS20]]
+        event types as defined in <a href="#mapping-rules"></a>.
+      </dd>
+
+      <dt>
+        <span class="cc cc-issuer">VSC-ISSUER</span>
+        <dfn>VSC Issuer</dfn>
+      </dt>
+      <dd>
+        A system that accepts a VSC Translation API <code>issue</code>
+        request, generates a signed [=Verifiable Credential=], and
+        returns it. A VSC Issuer MUST implement the
+        <code>POST /credentials/issue</code> endpoint as specified in
+        <a href="#api-issue"></a> and MUST support at least one
+        proof format listed in <a href="#proof-formats"></a>.
+      </dd>
+
+      <dt>
+        <span class="cc cc-verifier">VSC-VERIFIER</span>
+        <dfn>VSC Verifier</dfn>
+      </dt>
+      <dd>
+        A system that accepts a VSC Translation API <code>verify</code>
+        request and returns a structured verification result. A VSC
+        Verifier MUST implement the <code>POST /credentials/verify</code>
+        and <code>POST /presentations/verify</code> endpoints as specified
+        in <a href="#api-verify"></a>.
+      </dd>
+
+      <dt>
+        <span class="cc cc-harness">VSC-HARNESS</span>
+        <dfn>VSC Test Harness</dfn>
+      </dt>
+      <dd>
+        A system that executes the VSC Conformance Test Suite against one
+        or more implementations and produces a conformance or
+        interoperability report in the format defined in
+        <a href="#test-reporting"></a>. A VSC Test Harness MUST implement
+        all mandatory test categories defined in <a href="#test-suite"></a>.
+      </dd>
+    </dl>
+
+    <p>
+      A single software system MAY simultaneously conform to multiple
+      conformance classes. For example, a "VSC Broker" that translates,
+      issues, and verifies credentials would conform to VSC-MAPPER,
+      VSC-ISSUER, and VSC-VERIFIER.
+    </p>
+  </section>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     3. TERMINOLOGY
+═══════════════════════════════════════════════════════════════════ -->
+<section id="terminology">
+  <h2>Terminology</h2>
+
+  <p>
+    Terms defined in [[VSC-REQUIREMENTS]] are used here with their
+    established meanings. Additional toolkit-specific terms follow.
+  </p>
+
+  <dl>
+    <dt><dfn>VSC Credential</dfn></dt>
+    <dd>
+      A [=Verifiable Credential=] conformant with [[VC-DATA-MODEL]] whose
+      <code>credentialSubject</code> encapsulates the data of one [[EPCIS20]]
+      event and whose structure satisfies the VSC event schema for that
+      event type. A VSC Credential is produced by applying the
+      [=EPCIS-to-VC Mapping=] to a valid [[EPCIS20]] event document.
+    </dd>
+
+    <dt><dfn>EPCIS-to-VC Mapping</dfn></dt>
+    <dd>
+      The normative, forward transformation defined in
+      <a href="#mapping-rules"></a> that converts a valid [[EPCIS20]] event
+      document into a [=VSC Credential=] without loss of any mandatory
+      EPCIS field.
+    </dd>
+
+    <dt><dfn>VC-to-EPCIS Mapping</dfn></dt>
+    <dd>
+      The normative, reverse transformation defined in
+      <a href="#mapping-rules"></a> that extracts a valid [[EPCIS20]] event
+      document from the <code>credentialSubject</code> of a [=VSC Credential=].
+    </dd>
+
+    <dt><dfn>VSC Translation API</dfn></dt>
+    <dd>
+      The HTTP API defined in <a href="#translation-api"></a> that exposes
+      the [=EPCIS-to-VC Mapping=] and [=VC-to-EPCIS Mapping=] as
+      machine-callable endpoints, alongside standard VC-API issuance and
+      verification endpoints.
+    </dd>
+
+    <dt><dfn>Conformance Profile</dfn></dt>
+    <dd>
+      A named, sector-specific set of constraints applied on top of the
+      base conformance requirements, specifying which [[EPCIS20]] event
+      types, [[CBV20]] bizStep values, proof formats, and regulatory
+      metadata fields are mandatory for a given industry vertical (e.g.,
+      Pharmaceuticals-DSCSA, Food-EUDR, Critical-Minerals-DPP).
+      Conformance profiles are defined in
+      <a href="#conformance-profiles"></a>.
+    </dd>
+
+    <dt><dfn>Test Vector</dfn></dt>
+    <dd>
+      A precisely specified, machine-readable input/output pair used by
+      the [=VSC Test Harness=] to verify a specific normative assertion.
+      Each test vector carries a unique identifier, a reference to the
+      normative clause it exercises, and the expected outcome
+      (<code>PASS</code>, <code>FAIL</code>, or <code>SKIP</code>).
+    </dd>
+
+    <dt><dfn>Interoperability Report</dfn></dt>
+    <dd>
+      A machine-readable and human-readable document produced by a
+      [=VSC Test Harness=] that records which test vectors each tested
+      implementation passed, failed, or skipped, and whether two
+      independently developed implementations achieved end-to-end
+      interoperability on a defined scenario.
+    </dd>
+
+    <dt><dfn>Round-Trip Fidelity</dfn></dt>
+    <dd>
+      The property that applying the [=EPCIS-to-VC Mapping=] followed
+      immediately by the [=VC-to-EPCIS Mapping=] to a valid [[EPCIS20]]
+      event document produces an output that is semantically equivalent
+      to the original input, with no mandatory field values altered or lost.
+    </dd>
+  </dl>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     4. ARCHITECTURE
+═══════════════════════════════════════════════════════════════════ -->
+<section id="architecture">
+  <h2>Component Architecture</h2>
+  <p class="informative-notice">This section is non-normative.</p>
+
+  <section id="arch-overview">
+    <h3>Overview</h3>
+    <p>
+      The Toolkit is positioned as an interoperability layer between
+      existing supply chain systems and the W3C Verifiable Credentials
+      ecosystem. The three principal components and their interactions
+      are illustrated below.
+    </p>
+
+    <figure>
+      <pre style="text-align:left; font-family:monospace; font-size:0.8em; line-height:1.5; background:#f4f4f4; padding:1em; border-radius:4px; overflow-x:auto;">
+  ┌─────────────────────────────────────────────────────────┐
+  │              EXISTING SUPPLY CHAIN SYSTEMS              │
+  │   ERP · WMS · EPCIS Repository · Logistics Platform    │
+  └──────────────────────┬──────────────────────────────────┘
+                         │  EPCIS 2.0 JSON-LD / XML
+                         ▼
+  ┌────────────────────────────────────────────────────────┐
+  │             VSC TRANSLATION API (§5)                   │
+  │  POST /epcis/translate   →  VSC Credential (JSON-LD)   │
+  │  POST /credentials/issue →  Signed VSC Credential      │
+  │  POST /credentials/verify→  Verification Result        │
+  │  POST /presentations/verify→Presentation Result        │
+  │  GET  /epcis/extract     ←  EPCIS 2.0 re-extraction    │
+  └──────────┬─────────────────────────────────────────────┘
+             │
+     ┌───────┴───────────────────────┐
+     │  EPCIS-VC MAPPING RULES (§6)  │
+     │  Field map · type coercion    │
+     │  CBV→VC vocab · round-trip    │
+     └───────┬───────────────────────┘
+             │
+     ┌───────┴───────────────────────┐
+     │  PROOF LAYER (§7)             │
+     │  EdDSA (eddsa-rdfc-2022)      │
+     │  ECDSA (ecdsa-rdfc-2019)      │
+     │  VC-JWT (ES256/ES384)         │
+     │  SD-JWT (selective disclose)  │
+     └───────────────────────────────┘
+             │
+     ┌───────┴───────────────────────┐
+     │  VSC CONFORMANCE TEST SUITE   │
+     │  (§8)                         │
+     │  Conformance · Interop        │
+     │  Positive · Negative          │
+     │  Round-trip fidelity          │
+     └───────────────────────────────┘
+      </pre>
+      <figcaption>
+        Figure 1 — VSC Toolkit component architecture.
+        Each layer is independently implementable; a minimal conforming
+        implementation need only implement VSC-MAPPER.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="arch-deployment">
+    <h3>Deployment Models</h3>
+    <p>
+      The Toolkit supports three deployment models. All are normatively
+      equivalent; the API surface is the same in each.
+    </p>
+    <dl>
+      <dt>Sidecar</dt>
+      <dd>
+        The VSC Translation API runs as a microservice alongside an
+        existing EPCIS repository. Events are translated on write or
+        on demand via a query endpoint.
+      </dd>
+      <dt>Embedded SDK</dt>
+      <dd>
+        The mapping rules are embedded in a supply chain platform's own
+        code, which calls the Translation API internally or exposes the
+        same API surface externally.
+      </dd>
+      <dt>Hosted Service</dt>
+      <dd>
+        A third-party VSC provider offers the Translation API as a
+        managed service. Authorization uses OAuth 2.0 Client Credentials
+        as specified in <a href="#api-auth"></a>.
+      </dd>
+    </dl>
+  </section>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     5. VSC TRANSLATION API
+═══════════════════════════════════════════════════════════════════ -->
+<section id="translation-api">
+  <h2>VSC Translation API</h2>
+
+  <p>
+    The VSC Translation API is a profile of the [[VC-API]] (W3C CCG)
+    with additional EPCIS-specific endpoints. It is defined as an
+    [[OPENAPI]] 3.1.0 document (normative YAML artefact, maintained
+    separately as <code>vsc-api.yaml</code> in the repository).
+    This section specifies the normative behaviour of each endpoint.
+  </p>
+
+  <section id="api-auth">
+    <h3>Authentication and Authorization</h3>
+    <p>
+      All VSC Translation API endpoints MUST be protected. Implementations
+      MUST support OAuth 2.0 Client Credentials Grant (RFC 6749 §4.4)
+      as the baseline authorization mechanism, consistent with
+      [[TRACE-INTEROP]]. Implementations SHOULD additionally support
+      HTTP Message Signatures (RFC 9421) for machine-to-machine scenarios
+      where OAuth infrastructure is unavailable.
+    </p>
+    <p>
+      Implementations MUST NOT expose endpoints over plain HTTP
+      (non-TLS). TLS 1.2 or later is REQUIRED on all VSC Translation
+      API connections.
+    </p>
+  </section>
+
+  <section id="api-base">
+    <h3>Base URL and Versioning</h3>
+    <p>
+      The API MUST be versioned. The base path MUST include the major
+      version number conforming to [[SEMVER]]:
+    </p>
+    <div class="endpoint-box">
+      <span class="comment">// Example base URL pattern</span><br/>
+      https://example.com/vsc/<span style="color:#f38ba8">v1</span>/
+    </div>
+    <p>
+      Breaking changes MUST increment the major version. Non-breaking
+      additions MUST increment the minor version. The current version
+      of this specification defines the <code>v1</code> API surface.
+    </p>
+  </section>
+
+  <section id="api-translate">
+    <h3>EPCIS Translation Endpoints</h3>
+
+    <p>
+      The following endpoints are specific to the VSC Toolkit and extend
+      [[VC-API]].
+    </p>
+
+    <section id="api-translate-forward">
+      <h4>Forward Translation: EPCIS → VSC Credential</h4>
+      <div class="endpoint-box">
+        <span class="method-post">POST</span>
+        <span class="path">/vsc/v1/epcis/translate</span>
+        <br/><span class="comment">// Accepts: application/json (EPCIS 2.0 JSON-LD event)</span>
+        <br/><span class="comment">// Returns: application/vc+ld+json (unsigned VSC Credential)</span>
+      </div>
+
+      <p>
+        A [=VSC Mapper=] implementing this endpoint MUST accept a single
+        [[EPCIS20]] event document in JSON-LD format and return an
+        unsigned [=VSC Credential=] whose <code>credentialSubject</code>
+        is constructed according to the [=EPCIS-to-VC Mapping=] rules
+        in <a href="#mapping-rules"></a>.
+      </p>
+
+      <p>
+        <strong>Request body</strong> — A single [[EPCIS20]] event object.
+        The request MUST include a <code>Content-Type: application/json</code>
+        header. EPCIS XML submissions MUST first be converted to JSON-LD
+        per [[EPCIS20]] §9.8 before submission; XML-to-JSON-LD conversion
+        is out of scope for this endpoint.
+      </p>
+
+      <p>
+        <strong>Success response</strong> — HTTP <code>200 OK</code>
+        with <code>Content-Type: application/vc+ld+json</code>. The body
+        is an unsigned VSC Credential conformant with [[VC-DATA-MODEL]].
+      </p>
+
+      <p>
+        <strong>Error responses</strong> — see <a href="#error-handling"></a>.
+        Specific errors for this endpoint include:
+        <code>VSC_ERR_UNKNOWN_EVENT_TYPE</code> (unsupported event type),
+        <code>VSC_ERR_MISSING_REQUIRED_FIELD</code> (mandatory EPCIS field absent),
+        and <code>VSC_ERR_INVALID_EPC_SYNTAX</code> (malformed EPC URI).
+      </p>
+
+      <details>
+        <summary>Example request and response (non-normative)</summary>
+        <pre class="example-fragment">
+<span style="color:#6c7086">// REQUEST — ObjectEvent (commissioning)</span>
+POST /vsc/v1/epcis/translate
+Content-Type: application/json
+Authorization: Bearer &lt;token&gt;
+
+{
+  "@context": ["https://ref.gs1.org/standards/epcis/epcis-context.jsonld"],
+  "type": "ObjectEvent",
+  "eventTime": "2026-04-15T09:00:00.000Z",
+  "eventTimeZoneOffset": "+00:00",
+  "epcList": ["https://id.gs1.org/01/09506000134376/21/12345"],
+  "action": "ADD",
+  "bizStep": "https://ref.gs1.org/cbv/BizStep-commissioning",
+  "disposition": "https://ref.gs1.org/cbv/Disp-active",
+  "readPoint": {"id": "https://id.gs1.org/414/9506000000000"},
+  "bizLocation": {"id": "https://id.gs1.org/414/9506000000000"}
+}
+
+<span style="color:#6c7086">// RESPONSE — Unsigned VSC Credential</span>
+HTTP/1.1 200 OK
+Content-Type: application/vc+ld+json
+
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3c-cg.github.io/vsc/contexts/v1"
+  ],
+  "type": ["VerifiableCredential", "VSCObjectEvent"],
+  "issuer": "did:web:ISSUER_DID_PLACEHOLDER",
+  "validFrom": "2026-04-15T09:00:00Z",
+  "credentialSubject": {
+    "epcisEventType": "ObjectEvent",
+    "eventTime": "2026-04-15T09:00:00.000Z",
+    "epcList": ["https://id.gs1.org/01/09506000134376/21/12345"],
+    "action": "ADD",
+    "bizStep": "https://ref.gs1.org/cbv/BizStep-commissioning",
+    "disposition": "https://ref.gs1.org/cbv/Disp-active",
+    "readPoint": "https://id.gs1.org/414/9506000000000",
+    "bizLocation": "https://id.gs1.org/414/9506000000000"
+  }
+}
+        </pre>
+      </details>
+    </section>
+
+    <section id="api-translate-reverse">
+      <h4>Reverse Translation: VSC Credential → EPCIS</h4>
+      <div class="endpoint-box">
+        <span class="method-post">POST</span>
+        <span class="path">/vsc/v1/epcis/extract</span>
+        <br/><span class="comment">// Accepts: application/vc+ld+json (signed or unsigned VSC Credential)</span>
+        <br/><span class="comment">// Returns: application/json (EPCIS 2.0 JSON-LD event)</span>
+      </div>
+      <p>
+        A [=VSC Mapper=] implementing this endpoint MUST apply the
+        [=VC-to-EPCIS Mapping=] rules and return a valid [[EPCIS20]] event
+        document. The extracted document MUST satisfy [[Round-Trip Fidelity]]
+        for any credential produced by <code>/epcis/translate</code>.
+      </p>
+      <p>
+        If the submitted credential is signed, the implementation
+        SHOULD validate the proof before extraction. If proof validation
+        fails, the implementation SHOULD return
+        <code>VSC_ERR_INVALID_PROOF</code> unless the caller has included
+        <code>"skipProofValidation": true</code> in an optional
+        <code>options</code> request object.
+      </p>
+    </section>
+  </section>
+
+  <section id="api-issue">
+    <h3>Credential Issuance</h3>
+    <div class="endpoint-box">
+      <span class="method-post">POST</span>
+      <span class="path">/vsc/v1/credentials/issue</span>
+      <br/><span class="comment">// Accepts: application/json (IssueCredentialRequest)</span>
+      <br/><span class="comment">// Returns: application/vc+ld+json (signed Verifiable Credential)</span>
+    </div>
+
+    <p>
+      A [=VSC Issuer=] implementing this endpoint MUST conform to the
+      [[VC-API]] <code>POST /credentials/issue</code> behaviour, with the
+      following VSC-specific constraints:
+    </p>
+
+    <ul>
+      <li>
+        The request body MUST include a <code>credential</code> object
+        that is a valid unsigned VSC Credential (output of
+        <code>/epcis/translate</code> or manually constructed).
+      </li>
+      <li>
+        The request MUST include an <code>options</code> object. The
+        following options are defined:
+        <ul>
+          <li><code>proofFormat</code> (string, REQUIRED) — one of
+            <code>"eddsa-rdfc-2022"</code>, <code>"ecdsa-rdfc-2019"</code>,
+            <code>"jwt"</code>, or <code>"sd-jwt"</code>
+            (see <a href="#proof-formats"></a>).</li>
+          <li><code>credentialStatus</code> (boolean, OPTIONAL, default <code>true</code>)
+            — if <code>true</code>, the issuer MUST add a
+            <code>credentialStatus</code> entry using [[VC-BITSTRING-STATUS]].</li>
+          <li><code>selectiveDisclosureFields</code> (array of strings, OPTIONAL)
+            — field paths within <code>credentialSubject</code> that
+            MUST be made individually disclosable. Only applicable when
+            <code>proofFormat</code> is <code>"sd-jwt"</code>.</li>
+        </ul>
+      </li>
+      <li>
+        The <code>issuer</code> in the credential MUST be a [[DID-CORE]]
+        URI whose DID document is publicly resolvable and contains a
+        verification method matching the proof's key material.
+      </li>
+      <li>
+        A successful response MUST include the HTTP header
+        <code>VSC-Proof-Format</code> identifying the proof format
+        used, to support automated test harness detection.
+      </li>
+    </ul>
+  </section>
+
+  <section id="api-verify">
+    <h3>Credential and Presentation Verification</h3>
+
+    <div class="endpoint-box">
+      <span class="method-post">POST</span>
+      <span class="path">/vsc/v1/credentials/verify</span>
+      <br/><span class="comment">// Returns: VerificationResult</span>
+    </div>
+    <div class="endpoint-box">
+      <span class="method-post">POST</span>
+      <span class="path">/vsc/v1/presentations/verify</span>
+      <br/><span class="comment">// Returns: VerificationResult</span>
+    </div>
+
+    <p>
+      A [=VSC Verifier=] MUST conform to the [[VC-API]] verification
+      behaviour and additionally:
+    </p>
+    <ul>
+      <li>
+        Check that the credential type includes at least one of the VSC
+        event type strings defined in <a href="#mapping-rules"></a>
+        (e.g., <code>"VSCObjectEvent"</code>).
+      </li>
+      <li>
+        Validate <code>credentialStatus</code> using [[VC-BITSTRING-STATUS]]
+        if present. A credential with a revoked status MUST be returned
+        as failed with error code <code>VSC_ERR_CREDENTIAL_REVOKED</code>.
+      </li>
+      <li>
+        Return a structured <code>VerificationResult</code> as defined
+        in <a href="#verification-result-schema"></a>.
+      </li>
+    </ul>
+
+    <section id="verification-result-schema">
+      <h4>VerificationResult Schema</h4>
+      <pre class="example-fragment">
+{
+  "verified": true | false,
+  "checks": ["proof", "status", "expiry", "schema"],
+  "warnings": [],
+  "errors": [
+    {
+      "code": "VSC_ERR_*",
+      "message": "Human-readable description",
+      "field": "credentialSubject.bizStep"   // optional field pointer
+    }
+  ],
+  "vscProfile": "pharmaceuticals-dscsa"   // if a conformance profile was applied
+}
+      </pre>
+    </section>
+  </section>
+
+  <section id="api-discovery">
+    <h3>Discovery</h3>
+    <div class="endpoint-box">
+      <span class="method-get">GET</span>
+      <span class="path">/vsc/v1/.well-known/vsc-configuration</span>
+      <br/><span class="comment">// Returns: VSCConfiguration (JSON)</span>
+    </div>
+    <p>
+      Implementations MUST expose a discovery endpoint that returns a
+      [[JSON-SCHEMA]]-validated <code>VSCConfiguration</code> object.
+      Minimum required fields:
+    </p>
+    <pre class="example-fragment">
+{
+  "vscVersion": "0.1",
+  "conformanceClasses": ["VSC-MAPPER", "VSC-ISSUER", "VSC-VERIFIER"],
+  "supportedEpcisEventTypes": [
+    "ObjectEvent", "AggregationEvent", "TransformationEvent",
+    "TransactionEvent", "AssociationEvent"
+  ],
+  "supportedProofFormats": ["eddsa-rdfc-2022", "jwt"],
+  "supportedProfiles": ["base", "pharmaceuticals-dscsa"],
+  "didMethods": ["did:web", "did:key"],
+  "statusListSupport": true,
+  "translationEndpoints": {
+    "forward": "/vsc/v1/epcis/translate",
+    "reverse": "/vsc/v1/epcis/extract"
+  }
+}
+    </pre>
+  </section>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     6. EPCIS-VC MAPPING RULES
+═══════════════════════════════════════════════════════════════════ -->
+<section id="mapping-rules">
+  <h2>EPCIS-VC Mapping Rules</h2>
+
+  <p>
+    This section specifies the normative field-level mapping between
+    [[EPCIS20]] event documents and [=VSC Credential=] documents. All rules
+    apply to both the [=EPCIS-to-VC Mapping=] (forward) and the
+    [=VC-to-EPCIS Mapping=] (reverse) unless stated otherwise.
+  </p>
+
+  <section id="mapping-general">
+    <h3>General Mapping Rules</h3>
+
+    <div class="req-box">
+      <span class="req-id">MAP-G1 — Context Injection</span>
+      <p>
+        The [=EPCIS-to-VC Mapping=] MUST add the following
+        <code>@context</code> entries to every produced credential, in
+        this order:
+      </p>
+      <pre class="example-fragment">
+"@context": [
+  "https://www.w3.org/ns/credentials/v2",
+  "https://w3c-cg.github.io/vsc/contexts/v1",
+  "https://ref.gs1.org/standards/epcis/epcis-context.jsonld"
+]
+      </pre>
+      <p>
+        The EPCIS JSON-LD context MUST be the last entry to allow VSC
+        terms to shadow any conflicting EPCIS terms.
+      </p>
+    </div>
+
+    <div class="req-box">
+      <span class="req-id">MAP-G2 — Type Array</span>
+      <p>
+        The produced credential's <code>type</code> array MUST contain
+        <code>"VerifiableCredential"</code> as its first element and a
+        VSC event type string as its second element. The VSC event type
+        strings are:
+      </p>
+      <table class="profile-table">
+        <thead>
+          <tr><th>EPCIS 2.0 event type</th><th>VSC type string</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>ObjectEvent</code></td><td><code>VSCObjectEvent</code></td></tr>
+          <tr><td><code>AggregationEvent</code></td><td><code>VSCAggregationEvent</code></td></tr>
+          <tr><td><code>TransformationEvent</code></td><td><code>VSCTransformationEvent</code></td></tr>
+          <tr><td><code>TransactionEvent</code></td><td><code>VSCTransactionEvent</code></td></tr>
+          <tr><td><code>AssociationEvent</code></td><td><code>VSCAssociationEvent</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="req-box">
+      <span class="req-id">MAP-G3 — validFrom from eventTime</span>
+      <p>
+        The EPCIS <code>eventTime</code> field MUST be mapped to the
+        credential's <code>validFrom</code> property using
+        <code>xsd:dateTimeStamp</code> format
+        (<code>YYYY-MM-DDTHH:MM:SS.sssZ</code>).
+        The EPCIS <code>recordTime</code> field, if present, MUST be
+        preserved in <code>credentialSubject.recordTime</code>.
+      </p>
+    </div>
+
+    <div class="req-box">
+      <span class="req-id">MAP-G4 — EPC Identifiers as GS1 Digital Link URIs</span>
+      <p>
+        EPC values in <code>epcList</code>, <code>inputEPCList</code>,
+        <code>outputEPCList</code>, <code>childEPCs</code>, and
+        <code>parentID</code> MUST be expressed as [[GS1-DIGITALLINK]]
+        URIs where a GS1 identifier scheme applies. URN-format EPCs
+        (e.g., <code>urn:epc:id:sgtin:...</code>) SHOULD be converted
+        to their equivalent Digital Link URI form during the forward mapping.
+        The original URN SHOULD be preserved as a
+        <code>credentialSubject.sourceEpcUrn</code> extension property.
+      </p>
+    </div>
+
+    <div class="req-box">
+      <span class="req-id">MAP-G5 — CBV Vocabulary URIs</span>
+      <p>
+        The <code>bizStep</code> and <code>disposition</code> fields
+        MUST use [[CBV20]] URI values
+        (e.g., <code>https://ref.gs1.org/cbv/BizStep-shipping</code>)
+        in both forward and reverse mappings. Short-form CBV code
+        strings (e.g., <code>"shipping"</code>) MUST be expanded to
+        full URIs during forward mapping.
+      </p>
+    </div>
+
+    <div class="req-box">
+      <span class="req-id">MAP-G6 — Round-Trip Fidelity</span>
+      <p>
+        For any valid [[EPCIS20]] event document <em>E</em>, the
+        composition <code>vcToEpcis(epcisToVc(E))</code> MUST produce a
+        document <em>E'</em> such that for every mandatory [[EPCIS20]]
+        field <em>f</em>: <code>E[f] == E'[f]</code> (value equality
+        after URI normalization). The [=VSC Test Harness=] MUST verify
+        this property for all five event types using the round-trip
+        test vectors in <a href="#test-roundtrip"></a>.
+      </p>
+    </div>
+  </section>
+
+  <section id="mapping-per-event">
+    <h3>Per-Event-Type Mapping Supplement</h3>
+
+    <p>
+      The following rules supplement the general rules for event-type-specific
+      fields. Fields not listed are passed through unchanged into
+      <code>credentialSubject</code> using their EPCIS JSON-LD property names.
+    </p>
+
+    <table class="profile-table">
+      <thead>
+        <tr>
+          <th>Event type</th>
+          <th>Key EPCIS fields</th>
+          <th>Mapping notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ObjectEvent</code></td>
+          <td><code>epcList</code>, <code>action</code>, <code>bizStep</code>, <code>disposition</code>, <code>readPoint</code>, <code>bizLocation</code>, <code>sensorElementList</code></td>
+          <td>
+            <code>action</code> MUST be preserved verbatim (<code>"ADD"</code>, <code>"OBSERVE"</code>, or <code>"DELETE"</code>).
+            <code>sensorElementList</code>, if present, MUST be preserved as a structured array in <code>credentialSubject</code>.
+          </td>
+        </tr>
+        <tr>
+          <td><code>AggregationEvent</code></td>
+          <td><code>parentID</code>, <code>childEPCs</code>, <code>childQuantityList</code>, <code>action</code></td>
+          <td>
+            <code>parentID</code> MUST be mapped per MAP-G4 (Digital Link URI).
+            The parent–child relationship MUST be preserved in <code>credentialSubject.aggregation</code>.
+          </td>
+        </tr>
+        <tr>
+          <td><code>TransformationEvent</code></td>
+          <td><code>inputEPCList</code>, <code>outputEPCList</code>, <code>inputQuantityList</code>, <code>outputQuantityList</code>, <code>transformationID</code></td>
+          <td>
+            <code>transformationID</code> MUST be used as <code>credentialSubject.id</code> if present,
+            enabling cross-enterprise matching of the same transformation event.
+          </td>
+        </tr>
+        <tr>
+          <td><code>TransactionEvent</code></td>
+          <td><code>bizTransactionList</code>, <code>epcList</code>, <code>sourceList</code>, <code>destinationList</code></td>
+          <td>
+            <code>bizTransactionList</code> entries MUST be preserved as an array in
+            <code>credentialSubject.businessTransactions</code>.
+            <code>sourceList</code> / <code>destinationList</code> parties SHOULD be expressed
+            as [[DID-CORE]] URIs where a DID is known; GLN-based [[GS1-DIGITALLINK]] URIs are
+            the fallback.
+          </td>
+        </tr>
+        <tr>
+          <td><code>AssociationEvent</code></td>
+          <td><code>parentID</code>, <code>childEPCs</code>, <code>childQuantityList</code></td>
+          <td>
+            For IoT device associations, the <code>parentID</code> SHOULD be the DID of the
+            device or contain a reference to the device's DID document.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="mapping-predecessor-link">
+    <h3>Predecessor Link Property</h3>
+    <div class="req-box">
+      <span class="req-id">MAP-LINK1 — Event Chain Reference</span>
+      <p>
+        To support [=Event Chain=] construction (VSC-REQUIREMENTS REQ-F4),
+        the VSC Translation API MUST accept an optional
+        <code>predecessorCredentialId</code> property in the
+        <code>/epcis/translate</code> request body. When provided, this
+        value MUST be included in the produced credential as:
+      </p>
+      <pre class="example-fragment">
+"credentialSubject": {
+  ...
+  "vscPredecessor": {
+    "id": "https://example.com/credentials/abc123",
+    "digestSRI": "sha256-BASE64URLENCODE(sha256(predecessorCredentialBytes))"
+  }
+}
+      </pre>
+      <p>
+        The <code>digestSRI</code> MUST use the
+        <a href="https://www.w3.org/TR/SRI/">Subresource Integrity</a>
+        hash format. Verifiers MUST check this digest when reconstructing
+        an event chain.
+      </p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     7. PROOF FORMATS
+═══════════════════════════════════════════════════════════════════ -->
+<section id="proof-formats">
+  <h2>Supported Proof Formats</h2>
+
+  <p>
+    VSC implementations MUST support at least one of the mandatory proof
+    formats below. Implementations MAY additionally support optional
+    formats. All cryptosuites referenced are defined by W3C Recommendations
+    (May 2025) or Candidate Recommendations.
+  </p>
+
+  <table class="profile-table">
+    <thead>
+      <tr>
+        <th>Proof format</th>
+        <th>Specification</th>
+        <th>Class requirement</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>eddsa-rdfc-2022</code></td>
+        <td>[[VC-DI-EDDSA]]</td>
+        <td><strong>REQUIRED</strong> for VSC-ISSUER baseline</td>
+        <td>
+          Ed25519 / Ed448 over canonicalized JSON-LD (RDFC-1.0).
+          This is the mandatory baseline for the VSC Conformance Test
+          Suite, consistent with [[TRACE-INTEROP]].
+        </td>
+      </tr>
+      <tr>
+        <td><code>ecdsa-rdfc-2019</code></td>
+        <td>[[VC-DI-ECDSA]]</td>
+        <td>RECOMMENDED for P-256 / P-384 key holders</td>
+        <td>
+          ECDSA over JSON-LD. Common in enterprise PKI environments.
+        </td>
+      </tr>
+      <tr>
+        <td>VC-JWT (<code>ES256</code> / <code>ES384</code>)</td>
+        <td>[[VC-JOSE-COSE]], [[RFC7515]]</td>
+        <td>RECOMMENDED for REST/OpenID Connect integrations</td>
+        <td>
+          JWT-secured VCs. Preferred by implementers with existing
+          OAuth/OIDC infrastructure. [[RFC9052]] COSE MAY also be used.
+        </td>
+      </tr>
+      <tr>
+        <td>SD-JWT</td>
+        <td>[[SD-JWT]], [[VC-JOSE-COSE]]</td>
+        <td>REQUIRED for profiles with selective disclosure obligations</td>
+        <td>
+          Selective Disclosure JWT. Mandatory when a
+          [=Conformance Profile=] requires per-field selective
+          disclosure (e.g., EU-DPP profile). See [[SD-JWT]] for
+          disclosure frame construction.
+        </td>
+      </tr>
+      <tr>
+        <td>BBS+ (<code>bbs-2023</code>)</td>
+        <td>[[VC-DI]] BBS Cryptosuites (W3C CR)</td>
+        <td>OPTIONAL (currently W3C Candidate Recommendation)</td>
+        <td>
+          Enables unlinkable selective disclosure proofs. Implementations
+          SHOULD plan for adoption once the underlying IETF BBS signature
+          scheme is finalized.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    The [=VSC Test Harness=] MUST test at minimum <code>eddsa-rdfc-2022</code>
+    proof generation and verification. Test vectors for other proof
+    formats are provided as optional test categories.
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     8. CONFORMANCE PROFILES
+═══════════════════════════════════════════════════════════════════ -->
+<section id="conformance-profiles">
+  <h2>Conformance Profiles</h2>
+
+  <p class="informative-notice">
+    Profiles constrain the base specification for specific industry
+    contexts. An implementation may claim conformance to one or more
+    profiles in addition to a base conformance class. Profile-specific
+    test vectors are defined in separate annexes of the VSC Conformance
+    Test Suite.
+  </p>
+
+  <section id="profile-base">
+    <h3>Base Profile (<code>vsc-base</code>)</h3>
+    <p>
+      The base profile requires all five EPCIS event types,
+      <code>eddsa-rdfc-2022</code> proof format, Bitstring Status List
+      revocation, and [[DID-WEB]] or <code>did:key</code> for issuers.
+      All other profiles extend the base profile.
+    </p>
+  </section>
+
+  <section id="profile-pharma">
+    <h3>Pharmaceuticals — DSCSA Profile (<code>pharmaceuticals-dscsa</code>)</h3>
+    <table class="profile-table">
+      <tr><th>Attribute</th><th>Constraint</th></tr>
+      <tr><td>Required event types</td><td><code>TransactionEvent</code> (mandatory), <code>ObjectEvent</code></td></tr>
+      <tr><td>Required bizStep values</td><td><code>cbv:BizStep-shipping</code>, <code>cbv:BizStep-receiving</code>, <code>cbv:BizStep-returning</code></td></tr>
+      <tr><td>Required identifiers</td><td>SGTIN (item-level serialization per [[DSCSA]] §582)</td></tr>
+      <tr><td>Predecessor link</td><td>REQUIRED for all custody transfer credentials</td></tr>
+      <tr><td>Credential status</td><td>REQUIRED (Bitstring Status List)</td></tr>
+      <tr><td>Proof format</td><td><code>eddsa-rdfc-2022</code> or VC-JWT (ES256)</td></tr>
+      <tr><td>Regulatory metadata</td><td>MUST include <code>credentialSubject.regulatoryContext: "dscsa"</code></td></tr>
+      <tr><td>Chain of custody</td><td>MUST support full chain reconstruction per [[GS1-DSCSA-GUIDE]]</td></tr>
+    </table>
+  </section>
+
+  <section id="profile-eudr">
+    <h3>Food &amp; Agriculture — EUDR Profile (<code>food-eudr</code>)</h3>
+    <table class="profile-table">
+      <tr><th>Attribute</th><th>Constraint</th></tr>
+      <tr><td>Required event types</td><td><code>ObjectEvent</code> (commissioning), <code>TransactionEvent</code></td></tr>
+      <tr><td>Required fields</td><td><code>geoLocation</code> (GeoJSON polygon), <code>harvestDate</code>, <code>speciesIdentifier</code> in <code>credentialSubject</code></td></tr>
+      <tr><td>Selective disclosure</td><td>REQUIRED: SD-JWT MUST enable independent disclosure of <code>geoLocation</code> and supplier identity</td></tr>
+      <tr><td>Certification linkage</td><td>SHOULD reference a deforestation certification credential via <code>vscPredecessor</code></td></tr>
+      <tr><td>Regulatory metadata</td><td>MUST include <code>credentialSubject.regulatoryContext: "eudr"</code></td></tr>
+    </table>
+  </section>
+
+  <section id="profile-cbam">
+    <h3>Critical Minerals &amp; Manufacturing — CBAM/DPP Profile (<code>critical-minerals-cbam</code>)</h3>
+    <table class="profile-table">
+      <tr><th>Attribute</th><th>Constraint</th></tr>
+      <tr><td>Required event types</td><td><code>TransformationEvent</code> (bill-of-materials), <code>ObjectEvent</code></td></tr>
+      <tr><td>Required fields</td><td><code>carbonFootprint</code> (kg CO₂e), <code>countryOfOrigin</code>, <code>hsCode</code> in <code>credentialSubject</code></td></tr>
+      <tr><td>Identifier scheme</td><td>Custom identifiers MAY be used where no GS1 identifier exists; MUST be expressed as URIs</td></tr>
+      <tr><td>Multi-tier linkage</td><td>REQUIRED: Tier-2 and Tier-3 <code>TransformationEvent</code> credentials MUST be linkable via <code>vscPredecessor</code></td></tr>
+      <tr><td>Regulatory metadata</td><td>MUST include <code>credentialSubject.regulatoryContext: "cbam"</code> and/or <code>"eu-dpp"</code></td></tr>
+    </table>
+  </section>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     9. VSC CONFORMANCE TEST SUITE (VSC-CTS)
+═══════════════════════════════════════════════════════════════════ -->
+<section id="test-suite">
+  <h2>VSC Conformance Test Suite (VSC-CTS)</h2>
+
+  <p>
+    The VSC Conformance Test Suite is the machine-executable complement
+    to the normative specification. It is maintained as a separate
+    artefact in the repository at
+    <code>test-suite/</code> and versioned in lock-step with this
+    specification using [[SEMVER]].
+  </p>
+
+  <section id="test-architecture">
+    <h3>Architecture</h3>
+    <p>
+      The VSC-CTS is structured after the model of [[TRACE-INTEROP]]
+      and the W3C VC Data Model 2.0 test suite. It uses:
+    </p>
+    <ul>
+      <li>
+        <strong>Mocha + chai</strong> as the JavaScript test runner
+        (Node.js 20+), consistent with existing W3C CCG test suites.
+      </li>
+      <li>
+        <strong>GitHub Actions</strong> for nightly scheduled and
+        on-demand CI execution.
+      </li>
+      <li>
+        <strong>Postman Collections</strong> exported alongside the
+        Mocha suite for manual and enterprise firewall-friendly testing,
+        following the [[TRACE-INTEROP]] approach.
+      </li>
+      <li>
+        <strong>JSON [=Test Vector=] files</strong> for each normative
+        assertion, stored in <code>test-suite/vectors/</code>.
+      </li>
+    </ul>
+  </section>
+
+  <section id="test-categories">
+    <h3>Test Categories</h3>
+
+    <table class="test-matrix">
+      <thead>
+        <tr>
+          <th>Category ID</th>
+          <th>Description</th>
+          <th>Scope</th>
+          <th>Class</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>MAP-FWD</code></td>
+          <td>Forward mapping: EPCIS → unsigned VSC Credential for all 5 event types</td>
+          <td>MAP-G1 – MAP-G6, MAP-LINK1</td>
+          <td><span class="cc cc-mapper">VSC-MAPPER</span></td>
+          <td class="pass">Mandatory</td>
+        </tr>
+        <tr>
+          <td><code>MAP-REV</code></td>
+          <td>Reverse mapping: VSC Credential → EPCIS (round-trip fidelity)</td>
+          <td>MAP-G6, VC-to-EPCIS rules</td>
+          <td><span class="cc cc-mapper">VSC-MAPPER</span></td>
+          <td class="pass">Mandatory</td>
+        </tr>
+        <tr>
+          <td><code>MAP-NEG</code></td>
+          <td>Negative mapping: invalid EPCIS inputs → correct error codes</td>
+          <td>Error handling, §10</td>
+          <td><span class="cc cc-mapper">VSC-MAPPER</span></td>
+          <td class="pass">Mandatory</td>
+        </tr>
+        <tr>
+          <td><code>ISS-SIGN</code></td>
+          <td>Credential issuance with eddsa-rdfc-2022 proof</td>
+          <td>§5.3, §7</td>
+          <td><span class="cc cc-issuer">VSC-ISSUER</span></td>
+          <td class="pass">Mandatory</td>
+        </tr>
+        <tr>
+          <td><code>ISS-STATUS</code></td>
+          <td>Issuance with Bitstring Status List credential status</td>
+          <td>§5.3, REQ-F7</td>
+          <td><span class="cc cc-issuer">VSC-ISSUER</span></td>
+          <td class="pass">Mandatory</td>
+        </tr>
+        <tr>
+          <td><code>ISS-JWT</code></td>
+          <td>Credential issuance with VC-JWT (ES256) proof</td>
+          <td>§7</td>
+          <td><span class="cc cc-issuer">VSC-ISSUER</span></td>
+          <td class="opt">Optional</td>
+        </tr>
+        <tr>
+          <td><code>ISS-SDJWT</code></td>
+          <td>Credential issuance with SD-JWT and selective disclosure frame</td>
+          <td>§7</td>
+          <td><span class="cc cc-issuer">VSC-ISSUER</span></td>
+          <td class="opt">Optional (mandatory for EUDR/DPP profiles)</td>
+        </tr>
+        <tr>
+          <td><code>VFY-CRED</code></td>
+          <td>Credential verification: valid, expired, revoked, bad-signature cases</td>
+          <td>§5.4</td>
+          <td><span class="cc cc-verifier">VSC-VERIFIER</span></td>
+          <td class="pass">Mandatory</td>
+        </tr>
+        <tr>
+          <td><code>VFY-PRES</code></td>
+          <td>Presentation verification: chain-of-custody presentations, gap detection</td>
+          <td>§5.4, MAP-LINK1</td>
+          <td><span class="cc cc-verifier">VSC-VERIFIER</span></td>
+          <td class="pass">Mandatory</td>
+        </tr>
+        <tr>
+          <td><code>DISC</code></td>
+          <td>Discovery endpoint returns valid VSCConfiguration</td>
+          <td>§5.5</td>
+          <td>All</td>
+          <td class="pass">Mandatory</td>
+        </tr>
+        <tr>
+          <td><code>INTEROP</code></td>
+          <td>End-to-end: Issuer A → Verifier B across two independent implementations</td>
+          <td>REQ-NF3</td>
+          <td>All</td>
+          <td class="pass">Mandatory for Interoperability Report</td>
+        </tr>
+        <tr>
+          <td><code>PROF-PHARMA</code></td>
+          <td>DSCSA profile: SGTIN serialization, chain reconstruction</td>
+          <td>§8.2</td>
+          <td><span class="cc cc-issuer">VSC-ISSUER</span> <span class="cc cc-verifier">VSC-VERIFIER</span></td>
+          <td class="opt">Optional (profile-specific)</td>
+        </tr>
+        <tr>
+          <td><code>PROF-EUDR</code></td>
+          <td>EUDR profile: geo-polygon, SD-JWT selective disclosure</td>
+          <td>§8.3</td>
+          <td><span class="cc cc-issuer">VSC-ISSUER</span></td>
+          <td class="opt">Optional (profile-specific)</td>
+        </tr>
+        <tr>
+          <td><code>PROF-CBAM</code></td>
+          <td>CBAM/DPP profile: carbon footprint, multi-tier linkage</td>
+          <td>§8.4</td>
+          <td><span class="cc cc-issuer">VSC-ISSUER</span></td>
+          <td class="opt">Optional (profile-specific)</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="test-roundtrip">
+    <h3>Round-Trip Test Vectors</h3>
+    <p>
+      Round-trip fidelity (MAP-G6) is verified using a canonical set of
+      [[EPCIS20]] test vectors, one per event type, stored in the
+      repository at <code>test-suite/vectors/roundtrip/</code>. Each
+      vector is a JSON file containing:
+    </p>
+    <ul>
+      <li><code>id</code> — globally unique vector identifier (e.g., <code>vsc-rt-obj-001</code>)</li>
+      <li><code>normativeRef</code> — clause exercised (e.g., <code>MAP-G6</code>)</li>
+      <li><code>epcisInput</code> — the canonical [[EPCIS20]] event</li>
+      <li><code>expectedVscTypes</code> — the expected <code>type</code> array in the produced credential</li>
+      <li><code>mandatoryFields</code> — list of <code>credentialSubject</code> paths that MUST be present and value-equal</li>
+    </ul>
+    <p>
+      The initial set of round-trip vectors covers all five event types
+      and at minimum the following bizStep values from [[CBV20]]:
+      <code>commissioning</code>, <code>shipping</code>,
+      <code>receiving</code>, <code>inspecting</code>,
+      <code>transforming</code>, and <code>sensor_reporting</code>.
+    </p>
+  </section>
+
+  <section id="test-reporting">
+    <h3>Reporting Format</h3>
+    <p>
+      The [=VSC Test Harness=] MUST produce two distinct report types:
+    </p>
+    <dl>
+      <dt>Conformance Report</dt>
+      <dd>
+        Tests a single implementation against all mandatory test
+        vectors for its declared conformance class(es). Produced as
+        a machine-readable JSON file at
+        <code>reports/conformance/&lt;impl-id&gt;-&lt;date&gt;.json</code>
+        and a human-readable HTML summary.
+      </dd>
+      <dt>Interoperability Report</dt>
+      <dd>
+        Tests two or more independent implementations against each
+        other on the <code>INTEROP</code> test category scenarios.
+        Produced at <code>reports/interoperability/&lt;date&gt;.json</code>.
+        An implementation is eligible for listing in the VSC
+        Interoperability Registry only after passing the
+        Interoperability Report with at least one other independent
+        implementation.
+      </dd>
+    </dl>
+    <p>
+      The report JSON schema is defined in
+      <code>test-suite/schemas/report-schema.json</code> and follows
+      the structure established by [[TRACE-INTEROP]].
+    </p>
+  </section>
+
+  <section id="test-registration">
+    <h3>Implementation Registration</h3>
+    <p>
+      Any organization wishing to have their implementation tested
+      against the VSC-CTS MUST:
+    </p>
+    <ol>
+      <li>
+        Submit a pull request to
+        <code>test-suite/implementations/&lt;org-name&gt;.json</code>
+        containing endpoint URLs, supported conformance classes,
+        supported proof formats, and OAuth 2.0 client credential
+        configuration (using GitHub Secrets for sensitive values).
+      </li>
+      <li>
+        Confirm acceptance of the
+        <a href="https://www.w3.org/community/about/process/cla/">W3C Community CLA</a>.
+      </li>
+      <li>
+        Ensure the registered endpoint is accessible from GitHub Actions
+        runners. Implementations MAY use an allowlisted outbound IP range
+        to restrict access to GitHub's CI infrastructure.
+      </li>
+    </ol>
+  </section>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     10. ERROR HANDLING
+═══════════════════════════════════════════════════════════════════ -->
+<section id="error-handling">
+  <h2>Error Handling</h2>
+
+  <p>
+    All VSC Translation API error responses MUST use the
+    <a href="https://www.rfc-editor.org/rfc/rfc9457">RFC 9457 Problem Details</a>
+    JSON format with <code>Content-Type: application/problem+json</code>.
+    In addition, VSC error responses MUST include a <code>vscCode</code>
+    property containing a VSC-specific error code from the registry below.
+  </p>
+
+  <pre class="example-fragment">
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/problem+json
+
+{
+  "type": "https://w3c-cg.github.io/vsc-interop-toolkit/errors#VSC_ERR_MISSING_REQUIRED_FIELD",
+  "title": "Missing required EPCIS field",
+  "status": 422,
+  "detail": "The field 'eventTime' is required but was not present in the submitted ObjectEvent.",
+  "instance": "/vsc/v1/epcis/translate",
+  "vscCode": "VSC_ERR_MISSING_REQUIRED_FIELD",
+  "vscField": "eventTime"
+}
+  </pre>
+
+  <table class="test-matrix">
+    <thead>
+      <tr><th>Code</th><th>HTTP status</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>VSC_ERR_UNKNOWN_EVENT_TYPE</code></td><td>400</td><td>The submitted document's <code>type</code> field does not match any of the five EPCIS 2.0 event types.</td></tr>
+      <tr><td><code>VSC_ERR_MISSING_REQUIRED_FIELD</code></td><td>422</td><td>A mandatory EPCIS field is absent. <code>vscField</code> identifies the missing property path.</td></tr>
+      <tr><td><code>VSC_ERR_INVALID_EPC_SYNTAX</code></td><td>422</td><td>An EPC value does not conform to [[GS1-DIGITALLINK]] URI syntax or the legacy URN format.</td></tr>
+      <tr><td><code>VSC_ERR_INVALID_CBV_VALUE</code></td><td>422</td><td>A <code>bizStep</code> or <code>disposition</code> value is not a recognized [[CBV20]] URI.</td></tr>
+      <tr><td><code>VSC_ERR_INVALID_PROOF</code></td><td>400</td><td>The submitted credential's cryptographic proof is invalid or cannot be verified.</td></tr>
+      <tr><td><code>VSC_ERR_DID_RESOLUTION_FAILURE</code></td><td>502</td><td>The issuer DID could not be resolved. Indicates a network or DID method infrastructure problem.</td></tr>
+      <tr><td><code>VSC_ERR_CREDENTIAL_REVOKED</code></td><td>400</td><td>The credential's Bitstring Status List entry indicates it has been revoked.</td></tr>
+      <tr><td><code>VSC_ERR_CREDENTIAL_EXPIRED</code></td><td>400</td><td>The credential's <code>validUntil</code> has passed.</td></tr>
+      <tr><td><code>VSC_ERR_CHAIN_GAP</code></td><td>400</td><td>A gap was detected in the event chain during presentation verification. <code>vscField</code> identifies the missing predecessor credential ID.</td></tr>
+      <tr><td><code>VSC_ERR_UNSUPPORTED_PROOF_FORMAT</code></td><td>400</td><td>The requested <code>proofFormat</code> is not supported by this implementation.</td></tr>
+      <tr><td><code>VSC_ERR_PROFILE_VIOLATION</code></td><td>422</td><td>The credential or presentation does not satisfy a required [=Conformance Profile=] constraint. <code>vscField</code> identifies the violated profile rule.</td></tr>
+      <tr><td><code>VSC_ERR_ROUND_TRIP_LOSS</code></td><td>500</td><td>The VC-to-EPCIS extraction produced a document that fails round-trip fidelity. Indicates an implementation defect.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     11. SECURITY CONSIDERATIONS
+═══════════════════════════════════════════════════════════════════ -->
+<section id="security">
+  <h2>Security Considerations</h2>
+
+  <p>
+    All security considerations in [[VC-DATA-MODEL]], [[VC-DI]], and
+    [[VC-JOSE-COSE]] apply to VSC credentials. In addition:
+  </p>
+
+  <ul>
+    <li>
+      <strong>API surface exposure:</strong>
+      The VSC Translation API MUST NOT be exposed without authentication
+      (see <a href="#api-auth"></a>). An unauthenticated translation endpoint
+      can be used by adversaries to probe the mapping rules and construct
+      syntactically valid but fraudulent credentials.
+    </li>
+    <li>
+      <strong>Input validation:</strong>
+      Implementations MUST validate all EPCIS input documents against
+      the [[EPCIS20]] JSON Schema before applying the [=EPCIS-to-VC Mapping=].
+      Malformed EPCIS documents MUST be rejected with
+      <code>VSC_ERR_MISSING_REQUIRED_FIELD</code> or
+      <code>VSC_ERR_INVALID_EPC_SYNTAX</code> before any credential
+      object is constructed, to prevent injection of crafted
+      <code>credentialSubject</code> content.
+    </li>
+    <li>
+      <strong>DID resolution caching:</strong>
+      Verifiers MUST NOT cache DID documents indefinitely. A staleness
+      limit of 24 hours is RECOMMENDED; verifiers SHOULD re-resolve
+      DIDs for high-value or regulatory verification contexts.
+    </li>
+    <li>
+      <strong>Test harness isolation:</strong>
+      VSC-CTS test runs MUST use test-only DIDs and key material that
+      are clearly labelled and never reused in production. Test
+      credentials MUST NOT be accepted by production verifiers.
+      Production endpoints registered for interoperability testing
+      SHOULD use separate key material from keys used for production
+      credential issuance.
+    </li>
+    <li>
+      <strong>Round-trip fidelity and data integrity:</strong>
+      A malicious intermediate that modifies <code>credentialSubject</code>
+      fields between translation and issuance would break the
+      <code>vscPredecessor.digestSRI</code> link. Implementations
+      SHOULD sign the unsigned credential output of
+      <code>/epcis/translate</code> without modification.
+    </li>
+  </ul>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     12. PRIVACY CONSIDERATIONS
+═══════════════════════════════════════════════════════════════════ -->
+<section id="privacy">
+  <h2>Privacy Considerations</h2>
+
+  <p>
+    All privacy considerations in [[VC-DATA-MODEL]] apply. Toolkit-specific
+    considerations:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Supplier identity in credentialSubject:</strong>
+      EPCIS <code>sourceList</code> and <code>destinationList</code> entries
+      may identify specific supplier organizations. When these are mapped
+      to <code>credentialSubject</code>, implementations SHOULD support
+      SD-JWT selective disclosure to allow holders to redact supplier
+      identities when presenting to parties who do not require them.
+    </li>
+    <li>
+      <strong>Test vector confidentiality:</strong>
+      Test vectors in the VSC-CTS repository MUST NOT contain real
+      production EPC values, real supplier GLNs, or real transaction
+      data. Synthetic identifiers with the prefix
+      <code>https://vsc-test.example/</code> MUST be used.
+    </li>
+    <li>
+      <strong>Interoperability report publication:</strong>
+      Interoperability reports are published publicly. Reports MUST
+      identify implementations by their registered implementation name
+      only; they MUST NOT disclose API endpoint URLs or OAuth client IDs.
+    </li>
+    <li>
+      <strong>Discovery endpoint disclosure:</strong>
+      The <code>/.well-known/vsc-configuration</code> endpoint reveals
+      the supported DID methods and proof formats of an implementation.
+      This information may assist an adversary in targeting weaknesses.
+      Implementations SHOULD require authentication even for discovery
+      in production deployments.
+    </li>
+  </ul>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     13. ROADMAP AND MILESTONES
+═══════════════════════════════════════════════════════════════════ -->
+<section id="roadmap">
+  <h2>Roadmap</h2>
+  <p class="informative-notice">This section is non-normative.</p>
+
+  <div class="milestone-row">
+    <div class="milestone-card">
+      <h5>v0.1 — This draft</h5>
+      <p>API specification, mapping rules, conformance classes, test suite architecture, error registry.</p>
+    </div>
+    <div class="milestone-card">
+      <h5>v0.2 — First Interop Event</h5>
+      <p>Two independent implementations complete MAP-FWD, ISS-SIGN, VFY-CRED categories. First public Interoperability Report published.</p>
+    </div>
+    <div class="milestone-card">
+      <h5>v0.3 — Profile Expansion</h5>
+      <p>EUDR SD-JWT profile (ISS-SDJWT) and CBAM multi-tier linkage vectors finalized. Second interop event with sector-specific test vectors.</p>
+    </div>
+    <div class="milestone-card">
+      <h5>v1.0 — CG Final Report</h5>
+      <p>At least two independent implementations pass all Mandatory test categories. OPENAPI artefact frozen. Formal liaison notification to GS1 and UN/CEFACT.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     14. CONTRIBUTING
+═══════════════════════════════════════════════════════════════════ -->
+<section id="contributing" class="appendix">
+  <h2>Contributing to this Specification</h2>
+  <p class="informative-notice">This section is non-normative.</p>
+
+  <div class="contrib-box">
+    <h4>All contributions welcome — no W3C Membership required.</h4>
+    <p>
+      Join the group at
+      <a href="https://www.w3.org/community/vsc/">w3.org/community/vsc</a>
+      (free GitHub account + W3C CLA acceptance). You are then eligible
+      to file issues and submit pull requests.
+    </p>
+  </div>
+
+  <section id="contrib-issues">
+    <h3>Filing Issues</h3>
+    <p>
+      Use the
+      <a href="https://github.com/w3c-cg/vsc-interop-toolkit/issues/new/choose">GitHub issue tracker</a>
+      with one of these labels:
+    </p>
+    <ul>
+      <li><code>api</code> — Translation API endpoint behaviour</li>
+      <li><code>mapping</code> — EPCIS-VC field mapping rule</li>
+      <li><code>test-suite</code> — test vector addition, category change, harness bug</li>
+      <li><code>profile</code> — conformance profile constraint</li>
+      <li><code>error-code</code> — new or changed VSC error code</li>
+      <li><code>editorial</code> — grammar, clarity, cross-references</li>
+      <li><code>security</code> or <code>privacy</code> — security or privacy consideration</li>
+    </ul>
+    <p>
+      One issue per discrete concern. Reference the relevant section
+      number (e.g., "§6.2 MAP-G4") in your issue title.
+    </p>
+  </section>
+
+  <section id="contrib-prs">
+    <h3>Pull Requests</h3>
+    <ul>
+      <li>Branch naming: <code>feat/&lt;short-desc&gt;</code>, <code>fix/&lt;short-desc&gt;</code>, <code>test/&lt;short-desc&gt;</code>.</li>
+      <li>Every normative change MUST be accompanied by at least one new or updated test vector in <code>test-suite/vectors/</code>.</li>
+      <li>New mapping rules MUST include: the rule identifier (MAP-Xn), the normative statement, a worked example (positive and negative), and a testability criterion.</li>
+      <li>New error codes MUST be added to both <a href="#error-handling"></a> and the machine-readable error registry at <code>errors/registry.json</code>.</li>
+      <li>New profiles MUST include: required event types, required fields, proof format constraints, and regulatory context reference.</li>
+      <li>At least one editor review is required before merge. Editors aim to review within two weeks.</li>
+    </ul>
+  </section>
+
+  <section id="contrib-impl">
+    <h3>Registering an Implementation</h3>
+    <p>
+      To register your implementation for conformance and interoperability
+      testing, follow the process in <a href="#test-registration"></a>.
+      All registered implementations and their current test results are
+      listed in the public
+      <a href="https://github.com/w3c-cg/vsc-interop-toolkit/blob/main/IMPLEMENTATIONS.md">IMPLEMENTATIONS.md</a>.
+    </p>
+  </section>
+
+  <section id="contrib-style">
+    <h3>Editorial Style</h3>
+    <ul>
+      <li>RFC 2119 keywords in ALL CAPS in normative sections only.</li>
+      <li>Mark non-normative sections and examples with <code>class="informative-notice"</code>.</li>
+      <li>Use <code>&lt;dfn&gt;</code> for new terms; subsequent uses are auto-linked by ReSpec.</li>
+      <li>All code examples MUST use synthetic test identifiers, never real EPC or GLN values.</li>
+      <li>Every new requirement, mapping rule, or test category MUST have a unique identifier (e.g., <code>MAP-G7</code>, <code>CAT-FOO</code>) for traceability.</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     ACKNOWLEDGMENTS
+═══════════════════════════════════════════════════════════════════ -->
+<section id="acknowledgments" class="appendix">
+  <h2>Acknowledgments</h2>
+  <p>
+    The editors thank participants of the
+    <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain
+    Community Group</a> for their contributions. This specification builds
+    on the substantial prior art of the W3C Credentials Community Group's
+    [[TRACE-INTEROP]] Final Report (December 2024), the [[VC-API]], and
+    the [[TRACE-VOCAB]], and on the GS1 [[EPCIS20]] and [[CBV20]] standards.
+    The conformance profile requirements are informed by published
+    regulatory guidance from the U.S. FDA ([[DSCSA]]), the European Union
+    ([[EUDR]], [[EU-DPP]], [[CBAM]]), and GS1's [[GS1-DSCSA-GUIDE]].
+  </p>
+</section>
+
+</body>
+</html>
