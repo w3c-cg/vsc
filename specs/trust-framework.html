@@ -13,7 +13,6 @@
     Community Group." />
 
   <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" class="remove" defer></script>
 
   <script class="remove">
     var respecConfig = {
@@ -214,7 +213,6 @@
   </script>
 
   <style>
-    /* ─── Normative requirement boxes ──────────────────────────────── */
     .req-box {
       border-left: 4px solid #005A9C;
       background: #f0f7ff;
@@ -229,7 +227,6 @@
     }
     .req-box p { margin: 0.3em 0 0; }
 
-    /* ─── Role/layer badges ─────────────────────────────────────────── */
     .badge {
       display: inline-block;
       padding: 2px 8px;
@@ -246,7 +243,6 @@
     .badge-holder  { background: #c05621; color: #fff; }
     .badge-gov     { background: #702459; color: #fff; }
 
-    /* ─── Fill-in template boxes ────────────────────────────────────── */
     .template-box {
       border: 2px dashed #888;
       background: #fffff0;
@@ -269,7 +265,6 @@
       font-style: normal;
     }
 
-    /* ─── Governance tables ─────────────────────────────────────────── */
     table.gov-table {
       width: 100%;
       border-collapse: collapse;
@@ -289,7 +284,6 @@
     }
     table.gov-table tr:nth-child(even) td { background: #f7f7f7; }
 
-    /* ─── Trust chain diagram ───────────────────────────────────────── */
     pre.trust-diagram {
       font-family: monospace;
       font-size: 0.8em;
@@ -300,7 +294,6 @@
       overflow-x: auto;
     }
 
-    /* ─── JSON-LD examples ──────────────────────────────────────────── */
     pre.example-fragment {
       background: #1e1e2e;
       color: #cdd6f4;
@@ -313,7 +306,6 @@
     pre.example-fragment .str   { color: #a6e3a1; }
     pre.example-fragment .cmt   { color: #6c7086; }
 
-    /* ─── Lifecycle stage timeline ──────────────────────────────────── */
     .lifecycle-row { display: flex; flex-wrap: wrap; gap: 0; margin: 1.2em 0; }
     .lifecycle-step {
       flex: 1 1 130px;
@@ -325,7 +317,7 @@
       font-size: 0.82em;
     }
     .lifecycle-step:not(:last-child)::after {
-      content: "›";
+      content: "\203A";
       position: absolute;
       right: -10px;
       top: 50%;
@@ -336,7 +328,6 @@
     }
     .lifecycle-step strong { display: block; font-size: 0.95em; margin-bottom: 3px; }
 
-    /* ─── Contrib box ───────────────────────────────────────────────── */
     .contrib-box {
       border: 1px solid #f0ad4e;
       background: #fffbf0;
@@ -346,26 +337,25 @@
     }
     .contrib-box h4 { margin-top: 0; color: #7a5200; }
 
-    /* ─── Informative notice ────────────────────────────────────────── */
     .informative-notice {
       font-style: italic;
       color: #555;
       font-size: 0.92em;
     }
 
-    /* ─── Checklist ─────────────────────────────────────────────────── */
     .checklist li { list-style: none; padding-left: 0; }
-    .checklist li::before { content: "☐ "; font-size: 1em; }
-    .checklist li.done::before { content: "☑ "; color: green; }
+    .checklist li::before { content: "\2610 "; font-size: 1em; }
+    .checklist li.done::before { content: "\2611 "; color: green; }
 
-    /* ─── UML diagram container ─────────────────────────────────────── */
-    .mermaid-container {
-      background: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      padding: 1em;
-      margin: 1em 0;
-      overflow-x: auto;
+    .figure {
+      text-align: center;
+      margin: 1.5em 0;
+    }
+    .figure .caption {
+      font-style: italic;
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 0.6em;
     }
   </style>
 </head>
@@ -381,8 +371,7 @@
     a customizable, machine-readable governance template that any supply
     chain network can adopt to establish the roles, accreditation rules,
     trust registry structure, credential policies, and compliance criteria
-    governing the issuance and consumption of VSC-conformant
-    [=Verifiable Credential=]s.
+    governing the issuance and consumption of VSC-conformant Verifiable Credentials.
   </p>
   <p>
     The template is the third major deliverable of the
@@ -417,10 +406,10 @@
   </p>
   <p>
     Feedback is welcome via the
-    <a href="https://github.com/w3c-cg/vsc-trust-framework/issues">GitHub
-    issue tracker</a> or the
-    <a href="https://lists.w3.org/Archives/Public/public-vsc/">public-vsc
-    mailing list</a>. See <a href="#contributing"></a> for guidelines.
+    <a href="https://github.com/w3c-cg/vsc-trust-framework/issues">GitHub issue tracker</a>
+    or the
+    <a href="https://lists.w3.org/Archives/Public/public-vsc/">public-vsc mailing list</a>.
+    See the <a href="#contributing">Contributing</a> section for guidelines.
   </p>
   <p>
     This specification is aligned with the Trust over IP Foundation's
@@ -443,57 +432,22 @@
     <h3>Why a Trust Framework Template?</h3>
     <p>
       Cryptographic verifiability — the ability to prove who signed a
-      [=Verifiable Credential=] — is necessary but not sufficient for
+      Verifiable Credential — is necessary but not sufficient for
       supply chain trust. A verifier also needs to know:
     </p>
     <ul>
-      <li>
-        <strong>Is this issuer authorized?</strong> — Does the signing
-        party have the right, under an agreed governance framework, to
-        assert the specific type of supply chain event for the claimed
-        commodity, location, or business step?
-      </li>
-      <li>
-        <strong>What standards did the issuer follow?</strong> — Did the
-        issuer meet the technical, operational, and legal requirements for
-        their role?
-      </li>
-      <li>
-        <strong>Who accredited the issuer?</strong> — Is there a
-        transparent, auditable chain from the issuer's DID back to a
-        recognized root of trust (a regulator, consortium, or standards
-        body)?
-      </li>
-      <li>
-        <strong>What happens when things go wrong?</strong> — Is there
-        a defined process for suspending or revoking issuers, handling
-        disputes, and escalating to regulators?
-      </li>
+      <li><strong>Is this issuer authorized?</strong> — Does the signing party have the right, under an agreed governance framework, to assert the specific type of supply chain event for the claimed commodity, location, or business step?</li>
+      <li><strong>What standards did the issuer follow?</strong> — Did the issuer meet the technical, operational, and legal requirements for their role?</li>
+      <li><strong>Who accredited the issuer?</strong> — Is there a transparent, auditable chain from the issuer's DID back to a recognized root of trust (a regulator, consortium, or standards body)?</li>
+      <li><strong>What happens when things go wrong?</strong> — Is there a defined process for suspending or revoking issuers, handling disputes, and escalating to regulators?</li>
     </ul>
     <p>
-      A [=Trust Framework=] answers all four questions. This template
-      provides the structure; adopting networks supply the sector-specific
-      content. The design draws on three proven models:
+      A Trust Framework answers all four questions. This template provides the structure; adopting networks supply the sector-specific content. The design draws on three proven models:
     </p>
     <ul>
-      <li>
-        The <strong>ToIP Governance Metamodel</strong> ([[TOIP-GOVERNANCE]],
-        [[TOIP-METAMODEL]]) — a dual-stack (technical + governance) model
-        for Internet-scale digital trust, with four layers from public
-        utility through credential ecosystems.
-      </li>
-      <li>
-        The <strong>EBSI Trust Chain Model</strong> ([[EBSI-TRUST-MODEL]]) —
-        a hierarchical Root TAO → TAO → Trusted Issuer accreditation
-        chain, already deployed for EU education and identity credentials,
-        directly applicable to supply chain sectors.
-      </li>
-      <li>
-        The <strong>Credential Engine Governance Framework</strong>
-        ([[CREDENTIAL-ENGINE-GOV]]) — seven governance areas for issuer
-        identity registries, grounded in the Integrative Model of
-        Organizational Trust (ability, integrity, benevolence).
-      </li>
+      <li>The <strong>ToIP Governance Metamodel</strong> ([[TOIP-GOVERNANCE]], [[TOIP-METAMODEL]]) — a dual-stack (technical + governance) model for Internet-scale digital trust, with four layers from public utility through credential ecosystems.</li>
+      <li>The <strong>EBSI Trust Chain Model</strong> ([[EBSI-TRUST-MODEL]]) — a hierarchical Root TAO to TAO to Trusted Issuer accreditation chain, already deployed for EU education and identity credentials, directly applicable to supply chain sectors.</li>
+      <li>The <strong>Credential Engine Governance Framework</strong> ([[CREDENTIAL-ENGINE-GOV]]) — seven governance areas for issuer identity registries, grounded in the Integrative Model of Organizational Trust (ability, integrity, benevolence).</li>
     </ul>
   </section>
 
@@ -562,12 +516,12 @@
       requirements, accreditation criteria, and legal obligations
       governing participants in a specific VSC-based supply chain
       ecosystem. A Trust Framework is instantiated from this template by
-      a [=Governance Authority=] for a specific sector or network.
+      a Governance Authority for a specific sector or network.
     </dd>
 
     <dt><dfn>Trust Framework Document</dfn> (TFD)</dt>
     <dd>
-      The formal, versioned artefact that records the [=Trust Framework=]
+      The formal, versioned artefact that records the Trust Framework
       for a specific network. A TFD MUST include both a human-readable
       narrative section and a machine-readable JSON-LD section conformant
       with <a href="#machine-readable-tf">Machine-Readable Trust Framework Document</a>.
@@ -576,67 +530,66 @@
     <dt><dfn>Governance Authority</dfn> (GA)</dt>
     <dd>
       The legal entity or consortium that authors, publishes, maintains,
-      and enforces a [=Trust Framework=]. The Governance Authority MUST
-      hold a [[DID-CORE]] identifier serving as the Root Trusted
-      Accreditation Organization (Root TAO) for the trust chain, following
-      the model established in [[EBSI-TRUST-MODEL]]. Examples include a
+      and enforces a Trust Framework. The Governance Authority MUST
+      hold a [[DID-CORE]] identifier serving as the <a>Root Trusted Accreditation Organization</a>
+      for the trust chain, following the model established in [[EBSI-TRUST-MODEL]]. Examples include a
       sector consortium, a national standards body, or a regulatory agency.
     </dd>
 
-    <dt><dfn>Root Trusted Accreditation Organization</dfn> (Root TAO)</dt>
+    <dt><dfn data-lt="Root TAO|Root Trusted Accreditation Organization">Root Trusted Accreditation Organization (Root TAO)</dfn></dt>
     <dd>
-      The apex of the trust hierarchy within a [=Trust Framework=]. The
-      Root TAO has full control of its [=Trust Chain=] and is the sole
-      entity that may accredit [=TAO=]s. The Root TAO is identified by a
+      The apex of the trust hierarchy within a Trust Framework. The
+      Root TAO has full control of its Trust Chain and is the sole
+      entity that may accredit <a>TAO</a>s. The Root TAO is identified by a
       [[DID-CORE]] URI and its accreditation credential is
       self-issued or issued by an external root authority (e.g., a
       government PKI or GS1 registry). Modelled after [[EBSI-TRUST-MODEL]].
     </dd>
 
-    <dt><dfn>Trusted Accreditation Organization</dfn> (TAO)</dt>
+    <dt><dfn data-lt="TAO|Trusted Accreditation Organization">Trusted Accreditation Organization (TAO)</dfn></dt>
     <dd>
-      An organization accredited by the [=Root TAO=] or another [=TAO=]
-      to govern a segment of the [=Trust Chain=]: specifically, to
-      evaluate and accredit [=Trusted Issuer=]s within their domain.
+      An organization accredited by the <a>Root TAO</a> or another <a>TAO</a>
+      to govern a segment of the Trust Chain: specifically, to
+      evaluate and accredit <a>Trusted Issuer</a>s within their domain.
       A TAO may only pass accreditation authority equal to or less than
       its own. TAOs are typically sector bodies, national associations,
       or regulatory agencies.
     </dd>
 
-    <dt><dfn>Trusted Issuer</dfn> (TI)</dt>
+    <dt><dfn data-lt="TI|Trusted Issuer">Trusted Issuer (TI)</dfn></dt>
     <dd>
-      A [=Supply Chain Actor=] accredited by a [=TAO=] to issue specific
+      A supply chain actor accredited by a <a>TAO</a> to issue specific
       types of VSC Credentials within defined business contexts.
       Each Trusted Issuer MUST hold a [[DID-CORE]] identifier registered
-      in the [=Trusted Issuers Registry=] with a valid
-      [=Verifiable Accreditation=]. Modelled after [[EBSI-TRUST-MODEL]].
+      in the <a>Trusted Issuers Registry</a> with a valid
+      <a>Verifiable Accreditation</a>. Modelled after [[EBSI-TRUST-MODEL]].
     </dd>
 
     <dt><dfn>Trusted Verifier</dfn></dt>
     <dd>
-      An entity explicitly recognized by the [=Trust Framework=] as
+      An entity explicitly recognized by the Trust Framework as
       authorized to request and receive presentations of specific VSC
       Credential types. Trusted Verifier status MAY be governed separately
-      from [=Trusted Issuer=] status or combined in the same entity.
+      from <a>Trusted Issuer</a> status or combined in the same entity.
     </dd>
 
     <dt><dfn>Trust Chain</dfn></dt>
     <dd>
       A hierarchical, directed graph of accreditation credentials linking
-      the [=Root TAO=] through one or more [=TAO=]s to all [=Trusted
-      Issuer=]s in a [=Trust Framework=]. Every credential in the chain
-      is a [=Verifiable Accreditation=] signed by its issuing node.
+      the <a>Root TAO</a> through one or more <a>TAO</a>s to all <a>Trusted
+      Issuer</a>s in a Trust Framework. Every credential in the chain
+      is a <a>Verifiable Accreditation</a> signed by its issuing node.
       A verifier traverses the chain to establish that a specific
-      [=Trusted Issuer=] is authorized to have issued a given VSC Credential.
+      <a>Trusted Issuer</a> is authorized to have issued a given VSC Credential.
     </dd>
 
     <dt><dfn>Verifiable Accreditation</dfn></dt>
     <dd>
-      A [=Verifiable Credential=] issued by a [=Root TAO=] or [=TAO=]
+      A Verifiable Credential issued by a <a>Root TAO</a> or <a>TAO</a>
       granting a specific entity the permission to accredit (if issued to
       a TAO) or to issue specific credential types (if issued to a
       Trusted Issuer). Verifiable Accreditations are stored in the
-      [=Trusted Issuers Registry=] and are publicly resolvable by any
+      <a>Trusted Issuers Registry</a> and are publicly resolvable by any
       verifier. Modelled after [[EBSI-TRUST-MODEL]] <code>VerifiableAccreditationToAccredit</code>
       and <code>VerifiableAccreditationToAttest</code>.
     </dd>
@@ -644,9 +597,9 @@
     <dt><dfn>Trusted Issuers Registry</dfn> (TIR)</dt>
     <dd>
       A publicly resolvable, machine-readable registry of all
-      [=Trusted Issuer=]s and [=TAO=]s participating in a [=Trust Framework=],
+      <a>Trusted Issuer</a>s and <a>TAO</a>s participating in a Trust Framework,
       indexed by their [[DID-CORE]] identifiers and linked
-      [=Verifiable Accreditation=]s. The TIR MUST be queryable by any
+      <a>Verifiable Accreditation</a>s. The TIR MUST be queryable by any
       verifier at any time, consistent with [[EBSI-TRUST-MODEL]] and the
       [[TOIP-GOVERNANCE]] Trust Registry specification.
     </dd>
@@ -655,16 +608,16 @@
     <dd>
       The bounded set of VSC Credential types, [[EPCIS20]] event types,
       [[CBV20]] bizStep values, commodity categories, or geographic regions
-      for which a [=Trusted Issuer=] is authorized to issue credentials
-      under their [=Verifiable Accreditation=]. Accreditation scope is
-      always a subset of the authorizing [=TAO=]'s scope and MUST NOT be
+      for which a <a>Trusted Issuer</a> is authorized to issue credentials
+      under their <a>Verifiable Accreditation</a>. Accreditation scope is
+      always a subset of the authorizing <a>TAO</a>'s scope and MUST NOT be
       extended beyond it.
     </dd>
 
     <dt><dfn>Governance Document</dfn></dt>
     <dd>
-      A controlled, versioned document referenced by the [=Trust Framework
-      Document=] that specifies policies, procedures, or standards for a
+      A controlled, versioned document referenced by the Trust Framework
+      Document that specifies policies, procedures, or standards for a
       specific aspect of the framework (e.g., a Key Management Policy, an
       Audit Procedure, a Dispute Resolution Procedure). Governance Documents
       are externally linked from the machine-readable TFD.
@@ -673,14 +626,14 @@
     <dt><dfn>Supply Chain Actor</dfn></dt>
     <dd>
       A legal entity that participates in one or more supply chain events
-      and may hold one or more roles defined by the [=Trust Framework=],
+      and may hold one or more roles defined by the Trust Framework,
       including but not limited to manufacturer, distributor, carrier,
       inspector, or auditor.
     </dd>
 
     <dt><dfn>Credential Status</dfn></dt>
     <dd>
-      The current state of a [=Verifiable Credential=] as indicated by its
+      The current state of a Verifiable Credential as indicated by its
       <code>credentialStatus</code> property, typically managed via
       [[VC-BITSTRING-STATUS]]. Possible states include <code>active</code>,
       <code>suspended</code>, and <code>revoked</code>.
@@ -703,47 +656,56 @@
       that must both be present for end-to-end trust.
     </p>
 
-    <div class="mermaid-container">
-      <pre class="mermaid">
-graph TB
-    subgraph Governance["GOVERNANCE STACK"]
-        G1["Ecosystem Governance Framework
-        (Human-readable policies,
-        legal agreements, audits)"]
-        G2["Accreditation Governance
-        (TAO rules, sector bodies)"]
-        G3["Issuer Obligations
-        (data quality, audit,
-        key management, SLAs)"]
-        G4["Credential Policy
-        (disclosure rules, expiry,
-        selective disclosure)"]
-    end
+    <div class="figure">
+      <svg viewBox="0 0 900 280" width="100%" xmlns="http://www.w3.org/2000/svg">
 
-    subgraph Technical["TECHNICAL STACK"]
-        T1["VSC Trust Framework Document (TFD)
-        (Machine-readable JSON-LD,
-        DID-anchored, versioned)"]
-        T2["Verifiable Accreditation Credentials
-        (VerifiableAccreditationToAccredit
-        VerifiableAccreditationToAttest)"]
-        T3["VSC Credential Schemas + Proof Rules
-        (per VSC-INTEROP Toolkit)"]
-        T4["Credential Policies per Credential Type
-        (validFrom, validUntil, status,
-        selective disclosure fields)"]
-    end
+        <!-- Governance Stack -->
+        <rect x="30" y="20" width="380" height="240" fill="#f0f7ff" stroke="#005A9C" stroke-width="2"/>
+        <text x="220" y="50" text-anchor="middle" font-weight="bold" font-size="14">GOVERNANCE STACK</text>
 
-    G1 <-->|"dual alignment"| T1
-    G2 <-->|"dual alignment"| T2
-    G3 <-->|"dual alignment"| T3
-    G4 <-->|"dual alignment"| T4
-      </pre>
+        <rect x="50" y="70" width="340" height="35" fill="#fff" stroke="#005A9C" stroke-width="1"/>
+        <text x="220" y="92" text-anchor="middle" font-size="12">Ecosystem Governance Framework</text>
+
+        <rect x="50" y="115" width="340" height="35" fill="#fff" stroke="#005A9C" stroke-width="1"/>
+        <text x="220" y="137" text-anchor="middle" font-size="12">Accreditation Governance (TAO rules)</text>
+
+        <rect x="50" y="160" width="340" height="35" fill="#fff" stroke="#005A9C" stroke-width="1"/>
+        <text x="220" y="182" text-anchor="middle" font-size="12">Issuer Obligations (audit, key management)</text>
+
+        <rect x="50" y="205" width="340" height="35" fill="#fff" stroke="#005A9C" stroke-width="1"/>
+        <text x="220" y="227" text-anchor="middle" font-size="12">Credential Policy (disclosure, expiry)</text>
+
+        <!-- Technical Stack -->
+        <rect x="490" y="20" width="380" height="240" fill="#f4f4f4" stroke="#333" stroke-width="2"/>
+        <text x="680" y="50" text-anchor="middle" font-weight="bold" font-size="14">TECHNICAL STACK</text>
+
+        <rect x="510" y="70" width="340" height="35" fill="#fff" stroke="#333" stroke-width="1"/>
+        <text x="680" y="92" text-anchor="middle" font-size="12">Trust Framework Document (JSON-LD)</text>
+
+        <rect x="510" y="115" width="340" height="35" fill="#fff" stroke="#333" stroke-width="1"/>
+        <text x="680" y="137" text-anchor="middle" font-size="12">Verifiable Accreditation Credentials</text>
+
+        <rect x="510" y="160" width="340" height="35" fill="#fff" stroke="#333" stroke-width="1"/>
+        <text x="680" y="182" text-anchor="middle" font-size="12">VSC Credential Schemas + Proof Rules</text>
+
+        <rect x="510" y="205" width="340" height="35" fill="#fff" stroke="#333" stroke-width="1"/>
+        <text x="680" y="227" text-anchor="middle" font-size="12">Credential Policies per Type</text>
+
+        <!-- Arrows -->
+        <defs>
+          <marker id="arrow1" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#000"/>
+          </marker>
+        </defs>
+
+        <line x1="420" y1="87" x2="500" y2="87" stroke="#000" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <line x1="420" y1="132" x2="500" y2="132" stroke="#000" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <line x1="420" y1="177" x2="500" y2="177" stroke="#000" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <line x1="420" y1="222" x2="500" y2="222" stroke="#000" stroke-width="1.5" marker-end="url(#arrow1)"/>
+
+      </svg>
+      <p class="caption">Figure 1 — VSC dual-stack trust architecture, aligned with [[TOIP-GOVERNANCE]] and the [[EBSI-TRUST-MODEL]].</p>
     </div>
-    <figcaption>
-      Figure 1 — VSC dual-stack trust architecture, aligned with
-      [[TOIP-GOVERNANCE]] and the [[EBSI-TRUST-MODEL]].
-    </figcaption>
   </section>
 
   <section id="arch-trust-chain">
@@ -751,100 +713,163 @@ graph TB
     <p>
       A VSC Trust Chain MUST contain exactly three tiers, following
       [[EBSI-TRUST-MODEL]]. Each tier is identified by a [[DID-CORE]] URI
-      and holds a [=Verifiable Accreditation=] from the tier above it.
+      and holds a Verifiable Accreditation from the tier above it.
     </p>
 
-    <div class="mermaid-container">
-      <pre class="mermaid">
-graph TD
-    RTAO["🏛️ ROOT TAO (Tier 0)
-    did:web:governance.example-consortium.org
-    Governance Authority
-    VerifiableAuthorisationForTrustChain
-    (self-issued or external root)"]
+    <div class="figure">
+      <svg viewBox="0 0 900 420" width="100%" xmlns="http://www.w3.org/2000/svg">
 
-    TAO1["📋 TAO — Pharma
-    Sector Body (Tier 1)"]
-    TAO2["📋 TAO — Food
-    Sector Body (Tier 1)"]
-    TAO3["📋 TAO — Minerals
-    Sector Body (Tier 1)"]
+        <!-- Root TAO -->
+        <rect x="270" y="20" width="360" height="65" rx="4" fill="#2d3748"/>
+        <text x="450" y="45" text-anchor="middle" fill="#fff" font-weight="bold" font-size="14">ROOT TAO — Tier 0</text>
+        <text x="450" y="65" text-anchor="middle" fill="#ccc" font-size="11">Governance Authority · VerifiableAuthorisationForTrustChain</text>
 
-    TI1["🏭 Trusted Issuers (Tier 2)
-    Manufacturers"]
-    TI2["🚚 Trusted Issuers (Tier 2)
-    Wholesalers · Carriers"]
-    TI3["🔍 Trusted Issuers (Tier 2)
-    Inspection Bodies · Customs"]
+        <!-- TAO row -->
+        <rect x="30" y="140" width="260" height="60" rx="4" fill="#553c9a"/>
+        <text x="160" y="168" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">TAO — Pharma</text>
+        <text x="160" y="186" text-anchor="middle" fill="#ccc" font-size="10">Sector Body · Tier 1</text>
 
-    RTAO -->|"issues
-    VerifiableAccreditationToAccredit"| TAO1
-    RTAO -->|"issues
-    VerifiableAccreditationToAccredit"| TAO2
-    RTAO -->|"issues
-    VerifiableAccreditationToAccredit"| TAO3
+        <rect x="320" y="140" width="260" height="60" rx="4" fill="#553c9a"/>
+        <text x="450" y="168" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">TAO — Food</text>
+        <text x="450" y="186" text-anchor="middle" fill="#ccc" font-size="10">Sector Body · Tier 1</text>
 
-    TAO1 -->|"issues
-    VerifiableAccreditationToAttest"| TI1
-    TAO1 -->|"issues
-    VerifiableAccreditationToAttest"| TI2
-    TAO2 -->|"issues
-    VerifiableAccreditationToAttest"| TI2
-    TAO3 -->|"issues
-    VerifiableAccreditationToAttest"| TI3
+        <rect x="610" y="140" width="260" height="60" rx="4" fill="#553c9a"/>
+        <text x="740" y="168" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">TAO — Minerals</text>
+        <text x="740" y="186" text-anchor="middle" fill="#ccc" font-size="10">Sector Body · Tier 1</text>
 
-    style RTAO fill:#2d3748,color:#fff
-    style TAO1 fill:#553c9a,color:#fff
-    style TAO2 fill:#553c9a,color:#fff
-    style TAO3 fill:#553c9a,color:#fff
-    style TI1 fill:#2b6cb0,color:#fff
-    style TI2 fill:#2b6cb0,color:#fff
-    style TI3 fill:#2b6cb0,color:#fff
-      </pre>
+        <!-- Trusted Issuer row -->
+        <rect x="30" y="290" width="260" height="60" rx="4" fill="#2b6cb0"/>
+        <text x="160" y="318" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">Trusted Issuers</text>
+        <text x="160" y="336" text-anchor="middle" fill="#ccc" font-size="10">Manufacturers · Tier 2</text>
+
+        <rect x="320" y="290" width="260" height="60" rx="4" fill="#2b6cb0"/>
+        <text x="450" y="318" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">Trusted Issuers</text>
+        <text x="450" y="336" text-anchor="middle" fill="#ccc" font-size="10">Wholesalers · Carriers · Tier 2</text>
+
+        <rect x="610" y="290" width="260" height="60" rx="4" fill="#2b6cb0"/>
+        <text x="740" y="318" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">Trusted Issuers</text>
+        <text x="740" y="336" text-anchor="middle" fill="#ccc" font-size="10">Inspectors · Customs · Tier 2</text>
+
+        <!-- Arrows -->
+        <defs>
+          <marker id="arrow2" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#000"/>
+          </marker>
+        </defs>
+
+        <!-- Root to TAO -->
+        <line x1="350" y1="85" x2="160" y2="140" stroke="#000" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <line x1="450" y1="85" x2="450" y2="140" stroke="#000" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <line x1="550" y1="85" x2="740" y2="140" stroke="#000" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+        <!-- TAO to TI -->
+        <line x1="160" y1="200" x2="160" y2="290" stroke="#000" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <line x1="350" y1="200" x2="350" y2="290" stroke="#000" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <line x1="550" y1="200" x2="550" y2="290" stroke="#000" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <line x1="740" y1="200" x2="740" y2="290" stroke="#000" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+        <!-- Accredit labels -->
+        <text x="260" y="115" text-anchor="middle" font-size="9" fill="#555">VerifiableAccreditationToAccredit</text>
+        <text x="450" y="115" text-anchor="middle" font-size="9" fill="#555">VerifiableAccreditationToAccredit</text>
+        <text x="645" y="115" text-anchor="middle" font-size="9" fill="#555">VerifiableAccreditationToAccredit</text>
+
+        <text x="160" y="255" text-anchor="middle" font-size="9" fill="#555">VerifiableAccreditationToAttest</text>
+        <text x="350" y="255" text-anchor="middle" font-size="9" fill="#555">VerifiableAccreditationToAttest</text>
+        <text x="550" y="255" text-anchor="middle" font-size="9" fill="#555">VerifiableAccreditationToAttest</text>
+        <text x="740" y="255" text-anchor="middle" font-size="9" fill="#555">VerifiableAccreditationToAttest</text>
+
+        <!-- TIR reference at bottom -->
+        <text x="450" y="390" text-anchor="middle" font-style="italic" font-size="10" fill="#888">All Verifiable Accreditations are stored in the Trusted Issuers Registry (TIR)</text>
+
+      </svg>
+      <p class="caption">Figure 2 — VSC three-tier trust chain. Each downward arrow represents a Verifiable Accreditation stored in the Trusted Issuers Registry.</p>
     </div>
-    <figcaption>
-      Figure 2 — VSC three-tier trust chain. Each downward arrow
-      represents a [=Verifiable Accreditation=] stored in the
-      [=Trusted Issuers Registry=].
-    </figcaption>
   </section>
 
   <section id="arch-accreditation-flow">
     <h3>Accreditation Flow Sequence</h3>
 
-    <div class="mermaid-container">
-      <pre class="mermaid">
-sequenceDiagram
-    participant TI as Trusted Issuer Applicant
-    participant TAO as Trusted Accreditation Org
-    participant TIR as Trusted Issuers Registry
-    participant Verifier as Verifier
+    <div class="figure">
+      <svg viewBox="0 0 800 520" width="100%" xmlns="http://www.w3.org/2000/svg">
 
-    TI->>TAO: Submit Application Package
-    Note over TI,TAO: Legal identity evidence<br/>DID + proof of key control<br/>Key Management Policy<br/>Self-assessment checklist
+        <!-- Participants header -->
+        <rect x="40" y="10" width="130" height="30" rx="3" fill="#2d3748"/>
+        <text x="105" y="30" text-anchor="middle" fill="#fff" font-size="11">TI Applicant</text>
 
-    TAO->>TAO: Vet applicant<br/>(ROLE-TAO2)
-    Note over TAO: Verify legal identity<br/>Check technical readiness<br/>Record vetting evidence
+        <rect x="220" y="10" width="130" height="30" rx="3" fill="#553c9a"/>
+        <text x="285" y="30" text-anchor="middle" fill="#fff" font-size="11">TAO</text>
 
-    TAO->>TI: Issue VerifiableAccreditationToAttest
-    Note over TAO,TI: validFrom/validUntil set<br/>Accreditation scope defined<br/>termsOfUse with parentAccreditation
+        <rect x="400" y="10" width="130" height="30" rx="3" fill="#2b6cb0"/>
+        <text x="465" y="30" text-anchor="middle" fill="#fff" font-size="11">TIR</text>
 
-    TAO->>TIR: Register accreditation
-    Note over TAO,TIR: DID, legalName, LEI<br/>accreditationCredential URI<br/>accreditedFor scope
+        <rect x="580" y="10" width="130" height="30" rx="3" fill="#276749"/>
+        <text x="645" y="30" text-anchor="middle" fill="#fff" font-size="11">Verifier</text>
 
-    TI->>Verifier: Issue VSC Credential
-    Note over TI,Verifier: Credential includes<br/>AccreditationPolicy in termsOfUse
+        <!-- Lifelines -->
+        <line x1="105" y1="40" x2="105" y2="490" stroke="#999" stroke-dasharray="4,4"/>
+        <line x1="285" y1="40" x2="285" y2="490" stroke="#999" stroke-dasharray="4,4"/>
+        <line x1="465" y1="40" x2="465" y2="490" stroke="#999" stroke-dasharray="4,4"/>
+        <line x1="645" y1="40" x2="645" y2="490" stroke="#999" stroke-dasharray="4,4"/>
 
-    Verifier->>TIR: Query issuer accreditation
-    TIR-->>Verifier: Return accreditation status + scope
+        <!-- Arrow marker -->
+        <defs>
+          <marker id="arrow-seq" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+          </marker>
+        </defs>
 
-    Verifier->>Verifier: Validate trust chain
-    Note over Verifier: Resolve DID<br/>Verify proof<br/>Check credential status<br/>Confirm scope compliance
-      </pre>
+        <!-- Step 1: Submit Application -->
+        <line x1="130" y1="70" x2="260" y2="70" stroke="#333" stroke-width="2" marker-end="url(#arrow-seq)"/>
+        <text x="200" y="63" text-anchor="middle" font-size="10" fill="#333">Submit Application</text>
+
+        <rect x="140" y="80" width="280" height="40" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1"/>
+        <text x="150" y="96" font-size="9" fill="#92400e">Legal identity evidence</text>
+        <text x="150" y="110" font-size="9" fill="#92400e">DID · proof of key control · KMP · self-assessment</text>
+
+        <!-- Step 2: Vet -->
+        <rect x="270" y="140" width="160" height="30" rx="3" fill="#f0f7ff" stroke="#005A9C" stroke-width="1"/>
+        <text x="350" y="159" text-anchor="middle" font-size="10" fill="#005A9C">Vet applicant (ROLE-TAO2)</text>
+
+        <!-- Step 3: Issue Accreditation -->
+        <line x1="285" y1="190" x2="130" y2="190" stroke="#333" stroke-width="2" marker-end="url(#arrow-seq)"/>
+        <text x="220" y="183" text-anchor="middle" font-size="10" fill="#333">Issue Accreditation</text>
+
+        <rect x="60" y="200" width="240" height="35" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1"/>
+        <text x="70" y="216" font-size="9" fill="#92400e">VerifiableAccreditationToAttest</text>
+        <text x="70" y="229" font-size="9" fill="#92400e">validFrom/validUntil · scope defined</text>
+
+        <!-- Step 4: Register in TIR -->
+        <line x1="285" y1="240" x2="440" y2="240" stroke="#333" stroke-width="2" marker-end="url(#arrow-seq)"/>
+        <text x="360" y="233" text-anchor="middle" font-size="10" fill="#333">Register Issuer</text>
+
+        <rect x="310" y="252" width="180" height="25" rx="3" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+        <text x="400" y="268" text-anchor="middle" font-size="9" fill="#2e7d32">DID · legalName · LEI · scope</text>
+
+        <!-- Step 5: Issue Credential -->
+        <line x1="130" y1="310" x2="620" y2="310" stroke="#333" stroke-width="2" marker-end="url(#arrow-seq)"/>
+        <text x="380" y="303" text-anchor="middle" font-size="10" fill="#333">Issue VSC Credential (includes AccreditationPolicy in termsOfUse)</text>
+
+        <!-- Step 6: Query TIR -->
+        <line x1="645" y1="350" x2="490" y2="350" stroke="#333" stroke-width="2" marker-end="url(#arrow-seq)"/>
+        <text x="560" y="343" text-anchor="middle" font-size="10" fill="#333">Query Accreditation</text>
+
+        <!-- Step 7: Return -->
+        <line x1="465" y1="380" x2="650" y2="380" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-seq)"/>
+        <text x="560" y="375" text-anchor="middle" font-size="9" fill="#2e7d32">Status: active · in-scope</text>
+
+        <!-- Step 8: Validate -->
+        <rect x="560" y="400" width="200" height="55" rx="3" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+        <text x="660" y="418" text-anchor="middle" font-size="10" fill="#2e7d32">Validate Trust Chain</text>
+        <text x="660" y="434" text-anchor="middle" font-size="9" fill="#2e7d32">Resolve DID · Verify proof</text>
+        <text x="660" y="448" text-anchor="middle" font-size="9" fill="#2e7d32">Check status · Confirm scope</text>
+
+        <!-- Credential accepted -->
+        <rect x="560" y="465" width="200" height="20" rx="3" fill="#276749"/>
+        <text x="660" y="479" text-anchor="middle" fill="#fff" font-size="10">Credential Accepted</text>
+
+      </svg>
+      <p class="caption">Figure 3 — Accreditation application, issuance, and verification flow.</p>
     </div>
-    <figcaption>
-      Figure 3 — Accreditation application, issuance, and verification flow.
-    </figcaption>
   </section>
 </section>
 
@@ -855,7 +880,7 @@ sequenceDiagram
   <h2>Required Structure of a VSC Trust Framework Document</h2>
 
   <p>
-    A VSC-conformant [=Trust Framework Document=] MUST include each of
+    A VSC-conformant Trust Framework Document MUST include each of
     the sections listed below. Sections marked REQUIRED must be present
     and non-empty. Sections marked RECOMMENDED must be present if the
     framework governs a regulated industry. The ordering follows the
@@ -872,11 +897,11 @@ sequenceDiagram
     </thead>
     <tbody>
       <tr><td>1. Preamble and Scope</td><td><strong>REQUIRED</strong></td><td>Identifies the framework, Governance Authority, version, effective date, and the supply chain sector(s) governed.</td></tr>
-      <tr><td>2. Controlled Documents Index</td><td><strong>REQUIRED</strong></td><td>An enumeration of all [=Governance Document=]s incorporated by reference, with their URIs, version hashes, and status (normative / informative).</td></tr>
-      <tr><td>3. Definitions</td><td><strong>REQUIRED</strong></td><td>Network-specific terms not defined in [[VSC-REQUIREMENTS]] or this specification. MUST reference this document for shared VSC vocabulary.</td></tr>
-      <tr><td>4. Roles and Participants</td><td><strong>REQUIRED</strong></td><td>Enumerates the [=Root TAO=], all [=TAO=]s, and categories of [=Trusted Issuer=]s with their DIDs, [=Accreditation Scope=]s, and onboarding criteria.</td></tr>
+      <tr><td>2. Controlled Documents Index</td><td><strong>REQUIRED</strong></td><td>An enumeration of all Governance Documents incorporated by reference, with their URIs, version hashes, and status (normative / informative).</td></tr>
+      <tr><td>3. Definitions</td><td><strong>REQUIRED</strong></td><td>Network-specific terms not defined in [[VSC-REQUIREMENTS]] or this specification. MUST reference this document for terms shared with the base VSC vocabulary.</td></tr>
+      <tr><td>4. Roles and Participants</td><td><strong>REQUIRED</strong></td><td>Enumerates the Root TAO, all TAOs, and categories of Trusted Issuers with their DIDs, Accreditation Scopes, and onboarding criteria.</td></tr>
       <tr><td>5. Trust Chain Structure</td><td><strong>REQUIRED</strong></td><td>A diagram and textual description of the three-tier trust chain as instantiated for this network.</td></tr>
-      <tr><td>6. Accreditation Lifecycle</td><td><strong>REQUIRED</strong></td><td>Procedures for applying, granting, suspending, revoking, and renewing accreditation. See <a href="#accreditation">Accreditation Lifecycle</a>.</td></tr>
+      <tr><td>6. Accreditation Lifecycle</td><td><strong>REQUIRED</strong></td><td>Procedures for applying for, granting, suspending, revoking, and renewing accreditation. See <a href="#accreditation">Accreditation Lifecycle</a>.</td></tr>
       <tr><td>7. Trusted Issuers Registry</td><td><strong>REQUIRED</strong></td><td>The URI, query API, and update procedure of the TIR for this framework. See <a href="#trust-registry">Trusted Issuers Registry</a>.</td></tr>
       <tr><td>8. Credential Policies</td><td><strong>REQUIRED</strong></td><td>Per-credential-type policies: required fields, validity period, selective disclosure rules, revocation obligations. See <a href="#credential-policies">Credential Policies</a>.</td></tr>
       <tr><td>9. Technical Requirements</td><td><strong>REQUIRED</strong></td><td>Required conformance class(es) from [[VSC-INTEROP]], required proof formats, DID methods, and API versions.</td></tr>
@@ -908,7 +933,7 @@ sequenceDiagram
       GA Jurisdiction: <span class="fill">[e.g., "United States", "European Union", "Global"]</span><br/>
       <br/>
       Governed Sectors: <span class="fill">[e.g., "Pharmaceutical distribution", "Food and agriculture"]</span><br/>
-      Regulatory Context: <span class="fill">[e.g., "DSCSA §582", "EUDR Art. 3", "EU-DPP Battery Regulation"]</span><br/>
+      Regulatory Context: <span class="fill">[e.g., "DSCSA 582", "EUDR Art. 3", "EU-DPP Battery Regulation"]</span><br/>
       Geographic Scope: <span class="fill">[e.g., "US domestic", "EU import/export", "Global"]</span><br/>
       <br/>
       Base Specification: https://w3c-cg.github.io/vsc-trust-framework/ (this document)<br/>
@@ -930,26 +955,26 @@ sequenceDiagram
     <div class="req-box">
       <span class="req-id">ROLE-GA1 — DID Publication</span>
       <p>
-        The [=Governance Authority=] MUST publish a [[DID-CORE]] document
+        The Governance Authority MUST publish a [[DID-CORE]] document
         at a stable, publicly resolvable URI. This DID serves as the
-        Root TAO DID for the [=Trust Chain=] and MUST be referenced in the
+        Root TAO DID for the Trust Chain and MUST be referenced in the
         machine-readable TFD.
       </p>
     </div>
     <div class="req-box">
       <span class="req-id">ROLE-GA2 — TFD Publication and Versioning</span>
       <p>
-        The GA MUST publish the [=Trust Framework Document=] at a stable
-        URI and MUST version it using <code>MAJOR.MINOR</code> versioning.
+        The GA MUST publish the Trust Framework Document at a stable
+        URI and MUST version it using MAJOR.MINOR versioning.
         A new MAJOR version MUST be issued for any change that affects
-        existing [=Verifiable Accreditation=]s or invalidates credentials
+        existing Verifiable Accreditations or invalidates credentials
         issued under the prior version. A changelog MUST be maintained.
       </p>
     </div>
     <div class="req-box">
       <span class="req-id">ROLE-GA3 — Root Accreditation Issuance</span>
       <p>
-        The GA MUST issue a <code>VerifiableAuthorisationForTrustChain</code>
+        The GA MUST issue a VerifiableAuthorisationForTrustChain
         credential (self-issued or from an external root, per
         [[EBSI-TRUST-MODEL]]) anchoring the trust chain. This credential
         MUST be publicly accessible and included in the TIR.
@@ -958,8 +983,8 @@ sequenceDiagram
     <div class="req-box">
       <span class="req-id">ROLE-GA4 — Governance Document Maintenance</span>
       <p>
-        The GA MUST maintain, version, and publish each [=Governance
-        Document=] referenced in the TFD. All Governance Documents MUST
+        The GA MUST maintain, version, and publish each Governance
+        Document referenced in the TFD. All Governance Documents MUST
         include a last-modified date and a stable URI. Links MUST NOT
         rot; retired documents MUST redirect to their successors.
       </p>
@@ -972,8 +997,8 @@ sequenceDiagram
     <div class="req-box">
       <span class="req-id">ROLE-TAO1 — Accreditation Scope Inheritance</span>
       <p>
-        A [=TAO=] MUST NOT grant a [=Verifiable Accreditation=] whose
-        [=Accreditation Scope=] exceeds its own. All scope constraints
+        A TAO MUST NOT grant a Verifiable Accreditation whose
+        Accreditation Scope exceeds its own. All scope constraints
         from the accrediting party MUST be inherited and, where
         appropriate, further restricted. This prevents privilege escalation
         within the trust chain.
@@ -982,8 +1007,8 @@ sequenceDiagram
     <div class="req-box">
       <span class="req-id">ROLE-TAO2 — Applicant Vetting</span>
       <p>
-        Before issuing a <code>VerifiableAccreditationToAttest</code>
-        to a [=Trusted Issuer=] applicant, the [=TAO=] MUST:
+        Before issuing a VerifiableAccreditationToAttest
+        to a Trusted Issuer applicant, the TAO MUST:
       </p>
       <ol>
         <li>Verify the applicant's legal identity using a recognized
@@ -999,9 +1024,9 @@ sequenceDiagram
     <div class="req-box">
       <span class="req-id">ROLE-TAO3 — Registry Maintenance</span>
       <p>
-        The [=TAO=] MUST update the [=Trusted Issuers Registry=] within
+        The TAO MUST update the Trusted Issuers Registry within
         5 business days of any accreditation grant, suspension, revocation,
-        or renewal. The [=TAO=] MUST NOT allow an entry to remain in the
+        or renewal. The TAO MUST NOT allow an entry to remain in the
         TIR for an entity whose accreditation has been revoked.
       </p>
     </div>
@@ -1013,17 +1038,17 @@ sequenceDiagram
     <div class="req-box">
       <span class="req-id">ROLE-TI1 — Scope Compliance</span>
       <p>
-        A [=Trusted Issuer=] MUST only issue VSC Credentials whose type
-        and [=Accreditation Scope=] fall within the bounds of their
-        [=Verifiable Accreditation=]. Credentials issued outside this
+        A Trusted Issuer MUST only issue VSC Credentials whose type
+        and Accreditation Scope fall within the bounds of their
+        Verifiable Accreditation. Credentials issued outside this
         scope MUST be rejected by conformant verifiers.
       </p>
     </div>
     <div class="req-box">
       <span class="req-id">ROLE-TI2 — Key Management</span>
       <p>
-        A [=Trusted Issuer=] MUST maintain a written Key Management Policy
-        (a [=Governance Document=]) that specifies: key generation
+        A Trusted Issuer MUST maintain a written Key Management Policy
+        (a Governance Document) that specifies: key generation
         algorithm, key storage (FIPS 140-2 Level 2 hardware security module
         RECOMMENDED for production issuance), key rotation schedule
         (RECOMMENDED: 12 months maximum), and key compromise response
@@ -1033,10 +1058,10 @@ sequenceDiagram
     <div class="req-box">
       <span class="req-id">ROLE-TI3 — Credential Quality Obligations</span>
       <p>
-        A [=Trusted Issuer=] MUST ensure that every VSC Credential it
+        A Trusted Issuer MUST ensure that every VSC Credential it
         issues accurately reflects the underlying [[EPCIS20]] event data
-        as observed or recorded by the issuer's own systems. A [=Trusted
-        Issuer=] MUST NOT issue credentials for events it did not observe
+        as observed or recorded by the issuer's own systems. A Trusted
+        Issuer MUST NOT issue credentials for events it did not observe
         or for which it lacks authoritative first-hand data, except as
         explicitly authorized by the TFD (e.g., a customs authority
         re-asserting an inspection result).
@@ -1045,17 +1070,17 @@ sequenceDiagram
     <div class="req-box">
       <span class="req-id">ROLE-TI4 — Accreditation Reference in Credentials</span>
       <p>
-        Each VSC Credential issued by a [=Trusted Issuer=] MUST include
-        a reference to the issuer's [=Verifiable Accreditation=] in the
-        credential's <code>termsOfUse</code> property, as specified in
+        Each VSC Credential issued by a Trusted Issuer MUST include
+        a reference to the issuer's Verifiable Accreditation in the
+        credential's termsOfUse property, as specified in
         <a href="#credential-policies">Credential Policies</a>. This enables verifiers to
-        traverse the [=Trust Chain=] programmatically.
+        traverse the Trust Chain programmatically.
       </p>
     </div>
     <div class="req-box">
       <span class="req-id">ROLE-TI5 — Incident Reporting</span>
       <p>
-        A [=Trusted Issuer=] MUST report to its accrediting [=TAO=] within
+        A Trusted Issuer MUST report to its accrediting TAO within
         48 hours of any: key compromise or suspected key compromise;
         issuance of a credential known to be erroneous; or any security
         incident affecting the integrity of its credential-issuing system.
@@ -1068,20 +1093,20 @@ sequenceDiagram
     <div class="req-box">
       <span class="req-id">ROLE-TV1 — Verification Obligations</span>
       <p>
-        A [=Trusted Verifier=] MUST perform full [=Trust Chain=] traversal
+        A Trusted Verifier MUST perform full Trust Chain traversal
         for every received VSC Credential before accepting it. This includes:
         resolving the issuer's [[DID-CORE]] identifier, verifying the
-        cryptographic proof, checking [=Credential Status=] via
-        [[VC-BITSTRING-STATUS]], and confirming the issuer's [=Verifiable
-        Accreditation=] is valid and in scope.
+        cryptographic proof, checking Credential Status via
+        [[VC-BITSTRING-STATUS]], and confirming the issuer's Verifiable
+        Accreditation is valid and in scope.
       </p>
     </div>
     <div class="req-box">
       <span class="req-id">ROLE-TV2 — No Substitution of Out-of-Band Trust</span>
       <p>
-        A [=Trusted Verifier=] MUST NOT accept a VSC Credential solely on
+        A Trusted Verifier MUST NOT accept a VSC Credential solely on
         the basis of an out-of-band relationship with the issuer (e.g., a
-        pre-existing business relationship). The [=Trust Chain=] traversal
+        pre-existing business relationship). The Trust Chain traversal
         in ROLE-TV1 is required regardless of any bilateral familiarity
         with the issuer.
       </p>
@@ -1099,7 +1124,7 @@ sequenceDiagram
       &nbsp;&nbsp;TIR endpoint: <span class="fill">[https://...]</span><br/>
       <br/>
       4.2 Trusted Accreditation Organizations<br/>
-      &nbsp;&nbsp;[[Repeat for each TAO]]<br/>
+      &nbsp;&nbsp;<span class="comment">[Repeat for each TAO]</span><br/>
       &nbsp;&nbsp;Name: <span class="fill">[Organization name]</span><br/>
       &nbsp;&nbsp;DID: <span class="fill">[did:web: URI]</span><br/>
       &nbsp;&nbsp;Accreditation VC URI: <span class="fill">[https://...]</span><br/>
@@ -1107,7 +1132,7 @@ sequenceDiagram
       &nbsp;&nbsp;Geo scope: <span class="fill">[e.g., "US", "EU", "Global"]</span><br/>
       <br/>
       4.3 Trusted Issuer Categories<br/>
-      &nbsp;&nbsp;[[Repeat for each category]]<br/>
+      &nbsp;&nbsp;<span class="comment">[Repeat for each category]</span><br/>
       &nbsp;&nbsp;Category name: <span class="fill">[e.g., "Licensed pharmaceutical manufacturer"]</span><br/>
       &nbsp;&nbsp;Accrediting TAO: <span class="fill">[TAO name from 4.2]</span><br/>
       &nbsp;&nbsp;Required credential types: <span class="fill">[e.g., "VSCTransactionEvent"]</span><br/>
@@ -1126,41 +1151,115 @@ sequenceDiagram
 
   <div class="lifecycle-row">
     <div class="lifecycle-step"><strong>1. Application</strong>Applicant submits identity evidence and capability declaration to TAO</div>
-    <div class="lifecycle-step"><strong>2. Vetting</strong>TAO verifies legal identity, technical readiness, and sector requirements (ROLE-TAO2)</div>
+    <div class="lifecycle-step"><strong>2. Vetting</strong>TAO verifies legal identity, technical readiness, and sector requirements</div>
     <div class="lifecycle-step"><strong>3. Issuance</strong>TAO issues VerifiableAccreditationToAttest; TI registers in TIR</div>
     <div class="lifecycle-step"><strong>4. Active</strong>TI issues VSC Credentials within Accreditation Scope; annual surveillance audit</div>
     <div class="lifecycle-step"><strong>5. Renewal</strong>TI reapplies before expiry; TAO performs renewal vetting</div>
     <div class="lifecycle-step"><strong>6. Suspension / Revocation</strong>TAO suspends or revokes; TIR updated within 5 days</div>
   </div>
 
-  <!-- State machine diagram for accreditation lifecycle -->
-  <div class="mermaid-container">
-    <pre class="mermaid">
-stateDiagram-v2
-    [*] --> Application: TI submits package
-    Application --> Vetting: TAO acknowledges receipt
-    Vetting --> Issuance: Vetting successful
-    Vetting --> Application: Remediation required
-    Issuance --> Active: TIR entry confirmed
-    Active --> Renewal: 60 days before expiry
-    Renewal --> Active: Renewal approved
-    Renewal --> Suspension: Renewal denied
-    Active --> Suspension: Non-compliance<br/>or incident
-    Suspension --> Active: Remediation complete
-    Suspension --> Revocation: Fraud, key compromise,<br/>or sustained non-compliance
-    Active --> Revocation: Critical violation
-    Revocation --> [*]
-    </pre>
+  <!-- Accreditation Lifecycle State Machine SVG -->
+  <div class="figure">
+    <svg viewBox="0 0 750 500" width="100%" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- States -->
+      <ellipse cx="100" cy="50" rx="50" ry="22" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+      <text x="100" y="54" text-anchor="middle" font-size="11" font-weight="bold">Start</text>
+
+      <rect x="20" y="110" width="140" height="40" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+      <text x="90" y="135" text-anchor="middle" font-size="11">Application</text>
+
+      <rect x="200" y="110" width="140" height="40" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+      <text x="270" y="135" text-anchor="middle" font-size="11">Vetting</text>
+
+      <rect x="380" y="110" width="140" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text x="450" y="135" text-anchor="middle" font-size="11">Issuance</text>
+
+      <rect x="560" y="110" width="140" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text x="630" y="135" text-anchor="middle" font-size="11">Active</text>
+
+      <rect x="200" y="220" width="140" height="40" rx="4" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+      <text x="270" y="245" text-anchor="middle" font-size="11">Renewal</text>
+
+      <rect x="380" y="220" width="140" height="40" rx="4" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+      <text x="450" y="245" text-anchor="middle" font-size="11">Suspended</text>
+
+      <rect x="560" y="220" width="140" height="40" rx="4" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+      <text x="630" y="245" text-anchor="middle" font-size="11">Revoked</text>
+
+      <ellipse cx="630" cy="320" rx="50" ry="22" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+      <text x="630" y="324" text-anchor="middle" font-size="11" font-weight="bold">End</text>
+
+      <!-- Arrow marker -->
+      <defs>
+        <marker id="arrow-lc" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+        </marker>
+      </defs>
+
+      <!-- Transitions -->
+      <!-- Start to Application -->
+      <line x1="100" y1="72" x2="100" y2="100" stroke="#333" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="105" y="88" font-size="9" fill="#555">TI submits</text>
+
+      <!-- Application to Vetting -->
+      <line x1="160" y1="130" x2="190" y2="130" stroke="#333" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="175" y="122" font-size="9" fill="#555">TAO acknowledges</text>
+
+      <!-- Vetting to Issuance -->
+      <line x1="340" y1="130" x2="370" y2="130" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="355" y="122" font-size="9" fill="#2e7d32">Success</text>
+
+      <!-- Vetting back to Application (remediation) -->
+      <path d="M 270 150 Q 270 180 90 180 Q 90 150 90 130" fill="none" stroke="#c62828" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="180" y="185" font-size="9" fill="#c62828">Remediation required</text>
+
+      <!-- Issuance to Active -->
+      <line x1="520" y1="130" x2="550" y2="130" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="535" y="122" font-size="9" fill="#2e7d32">TIR confirmed</text>
+
+      <!-- Active to Renewal -->
+      <path d="M 630 150 Q 630 170 270 170 Q 270 190 270 210" fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="480" y="185" font-size="9" fill="#555">60 days before expiry</text>
+
+      <!-- Renewal to Active -->
+      <path d="M 340 240 Q 340 260 630 260 Q 630 200 630 150" fill="none" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="480" y="275" font-size="9" fill="#2e7d32">Renewal approved</text>
+
+      <!-- Renewal to Suspended -->
+      <line x1="340" y1="240" x2="380" y2="240" stroke="#c62828" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="360" y="235" font-size="9" fill="#c62828">Denied</text>
+
+      <!-- Active to Suspended -->
+      <path d="M 560 130 L 440 130 L 440 210" fill="none" stroke="#e65100" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="455" y="175" font-size="9" fill="#e65100">Non-compliance</text>
+
+      <!-- Suspended to Active -->
+      <path d="M 450 260 Q 450 280 630 280 Q 630 200 630 150" fill="none" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="560" y="295" font-size="9" fill="#2e7d32">Remediation complete</text>
+
+      <!-- Suspended to Revoked -->
+      <line x1="520" y1="240" x2="550" y2="240" stroke="#c62828" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="535" y="235" font-size="9" fill="#c62828">Critical violation</text>
+
+      <!-- Active to Revoked -->
+      <path d="M 630 150 Q 630 195 630 210" fill="none" stroke="#c62828" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+      <text x="640" y="180" font-size="9" fill="#c62828">Fraud / key compromise</text>
+
+      <!-- Revoked to End -->
+      <line x1="630" y1="260" x2="630" y2="290" stroke="#333" stroke-width="1.5" marker-end="url(#arrow-lc)"/>
+
+    </svg>
+    <p class="caption">Figure 4 — Accreditation lifecycle state machine showing all valid state transitions.</p>
   </div>
-  <figcaption>Figure 4 — Accreditation lifecycle state machine.</figcaption>
 
   <section id="accreditation-application">
     <h3>Application Process</h3>
     <div class="req-box">
       <span class="req-id">ACC-A1 — Application Package</span>
       <p>
-        An applicant for [=Trusted Issuer=] status MUST submit to the
-        accrediting [=TAO=] an application package containing:
+        An applicant for Trusted Issuer status MUST submit to the
+        accrediting TAO an application package containing:
       </p>
       <ol>
         <li>Legal identity evidence (business registration number, LEI, or equivalent).</li>
@@ -1173,7 +1272,7 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">ACC-A2 — Application Response Time</span>
       <p>
-        The [=TAO=] MUST acknowledge receipt of a complete application
+        The TAO MUST acknowledge receipt of a complete application
         within 5 business days and MUST issue an accreditation decision
         (grant or reasoned rejection) within <span class="fill">[TF-specific SLA, e.g., 30 calendar days]</span>.
         A rejection MUST include a written statement of the specific
@@ -1187,8 +1286,8 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">ACC-I1 — VerifiableAccreditationToAttest Schema</span>
       <p>
-        Upon successful vetting, the [=TAO=] MUST issue a
-        <code>VerifiableAccreditationToAttest</code> credential conformant
+        Upon successful vetting, the TAO MUST issue a
+        VerifiableAccreditationToAttest credential conformant
         with the following schema. This schema follows [[EBSI-TRUST-MODEL]]
         conventions and is encoded as a [[VC-DATA-MODEL]] credential:
       </p>
@@ -1237,8 +1336,8 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">ACC-I2 — TIR Registration</span>
       <p>
-        The [=TAO=] MUST register the issued accreditation credential in
-        the [=Trusted Issuers Registry=] within 2 business days of
+        The TAO MUST register the issued accreditation credential in
+        the Trusted Issuers Registry within 2 business days of
         issuance. The TI MUST NOT begin issuing VSC Credentials until
         the TIR entry is confirmed.
       </p>
@@ -1250,7 +1349,7 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">ACC-SR1 — Mandatory Revocation Triggers</span>
       <p>
-        A [=TAO=] MUST revoke a [=Trusted Issuer=]'s accreditation upon
+        A TAO MUST revoke a Trusted Issuer's accreditation upon
         any of the following:
       </p>
       <ul>
@@ -1265,7 +1364,7 @@ stateDiagram-v2
       <span class="req-id">ACC-SR2 — Revocation Execution</span>
       <p>
         Revocation MUST be executed by setting the TI's
-        [[VC-BITSTRING-STATUS]] entry to <code>revoked</code> and updating
+        [[VC-BITSTRING-STATUS]] entry to revoked and updating
         the TIR entry to reflect the revocation date and reason code.
         The TAO MUST notify the TI of the revocation in writing (via
         registered email or equivalent) simultaneously with or before the
@@ -1290,10 +1389,10 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">ACC-R1 — Renewal Timeline</span>
       <p>
-        [=Trusted Issuer=] accreditations MUST have a defined validity
-        period specified in the TFD. The default is 12 months. A [=TI=]
+        Trusted Issuer accreditations MUST have a defined validity
+        period specified in the TFD. The default is 12 months. A TI
         MUST initiate renewal no later than 60 days before expiry.
-        A [=TAO=] MUST complete a renewal review before the expiry date
+        A TAO MUST complete a renewal review before the expiry date
         to avoid a gap in the TI's active status.
       </p>
     </div>
@@ -1311,10 +1410,10 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">TIR-1 — Public Availability</span>
       <p>
-        The [=Trusted Issuers Registry=] MUST be publicly readable without
+        The Trusted Issuers Registry MUST be publicly readable without
         authentication. Any party MUST be able to query the TIR to verify
-        whether a given [[DID-CORE]] identifier holds a valid [=Verifiable
-        Accreditation=] at any time. Write access MUST require
+        whether a given [[DID-CORE]] identifier holds a valid Verifiable
+        Accreditation at any time. Write access MUST require
         authentication and authorization (OAuth 2.0 or equivalent).
       </p>
     </div>
@@ -1322,7 +1421,7 @@ stateDiagram-v2
       <span class="req-id">TIR-2 — Query API</span>
       <p>
         The TIR MUST expose the following REST query endpoints.
-        Responses MUST be returned as <code>application/json</code>
+        Responses MUST be returned as application/json
         using [[RFC9457]] for errors:
       </p>
       <table class="gov-table">
@@ -1330,9 +1429,9 @@ stateDiagram-v2
           <tr><th>Method</th><th>Path</th><th>Description</th></tr>
         </thead>
         <tbody>
-          <tr><td>GET</td><td><code>/tir/v1/issuers/{did}</code></td><td>Returns the TIR entry and current [=Verifiable Accreditation=] for the specified DID.</td></tr>
-          <tr><td>GET</td><td><code>/tir/v1/issuers</code></td><td>Returns all active TIR entries, paginated. Supports filtering by <code>?sector=</code>, <code>?eventType=</code>, and <code>?status=active|suspended|revoked</code>.</td></tr>
-          <tr><td>GET</td><td><code>/tir/v1/chain/{did}</code></td><td>Returns the complete [=Trust Chain=] from the specified DID up to the Root TAO, as an ordered array of [=Verifiable Accreditation=] credentials.</td></tr>
+          <tr><td>GET</td><td><code>/tir/v1/issuers/{did}</code></td><td>Returns the TIR entry and current Verifiable Accreditation for the specified DID.</td></tr>
+          <tr><td>GET</td><td><code>/tir/v1/issuers</code></td><td>Returns all active TIR entries, paginated. Supports filtering by ?sector=, ?eventType=, and ?status=active|suspended|revoked.</td></tr>
+          <tr><td>GET</td><td><code>/tir/v1/chain/{did}</code></td><td>Returns the complete Trust Chain from the specified DID up to the Root TAO, as an ordered array of Verifiable Accreditation credentials.</td></tr>
           <tr><td>GET</td><td><code>/tir/v1/.well-known/tir-configuration</code></td><td>Returns TIR metadata including root TAO DID, supported sectors, and framework URI.</td></tr>
         </tbody>
       </table>
@@ -1361,7 +1460,7 @@ stateDiagram-v2
           <tr>
             <td>Static JSON-LD Registry</td>
             <td>A versioned JSON-LD file hosted at a well-known URI, signed by the Root TAO DID</td>
-            <td>Small networks (&lt;50 issuers), low-cost, easy to audit</td>
+            <td>Small networks (fewer than 50 issuers), low-cost, easy to audit</td>
           </tr>
           <tr>
             <td>did:web DID Document Fragments</td>
@@ -1396,7 +1495,7 @@ stateDiagram-v2
   <span class="key">"legalName"</span>: <span class="str">"Example Company Ltd."</span>,
   <span class="key">"lei"</span>: <span class="str">"529900HNOAA1KXQJUQ27"</span>,         <span class="cmt">// Legal Entity Identifier (optional but RECOMMENDED)</span>
   <span class="key">"gs1CompanyPrefix"</span>: <span class="str">"0614141"</span>,    <span class="cmt">// GS1 Company Prefix (where applicable)</span>
-  <span class="key">"status"</span>: <span class="str">"active"</span>,                     <span class="cmt">// "active" | "suspended" | "revoked"</span>
+  <span class="key">"status"</span>: <span class="str">"active"</span>,                     <span class="cmt">// "active" or "suspended" or "revoked"</span>
   <span class="key">"accreditationCredential"</span>: <span class="str">"https://tir.example-consortium.org/accreditations/abc-123"</span>,
   <span class="key">"accreditedFor"</span>: [
     {
@@ -1423,9 +1522,9 @@ stateDiagram-v2
 
   <p>
     Credential policies govern how individual VSC Credential types are
-    issued, presented, and consumed within a [=Trust Framework=]. Each
+    issued, presented, and consumed within a Trust Framework. Each
     TFD MUST define a policy for every VSC Credential type that
-    [=Trusted Issuer=]s in that framework are authorized to issue.
+    Trusted Issuers in that framework are authorized to issue.
   </p>
 
   <section id="cp-terms-of-use">
@@ -1433,19 +1532,19 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">CP-1 — AccreditationPolicy in termsOfUse</span>
       <p>
-        Every VSC Credential issued by a [=Trusted Issuer=] MUST include
-        a <code>termsOfUse</code> entry of type <code>AccreditationPolicy</code>
+        Every VSC Credential issued by a Trusted Issuer MUST include
+        a termsOfUse entry of type AccreditationPolicy
         containing:
       </p>
       <ul>
-        <li><code>parentAccreditation</code>: URI of the issuer's [=Verifiable Accreditation=] in the TIR.</li>
-        <li><code>rootTAO</code>: DID of the [=Root TAO=] for the applicable [=Trust Framework=].</li>
-        <li><code>trustFramework</code>: URI of the published [=Trust Framework Document=].</li>
+        <li><code>parentAccreditation</code>: URI of the issuer's Verifiable Accreditation in the TIR.</li>
+        <li><code>rootTAO</code>: DID of the Root TAO for the applicable Trust Framework.</li>
+        <li><code>trustFramework</code>: URI of the published Trust Framework Document.</li>
       </ul>
       <p>
         This property is the machine-readable hook that enables automated
-        [=Trust Chain=] traversal by verifiers (ROLE-TV1). It is modelled
-        after the <code>AccreditationPolicy</code> in [[EBSI-TRUST-MODEL]].
+        Trust Chain traversal by verifiers (ROLE-TV1). It is modelled
+        after the AccreditationPolicy in [[EBSI-TRUST-MODEL]].
       </p>
     </div>
   </section>
@@ -1455,19 +1554,19 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">CP-2 — Default Validity Periods</span>
       <p>
-        The TFD MUST specify a default <code>validUntil</code> period for
+        The TFD MUST specify a default validUntil period for
         each VSC Credential type. The following defaults apply unless
         overridden by the TFD's sector-specific rules:
       </p>
       <table class="gov-table">
         <thead><tr><th>Credential type</th><th>Default validity</th><th>Rationale</th></tr></thead>
         <tbody>
-          <tr><td>VSCObjectEvent (commissioning, inspection)</td><td>7 years from <code>validFrom</code></td><td>Aligns with typical product liability and regulatory record-retention periods</td></tr>
-          <tr><td>VSCTransactionEvent (custody transfer)</td><td>7 years from <code>validFrom</code></td><td>DSCSA, EUDR, and CBAM record-keeping obligations</td></tr>
-          <tr><td>VSCTransformationEvent</td><td>10 years from <code>validFrom</code></td><td>Extended for manufacturing liability and product recall investigations</td></tr>
-          <tr><td>VSCAggregationEvent</td><td>7 years from <code>validFrom</code></td><td>Pallet/container records</td></tr>
+          <tr><td>VSCObjectEvent (commissioning, inspection)</td><td>7 years from validFrom</td><td>Aligns with typical product liability and regulatory record-retention periods</td></tr>
+          <tr><td>VSCTransactionEvent (custody transfer)</td><td>7 years from validFrom</td><td>DSCSA, EUDR, and CBAM record-keeping obligations</td></tr>
+          <tr><td>VSCTransformationEvent</td><td>10 years from validFrom</td><td>Extended for manufacturing liability and product recall investigations</td></tr>
+          <tr><td>VSCAggregationEvent</td><td>7 years from validFrom</td><td>Pallet/container records</td></tr>
           <tr><td>VSCAssociationEvent (IoT device binding)</td><td>Duration of device operational lifecycle</td><td>Sensor data interpretation requires active device registration</td></tr>
-          <tr><td>VerifiableAccreditationToAttest</td><td>12 months from <code>validFrom</code></td><td>Annual renewal cycle per <a href="#accreditation-renewal">Renewal</a></td></tr>
+          <tr><td>VerifiableAccreditationToAttest</td><td>12 months from validFrom</td><td>Annual renewal cycle per <a href="#accreditation-renewal">Renewal</a></td></tr>
         </tbody>
       </table>
     </div>
@@ -1487,10 +1586,10 @@ stateDiagram-v2
       <table class="gov-table">
         <thead><tr><th>Verifier category</th><th>Minimum Disclosure Set (TransactionEvent)</th></tr></thead>
         <tbody>
-          <tr><td>Customs authority</td><td><code>epcList</code>, <code>bizStep</code>, <code>eventTime</code>, <code>bizLocation</code>, <code>issuer</code> DID</td></tr>
-          <tr><td>Downstream trading partner</td><td><code>epcList</code>, <code>bizStep</code>, <code>eventTime</code>, <code>disposition</code></td></tr>
+          <tr><td>Customs authority</td><td>epcList, bizStep, eventTime, bizLocation, issuer DID</td></tr>
+          <tr><td>Downstream trading partner</td><td>epcList, bizStep, eventTime, disposition</td></tr>
           <tr><td>Regulatory auditor (DSCSA)</td><td>All mandatory DSCSA fields per [[GS1-DSCSA-GUIDE]]</td></tr>
-          <tr><td>ESG/sustainability reporter</td><td><code>geoLocation</code>, <code>certificationReference</code>, <code>carbonFootprint</code></td></tr>
+          <tr><td>ESG/sustainability reporter</td><td>geoLocation, certificationReference, carbonFootprint</td></tr>
         </tbody>
       </table>
     </div>
@@ -1510,7 +1609,7 @@ stateDiagram-v2
       Selective disclosure required: <span class="fill">[yes/no; if yes, specify fields]</span><br/>
       Proof format: <span class="fill">[e.g., "eddsa-rdfc-2022"]</span><br/>
       Predecessor link required: <span class="fill">[yes/no; if yes, specify predecessor type]</span><br/>
-      Regulatory basis: <span class="fill">[e.g., "DSCSA §582(a)"]</span><br/>
+      Regulatory basis: <span class="fill">[e.g., "DSCSA 582(a)"]</span><br/>
       Minimum Disclosure Set — customs: <span class="fill">[field list]</span><br/>
       Minimum Disclosure Set — trading partner: <span class="fill">[field list]</span><br/>
     </div>
@@ -1525,7 +1624,7 @@ stateDiagram-v2
 
   <p>
     This section specifies the minimum auditing and enforcement requirements
-    for a VSC-conformant [=Trust Framework=]. The approach is informed by
+    for a VSC-conformant Trust Framework. The approach is informed by
     the seven governance areas of [[CREDENTIAL-ENGINE-GOV]]: transparency,
     accountability, accuracy, privacy, security, interoperability, and
     sustainability.
@@ -1536,9 +1635,9 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">AUDIT-1 — Annual Surveillance</span>
       <p>
-        Every [=Trusted Issuer=] MUST undergo at minimum an annual
+        Every Trusted Issuer MUST undergo at minimum an annual
         surveillance audit conducted by or on behalf of their accrediting
-        [=TAO=]. The audit MUST assess at minimum:
+        TAO. The audit MUST assess at minimum:
       </p>
       <ul>
         <li>Key management practice compliance with ROLE-TI2.</li>
@@ -1563,11 +1662,6 @@ stateDiagram-v2
 
   <section id="enforcement">
     <h3>Enforcement Ladder</h3>
-    <p>
-      The following enforcement ladder defines four escalating stages of
-      response to non-compliance, from advisory notice through permanent
-      revocation.
-    </p>
     <table class="gov-table">
       <thead>
         <tr>
@@ -1593,13 +1687,13 @@ stateDiagram-v2
         <tr>
           <td>3. Suspension</td>
           <td>Failure to remediate after Formal Warning; serious non-conformance with no immediate safety risk</td>
-          <td>TIR entry marked <code>suspended</code>; TI may not issue new credentials; existing credentials remain valid</td>
+          <td>TIR entry marked suspended; TI may not issue new credentials; existing credentials remain valid</td>
           <td>Immediate; TAO notifies TI simultaneously</td>
         </tr>
         <tr>
           <td>4. Revocation</td>
           <td>Confirmed fraud, key compromise, sustained non-compliance, or serious safety risk</td>
-          <td>TIR entry marked <code>revoked</code>; accreditation credential revoked via [[VC-BITSTRING-STATUS]]</td>
+          <td>TIR entry marked revoked; accreditation credential revoked via [[VC-BITSTRING-STATUS]]</td>
           <td>Immediate upon confirmation</td>
         </tr>
       </tbody>
@@ -1611,9 +1705,9 @@ stateDiagram-v2
     <div class="req-box">
       <span class="req-id">DISPUTE-1 — Appeal Right</span>
       <p>
-        Any [=Trusted Issuer=] subject to a Formal Warning, Suspension,
+        Any Trusted Issuer subject to a Formal Warning, Suspension,
         or Revocation decision MUST be afforded a right of appeal to the
-        [=Governance Authority=] within 15 business days of notification.
+        Governance Authority within 15 business days of notification.
         The GA MUST render a decision on the appeal within 30 calendar
         days. The TFD MUST specify whether appeal has suspensive effect
         (i.e., whether the TI may continue issuing during the appeal period).
@@ -1624,10 +1718,10 @@ stateDiagram-v2
       <p>
         Any holder or verifier that believes a VSC Credential was issued
         in error or fraudulently MAY file a credential challenge with the
-        issuer's [=TAO=]. The TFD MUST define a challenge procedure that
+        issuer's TAO. The TFD MUST define a challenge procedure that
         includes: a structured challenge submission form, a response
         timeline (RECOMMENDED: 10 business days), and an escalation path
-        to the [=Governance Authority=] if unresolved.
+        to the Governance Authority if unresolved.
       </p>
     </div>
   </section>
@@ -1652,13 +1746,13 @@ stateDiagram-v2
       <tr><td>Governance Authority type</td><td>Industry consortium or GS1 US authorized body</td></tr>
       <tr><td>Root TAO</td><td>GA DID (did:web:)</td></tr>
       <tr><td>TAO(s)</td><td>State pharmacy boards, FDA-recognized ATP registrars</td></tr>
-      <tr><td>Trusted Issuer categories</td><td>Licensed manufacturer, licensed wholesale distributor, licensed dispenser (per [[DSCSA]] §581)</td></tr>
+      <tr><td>Trusted Issuer categories</td><td>Licensed manufacturer, licensed wholesale distributor, licensed dispenser (per [[DSCSA]] 581)</td></tr>
       <tr><td>Vetting requirements</td><td>FDA Establishment Registration Number; DEA Schedule II license where applicable; GS1 Company Prefix</td></tr>
       <tr><td>Mandatory credential types</td><td>VSCTransactionEvent (shipping, receiving); VSCObjectEvent (commissioning, decommissioning)</td></tr>
       <tr><td>Accreditation scope restriction</td><td>Must specify SGTIN EPC class; US geographic scope</td></tr>
-      <tr><td>Proof format</td><td><code>eddsa-rdfc-2022</code> or VC-JWT ES256</td></tr>
+      <tr><td>Proof format</td><td>eddsa-rdfc-2022 or VC-JWT ES256</td></tr>
       <tr><td>Key management</td><td>HSM required for manufacturing tier; software key permitted for dispensers</td></tr>
-      <tr><td>Regulatory obligations</td><td>[[DSCSA]] §582; [[GS1-DSCSA-GUIDE]] R1.3</td></tr>
+      <tr><td>Regulatory obligations</td><td>[[DSCSA]] 582; [[GS1-DSCSA-GUIDE]] R1.3</td></tr>
       <tr><td>TIR implementation</td><td>REST API (recommended); must support real-time revocation</td></tr>
       <tr><td>Audit frequency</td><td>Annual surveillance + triggered audit on incident report</td></tr>
     </table>
@@ -1673,7 +1767,7 @@ stateDiagram-v2
       <tr><td>Trusted Issuer categories</td><td>Land-owner / producer; processor; first-place-of-sale operator</td></tr>
       <tr><td>Vetting requirements</td><td>[[EUDR]] due diligence system registration; geolocation proof of land ownership or lease</td></tr>
       <tr><td>Mandatory credential types</td><td>VSCObjectEvent (commissioning with geo-polygon); VSCTransactionEvent (shipping)</td></tr>
-      <tr><td>Mandatory credential fields</td><td><code>geoLocation</code> (GeoJSON polygon per [[EUDR]] Art. 9); <code>harvestDate</code>; <code>speciesIdentifier</code></td></tr>
+      <tr><td>Mandatory credential fields</td><td>geoLocation (GeoJSON polygon per [[EUDR]] Art. 9); harvestDate; speciesIdentifier</td></tr>
       <tr><td>Selective disclosure</td><td>SD-JWT required; supplier identity MUST be independently disclosable from geo-coordinates</td></tr>
       <tr><td>Regulatory obligations</td><td>[[EUDR]] Art. 3, 8, 10; due-diligence statement requirement</td></tr>
       <tr><td>Audit frequency</td><td>Annual surveillance; triggered audit on deforestation risk signal</td></tr>
@@ -1689,9 +1783,9 @@ stateDiagram-v2
       <tr><td>Trusted Issuer categories</td><td>Mine operator; smelter/refiner; component manufacturer; battery manufacturer</td></tr>
       <tr><td>Vetting requirements</td><td>[[CBAM]] declarant registration; [[EU-DPP]] economic operator registration; OECD Due Diligence Guidance compliance declaration</td></tr>
       <tr><td>Mandatory credential types</td><td>VSCTransformationEvent (bill-of-materials); VSCObjectEvent (commissioning)</td></tr>
-      <tr><td>Mandatory credential fields</td><td><code>carbonFootprint</code> (kg CO₂e per unit); <code>countryOfOrigin</code>; <code>hsCode</code>; <code>cbamDeclarantId</code></td></tr>
-      <tr><td>Regulatory obligations</td><td>[[CBAM]] Art. 4–6; [[EU-DPP]] Battery Regulation (EU) 2023/1542; OECD Minerals Guidance</td></tr>
-      <tr><td>Multi-tier linkage</td><td>Tier-2 and Tier-3 TransformationEvent credentials MUST be linked via <code>vscPredecessor</code></td></tr>
+      <tr><td>Mandatory credential fields</td><td>carbonFootprint (kg CO2e per unit); countryOfOrigin; hsCode; cbamDeclarantId</td></tr>
+      <tr><td>Regulatory obligations</td><td>[[CBAM]] Art. 4 to 6; [[EU-DPP]] Battery Regulation (EU) 2023/1542; OECD Minerals Guidance</td></tr>
+      <tr><td>Multi-tier linkage</td><td>Tier-2 and Tier-3 TransformationEvent credentials MUST be linked via vscPredecessor</td></tr>
     </table>
   </section>
 </section>
@@ -1703,11 +1797,11 @@ stateDiagram-v2
   <h2>Machine-Readable Trust Framework Document</h2>
 
   <p>
-    Every [=Trust Framework Document=] MUST include a machine-readable
+    Every Trust Framework Document MUST include a machine-readable
     section serialized as a [[VC-DATA-MODEL]]-conformant JSON-LD document
     published at a stable, versioned URI. This document is the
     authoritative source for automated verifier policy loading and
-    [=Trust Chain=] traversal.
+    Trust Chain traversal.
   </p>
 
   <section id="mrtfd-schema">
@@ -1777,11 +1871,11 @@ stateDiagram-v2
       <span class="req-id">MRTFD-1 — Well-Known URI</span>
       <p>
         The machine-readable TFD MUST be discoverable at:
-        <code>https://&lt;governance-authority-domain&gt;/.well-known/vsc-trust-framework.json</code>
+        <code>https://{governance-authority-domain}/.well-known/vsc-trust-framework.json</code>
       </p>
       <p>
-        Additionally, the [=Root TAO=]'s [[DID-WEB]] document SHOULD
-        include a service entry of type <code>VSCTrustFramework</code>
+        Additionally, the Root TAO's [[DID-WEB]] document SHOULD
+        include a service entry of type VSCTrustFramework
         pointing to this URI.
       </p>
     </div>
@@ -1796,18 +1890,17 @@ stateDiagram-v2
 
   <p>
     All security considerations from [[VC-DATA-MODEL]], [[VC-DI]],
-    and [[VSC-INTEROP]] apply. The following trust framework-specific
-    considerations are additional:
+    and [[VSC-INTEROP]] apply. Trust framework-specific considerations:
   </p>
 
   <section id="sec-root-compromise">
     <h3>Root TAO Key Compromise</h3>
     <p>
       A compromise of the Root TAO signing key would invalidate the entire
-      [=Trust Chain=]. The [=Governance Authority=] MUST use hardware-stored
+      Trust Chain. The Governance Authority MUST use hardware-stored
       keys for the Root TAO DID. A documented key compromise response
       procedure MUST be included in the TFD. The procedure MUST include
-      notification to all [=TAO=]s and all verifiers within 24 hours.
+      notification to all TAOs and all verifiers within 24 hours.
     </p>
   </section>
 
@@ -1826,7 +1919,7 @@ stateDiagram-v2
   <section id="sec-doc-integrity">
     <h3>Governance Document Integrity</h3>
     <p>
-      TFD [=Governance Document=] links MUST include a <code>digestSRI</code>
+      TFD Governance Document links MUST include a digestSRI
       hash. Automated policy loaders MUST verify the hash before applying
       the governance document. Link rot or hash mismatch MUST be treated
       as a framework integrity failure.
@@ -1836,9 +1929,9 @@ stateDiagram-v2
   <section id="sec-tao-escalation">
     <h3>TAO Privilege Escalation</h3>
     <p>
-      As specified in ROLE-TAO1, a [=TAO=] MUST NOT grant accreditation
+      As specified in ROLE-TAO1, a TAO MUST NOT grant accreditation
       scope beyond its own. Verifier implementations MUST traverse the
-      full [=Trust Chain=] to detect any scope escalation at any tier.
+      full Trust Chain to detect any scope escalation at any tier.
       Any chain where a descendant's scope exceeds its ancestor's MUST
       be rejected.
     </p>
@@ -1847,8 +1940,8 @@ stateDiagram-v2
   <section id="sec-sybil">
     <h3>Sybil Issuer Registration</h3>
     <p>
-      An adversary may attempt to register multiple DIDs as [=Trusted
-      Issuer=]s using fabricated identity evidence. TAOs MUST verify
+      An adversary may attempt to register multiple DIDs as Trusted
+      Issuers using fabricated identity evidence. TAOs MUST verify
       legal entity identity through at least one authoritative external
       source (national business registry, LEI, or equivalent) that cannot
       be self-asserted.
@@ -1887,7 +1980,7 @@ stateDiagram-v2
   <section id="priv-credential-linkage">
     <h3>Credential-Level Privacy</h3>
     <p>
-      The <code>AccreditationPolicy</code> <code>termsOfUse</code> entry
+      The AccreditationPolicy termsOfUse entry
       (CP-1) links an issued credential to the issuer's accreditation
       record. This link is public information and does not constitute
       a privacy risk per se, but verifiers SHOULD NOT log this information
@@ -1942,7 +2035,7 @@ stateDiagram-v2
     <h3>Adding a New Sector Profile</h3>
     <p>
       To propose a new sector-specific Trust Framework profile, open an
-      issue with label <code>sector-profile</code> and include:
+      issue with label sector-profile and include:
     </p>
     <ul>
       <li>The target regulatory framework and its citation.</li>
@@ -1956,7 +2049,7 @@ stateDiagram-v2
   <section id="contrib-adopting-tfd">
     <h3>Publishing a Conformant TFD</h3>
     <p>
-      Organizations that have published a [=Trust Framework Document=]
+      Organizations that have published a Trust Framework Document
       conformant with this specification are invited to register it in the
       <a href="https://github.com/w3c-cg/vsc-trust-framework/blob/main/REGISTRY.md">VSC TFD Registry</a>
       by submitting a pull request with the TFD's URI, Governance Authority
@@ -1972,9 +2065,9 @@ stateDiagram-v2
     <h3>Editorial Style</h3>
     <ul>
       <li>RFC 2119 keywords in ALL CAPS in normative sections only.</li>
-      <li>All new governance rules MUST have a unique identifier (e.g., <code>ROLE-GA5</code>, <code>ACC-A3</code>) for traceability.</li>
-      <li>New fill-in template sections MUST use the <code>template-box</code> CSS class and highlight all placeholders with <code>&lt;span class="fill"&gt;</code>.</li>
-      <li>Sector profiles MUST cite their regulatory basis with a <code>localBiblio</code> reference.</li>
+      <li>All new governance rules MUST have a unique identifier (e.g., ROLE-GA5, ACC-A3) for traceability.</li>
+      <li>New fill-in template sections MUST use the template-box CSS class and highlight all placeholders with fill spans.</li>
+      <li>Sector profiles MUST cite their regulatory basis with a localBiblio reference.</li>
       <li>Do not add personally identifiable information to examples; use fictional organization names and syntactically correct but non-existent DIDs.</li>
     </ul>
   </section>
@@ -1998,8 +2091,8 @@ stateDiagram-v2
     </li>
     <li>
       The EBSI Issuer Trust Model v3 ([[EBSI-TRUST-MODEL]]) for the
-      Root TAO → TAO → TI three-tier accreditation chain, the
-      <code>VerifiableAccreditationToAttest</code> schema, and the
+      Root TAO to TAO to TI three-tier accreditation chain, the
+      VerifiableAccreditationToAttest schema, and the
       Trusted Issuers Registry architecture.
     </li>
     <li>
@@ -2018,30 +2111,6 @@ stateDiagram-v2
     </li>
   </ul>
 </section>
-
-<script>
-  // Initialize Mermaid diagrams
-  document.addEventListener('DOMContentLoaded', function() {
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'neutral',
-      securityLevel: 'loose',
-      flowchart: {
-        useMaxWidth: true,
-        htmlLabels: true,
-        curve: 'basis'
-      },
-      sequence: {
-        diagramMarginX: 50,
-        diagramMarginY: 10,
-        actorMargin: 50,
-        width: 150,
-        height: 65,
-        boxMargin: 10
-      }
-    });
-  });
-</script>
 
 </body>
 </html>
