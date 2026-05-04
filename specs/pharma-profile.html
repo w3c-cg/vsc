@@ -19,20 +19,17 @@
       specStatus: "CG-DRAFT",
       shortName: "vsc-requirements",
 
-      /* ── Community Group ─────────────────────────────────────── */
       group: "cg/vsc",
       wg: "Verifiable Supply Chain Community Group",
       wgURI: "https://www.w3.org/community/vsc/",
       wgPublicList: "public-vsc",
 
-      /* ── Source & publication ────────────────────────────────── */
       github: {
         repoURL: "https://github.com/w3c-cg/vsc-requirements",
         branch:  "main"
       },
       edDraftURI: "https://w3c-cg.github.io/vsc-requirements/",
 
-      /* ── People ──────────────────────────────────────────────── */
       editors: [
         {
           name:       "Amir Hameed Mir",
@@ -47,16 +44,13 @@
         }
       ],
 
-      /* ── Misc ────────────────────────────────────────────────── */
       license:        "w3c-software-doc",
       copyrightStart: 2026,
       maxTocLevel:    4,
       noRecTrack:     true,
 
-      /* ── Cross-references ────────────────────────────────────── */
       xref: ["did-core", "vc-data-model", "infra"],
 
-      /* ── Local bibliography ──────────────────────────────────── */
       localBiblio: {
         "EPCIS": {
           title:     "EPC Information Services (EPCIS) Standard, v2.0",
@@ -221,11 +215,7 @@
     };
   </script>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       Contributor-friendly reading aids — pure CSS, no JS needed
-       ═══════════════════════════════════════════════════════════ -->
   <style>
-    /* ── Requirement blocks ─────────────────────────────────── */
     .req-block {
       border-left: 4px solid #005a9c;
       background: #f0f4f8;
@@ -274,7 +264,6 @@
       font-weight: bold;
     }
 
-    /* ── Use-case blocks ────────────────────────────────────── */
     .uc-meta {
       background: #f7f7f7;
       border: 1px solid #ddd;
@@ -318,7 +307,6 @@
       font-weight: bold;
     }
 
-    /* ── Threat model table ─────────────────────────────────── */
     .threat-table {
       width: 100%;
       border-collapse: collapse;
@@ -343,7 +331,6 @@
     .severity-medium { color: #e67e22; font-weight: bold; }
     .severity-low    { color: #27ae60; font-weight: bold; }
 
-    /* ── Requirements summary table ─────────────────────────── */
     .req-table {
       width: 100%;
       border-collapse: collapse;
@@ -368,10 +355,6 @@
     .level-should { color: #e67e22; font-weight: bold; }
     .level-may    { color: #27ae60; font-weight: bold; }
 
-    /* ── Note/Issue/Example callouts ────────────────────────── */
-    /* Uses ReSpec's built-in .note, .issue, .example classes */
-
-    /* ── Contributor guide banner ───────────────────────────── */
     .contrib-banner {
       background: #fffbea;
       border: 1px solid #e6b800;
@@ -381,8 +364,19 @@
       font-size: .92em;
     }
     .contrib-banner::before {
-      content: "👋 New contributor? ";
+      content: "\01F44B New contributor? ";
       font-weight: bold;
+    }
+
+    .figure {
+      text-align: center;
+      margin: 1.5em 0;
+    }
+    .figure .caption {
+      font-style: italic;
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 0.6em;
     }
   </style>
 </head>
@@ -414,21 +408,10 @@
     This document is intended for:
   </p>
   <ul>
-    <li>
-      <strong>Implementers</strong> building VSC-conformant software systems;
-    </li>
-    <li>
-      <strong>Specification authors</strong> drafting the VSC Core Data Model
-      and related normative deliverables;
-    </li>
-    <li>
-      <strong>Regulators and policy teams</strong> evaluating VSC fitness
-      for compliance scenarios; and
-    </li>
-    <li>
-      <strong>New contributors</strong> seeking to understand the scope and
-      motivation of the VSC Community Group.
-    </li>
+    <li><strong>Implementers</strong> building VSC-conformant software systems;</li>
+    <li><strong>Specification authors</strong> drafting the VSC Core Data Model and related normative deliverables;</li>
+    <li><strong>Regulators and policy teams</strong> evaluating VSC fitness for compliance scenarios; and</li>
+    <li><strong>New contributors</strong> seeking to understand the scope and motivation of the VSC Community Group.</li>
   </ul>
 </section>
 
@@ -448,7 +431,7 @@
     <a href="https://github.com/w3c-cg/vsc-requirements/issues">GitHub issue</a>.
     For general discussion, see the
     <a href="https://lists.w3.org/Archives/Public/public-vsc/">public mailing list</a>.
-    See <a href="#contributing"></a> for full contributor guidance.
+    See <a href="#contributing">Contributing</a> for full contributor guidance.
   </p>
 </section>
 
@@ -552,13 +535,13 @@
 
     <p>
       VSC addresses the deficiencies identified in
-      <a href="#problem-statement"></a> by:
+      <a href="#problem-statement">Problem Statement</a> by:
     </p>
 
     <ul>
       <li>
         <strong>Preserving EPCIS semantics:</strong> The
-        <a href="#dfn-event-to-credential-mapping">Event-to-Credential Mapping</a>
+        <a>Event-to-Credential Mapping</a>
         is a normative, lossless transformation. All EPCIS event fields
         (event type, temporal context, business context, product
         identifiers, read points) are preserved. The resulting
@@ -568,7 +551,7 @@
       <li>
         <strong>Binding identity to events:</strong> Each event credential
         is signed by the asserting
-        <a href="#dfn-supply-chain-actor">Supply Chain Actor</a>
+        <a>Supply Chain Actor</a>
         using a [[DID-CORE]] identifier. Verifiers can resolve the DID
         to retrieve the public key and verify the signature without
         contacting the issuer.
@@ -628,19 +611,19 @@
   <section id="document-structure">
     <h3>Document Structure</h3>
     <ul>
-      <li><a href="#conformance"></a> — conformance language</li>
-      <li><a href="#scope"></a> — in-scope and out-of-scope topics</li>
-      <li><a href="#terminology"></a> — normative definitions</li>
-      <li><a href="#architecture"></a> — conceptual model and roles</li>
-      <li><a href="#related-work"></a> — alignment with existing standards</li>
-      <li><a href="#use-cases"></a> — motivating scenarios with actors, flows, and failure modes</li>
-      <li><a href="#requirements"></a> — functional and non-functional requirements with testability statements</li>
-      <li><a href="#security"></a> — threat model and mitigations</li>
-      <li><a href="#privacy"></a> — privacy considerations</li>
-      <li><a href="#accessibility"></a> — accessibility considerations</li>
-      <li><a href="#i18n"></a> — internationalization considerations</li>
-      <li><a href="#future-work"></a> — planned follow-on work</li>
-      <li><a href="#contributing"></a> — contributor guidance</li>
+      <li><a href="#conformance">Conformance</a> — conformance language</li>
+      <li><a href="#scope">Scope</a> — in-scope and out-of-scope topics</li>
+      <li><a href="#terminology">Terminology</a> — normative definitions</li>
+      <li><a href="#architecture">Conceptual Architecture</a> — conceptual model and roles</li>
+      <li><a href="#related-work">Related Work</a> — alignment with existing standards</li>
+      <li><a href="#use-cases">Use Cases</a> — motivating scenarios with actors, flows, and failure modes</li>
+      <li><a href="#requirements">Requirements</a> — functional and non-functional requirements with testability statements</li>
+      <li><a href="#security">Security Considerations</a> — threat model and mitigations</li>
+      <li><a href="#privacy">Privacy Considerations</a> — privacy considerations</li>
+      <li><a href="#accessibility">Accessibility Considerations</a> — accessibility considerations</li>
+      <li><a href="#i18n">Internationalization Considerations</a> — internationalization considerations</li>
+      <li><a href="#future-work">Future Work</a> — planned follow-on work</li>
+      <li><a href="#contributing">Contributing</a> — contributor guidance</li>
     </ul>
   </section>
 </section>
@@ -649,6 +632,7 @@
      2. CONFORMANCE
      ═══════════════════════════════════════════════════════════════ -->
 <section id="conformance">
+  <h2>Conformance</h2>
   <p>
     The key words
     <em class="rfc2119">MUST</em>, <em class="rfc2119">MUST NOT</em>,
@@ -666,7 +650,7 @@
     A <dfn>VSC-conformant implementation</dfn> is a software system
     that satisfies all <em class="rfc2119">MUST</em> and
     <em class="rfc2119">MUST NOT</em> requirements in
-    <a href="#requirements"></a>. Conformance is assessed against
+    <a href="#requirements">Requirements</a>. Conformance is assessed against
     the testability statements accompanying each requirement.
   </p>
 
@@ -679,7 +663,7 @@
     <dd>
       A software component that produces
       <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>
-      representing <a href="#dfn-supply-chain-event">Supply Chain Events</a>
+      representing <a>Supply Chain Events</a>
       in conformance with this specification.
     </dd>
 
@@ -689,7 +673,7 @@
       <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>
       or
       <a data-cite="VC-DATA-MODEL#dfn-verifiable-presentation">Verifiable Presentations</a>
-      representing <a href="#dfn-supply-chain-event">Supply Chain Events</a>
+      representing <a>Supply Chain Events</a>
       in conformance with this specification.
     </dd>
   </dl>
@@ -711,82 +695,25 @@
   <section id="in-scope">
     <h3>In Scope</h3>
     <ul>
-      <li>
-        <strong>Event-to-credential mapping:</strong> A normative,
-        field-level mapping from each [[EPCIS]] event type
-        (ObjectEvent, AggregationEvent, TransformationEvent,
-        TransactionEvent, AssociationEvent) to a corresponding
-        [[VC-DATA-MODEL]] credential schema.
-      </li>
-      <li>
-        <strong>Identity binding:</strong> Specification of how
-        [=Supply Chain Actor=]s are identified using [[DID-CORE]] and
-        how their authority to assert events for a given business context
-        is established.
-      </li>
-      <li>
-        <strong>Verification model:</strong> Rules for verifying the
-        integrity, authenticity, and provenance of
-        [=Supply Chain Event=]s represented as
-        <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>.
-      </li>
-      <li>
-        <strong>Selective disclosure:</strong> Mechanisms allowing
-        holders to reveal only a subset of event fields to a given
-        verifier.
-      </li>
-      <li>
-        <strong>Event linking:</strong> Conventions for chaining event
-        credentials to reconstruct provenance and custody histories.
-      </li>
-      <li>
-        <strong>Interoperability requirements:</strong> Normative
-        requirements enabling VSC-conformant implementations from
-        different vendors to exchange and verify event credentials
-        without bilateral agreements.
-      </li>
-      <li>
-        <strong>Use cases and requirements:</strong> Motivating scenarios
-        grounded in regulatory obligations and industry practice, with
-        corresponding testable requirements.
-      </li>
+      <li><strong>Event-to-credential mapping:</strong> A normative, field-level mapping from each [[EPCIS]] event type (ObjectEvent, AggregationEvent, TransformationEvent, TransactionEvent, AssociationEvent) to a corresponding [[VC-DATA-MODEL]] credential schema.</li>
+      <li><strong>Identity binding:</strong> Specification of how Supply Chain Actors are identified using [[DID-CORE]] and how their authority to assert events for a given business context is established.</li>
+      <li><strong>Verification model:</strong> Rules for verifying the integrity, authenticity, and provenance of Supply Chain Events represented as <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>.</li>
+      <li><strong>Selective disclosure:</strong> Mechanisms allowing holders to reveal only a subset of event fields to a given verifier.</li>
+      <li><strong>Event linking:</strong> Conventions for chaining event credentials to reconstruct provenance and custody histories.</li>
+      <li><strong>Interoperability requirements:</strong> Normative requirements enabling VSC-conformant implementations from different vendors to exchange and verify event credentials without bilateral agreements.</li>
+      <li><strong>Use cases and requirements:</strong> Motivating scenarios grounded in regulatory obligations and industry practice, with corresponding testable requirements.</li>
     </ul>
   </section>
 
   <section id="out-of-scope">
     <h3>Out of Scope</h3>
     <ul>
-      <li>
-        <strong>Credential transport protocols:</strong> How credentials
-        are transmitted between parties (e.g., HTTPS, messaging queues,
-        DIDComm) is out of scope. Implementers SHOULD follow
-        [[TRACEABILITY-INTEROP]] for HTTP-based exchange.
-      </li>
-      <li>
-        <strong>Storage and persistence:</strong> Database schemas,
-        file formats, and retention policies for event credentials are
-        implementation-specific.
-      </li>
-      <li>
-        <strong>Business workflow automation:</strong> Rules engines,
-        approval workflows, and ERP integrations are out of scope.
-      </li>
-      <li>
-        <strong>Identity governance:</strong> Frameworks for issuing,
-        revoking, or governing organizational DID identifiers are
-        defined externally (e.g., by sector trust frameworks).
-      </li>
-      <li>
-        <strong>Distributed ledger technology:</strong> VSC does not
-        define or require any specific DLT, blockchain, or consensus
-        mechanism. See the note in <a href="#vsc-approach"></a>.
-      </li>
-      <li>
-        <strong>Physical IoT and sensor integration:</strong> How
-        physical readings (temperature logs, GPS coordinates) are
-        captured and bound to credentials is out of scope, though
-        VSC credentials can carry such data.
-      </li>
+      <li><strong>Credential transport protocols:</strong> How credentials are transmitted between parties (e.g., HTTPS, messaging queues, DIDComm) is out of scope. Implementers SHOULD follow [[TRACEABILITY-INTEROP]] for HTTP-based exchange.</li>
+      <li><strong>Storage and persistence:</strong> Database schemas, file formats, and retention policies for event credentials are implementation-specific.</li>
+      <li><strong>Business workflow automation:</strong> Rules engines, approval workflows, and ERP integrations are out of scope.</li>
+      <li><strong>Identity governance:</strong> Frameworks for issuing, revoking, or governing organizational DID identifiers are defined externally (e.g., by sector trust frameworks).</li>
+      <li><strong>Distributed ledger technology:</strong> VSC does not define or require any specific DLT, blockchain, or consensus mechanism.</li>
+      <li><strong>Physical IoT and sensor integration:</strong> How physical readings (temperature logs, GPS coordinates) are captured and bound to credentials is out of scope, though VSC credentials can carry such data.</li>
     </ul>
   </section>
 </section>
@@ -804,26 +731,26 @@
   </p>
 
   <dl>
-    <dt><dfn>Supply Chain Event</dfn></dt>
+    <dt><dfn data-lt="Supply Chain Events|Supply Chain Event">Supply Chain Event</dfn></dt>
     <dd>
       A structured record of an occurrence at a specific point in time
       within a supply chain, such as the observation, commissioning,
       aggregation, transformation, or custody transfer of goods. In VSC,
       supply chain events are modeled on [[EPCIS]] v2.0 event types.
-      <em>See also:</em> [=EPCIS Event=].
+      <em>See also:</em> <a>EPCIS Event</a>.
     </dd>
 
-    <dt><dfn>Supply Chain Actor</dfn></dt>
+    <dt><dfn data-lt="Supply Chain Actors|Supply Chain Actor">Supply Chain Actor</dfn></dt>
     <dd>
       An organization or individual that participates in a supply chain
-      and is capable of asserting [=Supply Chain Event=]s. In VSC, each
+      and is capable of asserting <a>Supply Chain Events</a>. In VSC, each
       actor is identified by at least one
       <a data-cite="DID-CORE#dfn-decentralized-identifier">Decentralized Identifier</a>
       (DID). Multiple DID methods are supported; the DID method used is
       not prescribed by VSC.
     </dd>
 
-    <dt><dfn>EPCIS Event</dfn></dt>
+    <dt><dfn data-lt="EPCIS Events|EPCIS Event">EPCIS Event</dfn></dt>
     <dd>
       A standardized supply chain event as defined by [[EPCIS]] v2.0,
       belonging to one of the following event types: ObjectEvent,
@@ -832,9 +759,9 @@
       defined in [[EPCIS]] and [[GS1-CBV]].
     </dd>
 
-    <dt><dfn>Event-to-Credential Mapping</dfn></dt>
+    <dt><dfn data-lt="Event-to-Credential Mappings|Event-to-Credential Mapping">Event-to-Credential Mapping</dfn></dt>
     <dd>
-      The normative, field-level transformation of an [=EPCIS Event=]
+      The normative, field-level transformation of an <a>EPCIS Event</a>
       into a
       <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credential</a>,
       as defined by VSC. The mapping is required to be lossless with
@@ -846,8 +773,8 @@
     <dd>
       As defined in [[VC-DATA-MODEL]] Section 4: a cryptographically
       verifiable set of claims made by an issuer about a subject.
-      In VSC, each [=Supply Chain Event=] is represented as a
-      Verifiable Credential where the asserting [=Supply Chain Actor=]
+      In VSC, each <a>Supply Chain Event</a> is represented as a
+      Verifiable Credential where the asserting <a>Supply Chain Actor</a>
       is the issuer and the event data constitutes the credential subject.
     </dd>
 
@@ -859,16 +786,16 @@
       convey custody chains, compliance histories, or provenance claims.
     </dd>
 
-    <dt><dfn>Event Chain</dfn></dt>
+    <dt><dfn data-lt="Event Chains|Event Chain">Event Chain</dfn></dt>
     <dd>
-      An ordered sequence of [=Supply Chain Event=]s, each represented
+      An ordered sequence of <a>Supply Chain Events</a>, each represented
       as a Verifiable Credential, linked by reference such that a
       verifier can reconstruct the full provenance or custody history
       of a product or batch. Each credential in the chain references
       the credential identifier of its predecessor.
     </dd>
 
-    <dt><dfn>Selective Disclosure</dfn></dt>
+    <dt><dfn data-lt="Selective Disclosure">Selective Disclosure</dfn></dt>
     <dd>
       A mechanism by which a holder can present a Verifiable Credential
       to a verifier revealing only a specified subset of credential
@@ -877,12 +804,12 @@
       and [[SD-JWT]].
     </dd>
 
-    <dt><dfn>Business Step</dfn></dt>
+    <dt><dfn data-lt="Business Steps|Business Step">Business Step</dfn></dt>
     <dd>
       As defined in [[GS1-CBV]]: a controlled vocabulary term
       (e.g., <code>shipping</code>, <code>receiving</code>,
       <code>manufacturing</code>) that describes the step in the
-      business process at which an [=EPCIS Event=] occurred.
+      business process at which an <a>EPCIS Event</a> occurred.
     </dd>
 
     <dt><dfn>Disposition</dfn></dt>
@@ -890,13 +817,13 @@
       As defined in [[GS1-CBV]]: a controlled vocabulary term
       (e.g., <code>in_transit</code>, <code>recalled</code>,
       <code>destroyed</code>) describing the condition or status of
-      an EPC or product class at the time of an [=EPCIS Event=].
+      an EPC or product class at the time of an <a>EPCIS Event</a>.
     </dd>
 
-    <dt><dfn>Trust Framework</dfn></dt>
+    <dt><dfn data-lt="Trust Frameworks|Trust Framework">Trust Framework</dfn></dt>
     <dd>
       A set of policies, rules, and agreements that govern how
-      [=Supply Chain Actor=]s are admitted to, and trusted within, a
+      <a>Supply Chain Actors</a> are admitted to, and trusted within, a
       VSC ecosystem. A trust framework defines which DID methods and
       issuer registries are accepted by verifiers in a given context.
       Trust framework governance is out of scope for VSC specifications
@@ -904,16 +831,16 @@
       credentials.
     </dd>
 
-    <dt><dfn>Issuer Registry</dfn></dt>
+    <dt><dfn data-lt="Issuer Registries|Issuer Registry">Issuer Registry</dfn></dt>
     <dd>
       A machine-readable list of
       <a data-cite="DID-CORE#dfn-decentralized-identifier">DIDs</a>
-      that are authorized to assert [=Supply Chain Event=]s within a
-      given context or [=Trust Framework=]. An issuer registry may be
+      that are authorized to assert <a>Supply Chain Events</a> within a
+      given context or <a>Trust Framework</a>. An issuer registry may be
       published by an industry body, regulator, or platform operator.
     </dd>
 
-    <dt><dfn>Credential Status</dfn></dt>
+    <dt><dfn data-lt="Credential Status">Credential Status</dfn></dt>
     <dd>
       A machine-checkable mechanism by which the current validity of a
       Verifiable Credential can be determined (e.g., revoked, suspended,
@@ -941,12 +868,12 @@
     <dl>
       <dt>Issuer</dt>
       <dd>
-        A [=Supply Chain Actor=] that asserts a [=Supply Chain Event=]
+        A <a>Supply Chain Actor</a> that asserts a <a>Supply Chain Event</a>
         and creates the corresponding Verifiable Credential. The issuer
         signs the credential using the cryptographic key material
         associated with its [[DID-CORE]] identifier. The issuer is
         responsible for the accuracy of the event claims and for
-        maintaining [=Credential Status=] information.
+        maintaining <a>Credential Status</a> information.
       </dd>
       <dt>Holder</dt>
       <dd>
@@ -965,7 +892,7 @@
         and validates their integrity, authenticity, and policy
         compliance. Verifiers check the issuer's DID resolution,
         cryptographic signature, credential status, and — where a
-        [=Trust Framework=] is in scope — whether the issuer is
+        <a>Trust Framework</a> is in scope — whether the issuer is
         authorized to assert events in the claimed business context.
       </dd>
     </dl>
@@ -988,31 +915,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><code>ObjectEvent</code></td>
-          <td>Commissioning, observation, shipping, receiving of items</td>
-          <td><code>VscObjectEventCredential</code></td>
-        </tr>
-        <tr>
-          <td><code>AggregationEvent</code></td>
-          <td>Packing items into a container; disaggregating a pallet</td>
-          <td><code>VscAggregationEventCredential</code></td>
-        </tr>
-        <tr>
-          <td><code>TransformationEvent</code></td>
-          <td>Manufacturing: input materials consumed, output products created</td>
-          <td><code>VscTransformationEventCredential</code></td>
-        </tr>
-        <tr>
-          <td><code>TransactionEvent</code></td>
-          <td>Linking events to business transactions (orders, invoices)</td>
-          <td><code>VscTransactionEventCredential</code></td>
-        </tr>
-        <tr>
-          <td><code>AssociationEvent</code></td>
-          <td>Associating sub-objects with a parent object</td>
-          <td><code>VscAssociationEventCredential</code></td>
-        </tr>
+        <tr><td><code>ObjectEvent</code></td><td>Commissioning, observation, shipping, receiving of items</td><td><code>VscObjectEventCredential</code></td></tr>
+        <tr><td><code>AggregationEvent</code></td><td>Packing items into a container; disaggregating a pallet</td><td><code>VscAggregationEventCredential</code></td></tr>
+        <tr><td><code>TransformationEvent</code></td><td>Manufacturing: input materials consumed, output products created</td><td><code>VscTransformationEventCredential</code></td></tr>
+        <tr><td><code>TransactionEvent</code></td><td>Linking events to business transactions (orders, invoices)</td><td><code>VscTransactionEventCredential</code></td></tr>
+        <tr><td><code>AssociationEvent</code></td><td>Associating sub-objects with a parent object</td><td><code>VscAssociationEventCredential</code></td></tr>
       </tbody>
     </table>
 
@@ -1031,7 +938,7 @@
     </p>
 
     <dl>
-      <dt>[=Supply Chain Event=]</dt>
+      <dt><a>Supply Chain Event</a></dt>
       <dd>
         The occurrence being recorded, conforming to one of the five
         [[EPCIS]] event types. The event carries the event-time,
@@ -1043,12 +950,12 @@
       <dd>
         The cryptographically signed representation of the event.
         The credential's <code>issuer</code> is the asserting
-        [=Supply Chain Actor=]'s DID. The <code>credentialSubject</code>
-        contains the [=EPCIS Event=] fields. The credential carries a
+        <a>Supply Chain Actor</a>'s DID. The <code>credentialSubject</code>
+        contains the <a>EPCIS Event</a> fields. The credential carries a
         <code>credentialStatus</code> endpoint for revocation checks.
       </dd>
 
-      <dt>[=Event Chain=]</dt>
+      <dt><a>Event Chain</a></dt>
       <dd>
         A directed graph of Verifiable Credentials linked by credential
         identifier references. The chain enables reconstruction of
@@ -1070,52 +977,107 @@
 
     <p>The canonical VSC information flow is:</p>
 
-    <ol class="uc-step">
-      <li>
-        A [=Supply Chain Event=] occurs (e.g., a pallet of goods is
-        transferred from manufacturer to logistics provider).
-      </li>
-      <li>
-        The asserting [=Supply Chain Actor=] (issuer) captures the event
-        in [[EPCIS]] format and applies the [=Event-to-Credential
-        Mapping=] to produce a Verifiable Credential conforming to the
-        appropriate VSC event schema.
-      </li>
-      <li>
-        The issuer signs the credential using its [[DID-CORE]]-referenced
-        key material using a [[VC-DATA-INTEGRITY]] proof or equivalent
-        mechanism.
-      </li>
-      <li>
-        The signed credential is transmitted to the intended recipient
-        (holder), typically the next party in the supply chain.
-      </li>
-      <li>
-        The holder stores the credential and may later assemble it into a
-        Verifiable Presentation alongside other relevant credentials.
-      </li>
-      <li>
-        The holder presents credentials to a verifier in response to a
-        verification request (e.g., from a customs authority, regulator,
-        or trading partner).
-      </li>
-      <li>
-        The verifier resolves the issuer's DID, verifies the
-        cryptographic proof, checks [=Credential Status=], and — where
-        applicable — confirms that the issuer is listed in the relevant
-        [=Issuer Registry=].
-      </li>
-      <li>
-        The verifier accepts or rejects the event credential and
-        communicates the outcome to the requesting system or human.
-      </li>
-    </ol>
+    <!-- Information Flow Sequence SVG -->
+    <div class="figure">
+      <svg viewBox="0 0 800 600" width="100%" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- Participants header -->
+        <rect x="30" y="10" width="120" height="28" rx="3" fill="#2d3748"/>
+        <text x="90" y="29" text-anchor="middle" fill="#fff" font-size="11">Event Source</text>
+
+        <rect x="200" y="10" width="120" height="28" rx="3" fill="#553c9a"/>
+        <text x="260" y="29" text-anchor="middle" fill="#fff" font-size="11">Issuer</text>
+
+        <rect x="370" y="10" width="120" height="28" rx="3" fill="#2b6cb0"/>
+        <text x="430" y="29" text-anchor="middle" fill="#fff" font-size="11">Holder</text>
+
+        <rect x="540" y="10" width="120" height="28" rx="3" fill="#276749"/>
+        <text x="600" y="29" text-anchor="middle" fill="#fff" font-size="11">Verifier</text>
+
+        <rect x="690" y="10" width="100" height="28" rx="3" fill="#c05621"/>
+        <text x="740" y="29" text-anchor="middle" fill="#fff" font-size="11">System</text>
+
+        <!-- Lifelines -->
+        <line x1="90" y1="38" x2="90" y2="570" stroke="#999" stroke-dasharray="4,4"/>
+        <line x1="260" y1="38" x2="260" y2="570" stroke="#999" stroke-dasharray="4,4"/>
+        <line x1="430" y1="38" x2="430" y2="570" stroke="#999" stroke-dasharray="4,4"/>
+        <line x1="600" y1="38" x2="600" y2="570" stroke="#999" stroke-dasharray="4,4"/>
+        <line x1="740" y1="38" x2="740" y2="570" stroke="#999" stroke-dasharray="4,4"/>
+
+        <!-- Arrow marker -->
+        <defs>
+          <marker id="arrow-seq" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+          </marker>
+        </defs>
+
+        <!-- Step 1: Event occurs -->
+        <rect x="40" y="55" width="100" height="22" rx="3" fill="#e8f5e9" stroke="#388e3c" stroke-width="1"/>
+        <text x="90" y="70" text-anchor="middle" font-size="9" fill="#388e3c">Event occurs</text>
+
+        <!-- Step 2: Capture EPCIS -->
+        <line x1="105" y1="77" x2="245" y2="95" stroke="#333" stroke-width="1.5" marker-end="url(#arrow-seq)"/>
+        <text x="180" y="82" font-size="9" fill="#333">1. Capture event</text>
+
+        <rect x="210" y="100" width="100" height="25" rx="3" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+        <text x="260" y="117" text-anchor="middle" font-size="9" fill="#7b1fa2">EPCIS event</text>
+
+        <!-- Step 3: Map to VC -->
+        <rect x="210" y="140" width="100" height="25" rx="3" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+        <text x="260" y="157" text-anchor="middle" font-size="9" fill="#7b1fa2">Apply mapping</text>
+
+        <!-- Step 4: Sign credential -->
+        <rect x="210" y="180" width="100" height="25" rx="3" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1"/>
+        <text x="260" y="197" text-anchor="middle" font-size="9" fill="#7b1fa2">Sign with DID</text>
+
+        <!-- Step 5: Transmit -->
+        <text x="345" y="215" text-anchor="middle" font-size="9" fill="#333">2. VC transmitted</text>
+        <line x1="275" y1="222" x2="415" y2="240" stroke="#333" stroke-width="1.5" marker-end="url(#arrow-seq)"/>
+
+        <rect x="380" y="245" width="100" height="25" rx="3" fill="#e3f2fd" stroke="#1565c0" stroke-width="1"/>
+        <text x="430" y="262" text-anchor="middle" font-size="9" fill="#1565c0">Store VC</text>
+
+        <!-- Step 6: Assemble VP -->
+        <rect x="380" y="285" width="100" height="25" rx="3" fill="#e3f2fd" stroke="#1565c0" stroke-width="1"/>
+        <text x="430" y="302" text-anchor="middle" font-size="9" fill="#1565c0">Assemble VP</text>
+
+        <!-- Step 7: Present -->
+        <text x="515" y="325" text-anchor="middle" font-size="9" fill="#333">3. Present VP</text>
+        <line x1="445" y1="332" x2="585" y2="350" stroke="#333" stroke-width="1.5" marker-end="url(#arrow-seq)"/>
+
+        <!-- Step 8: Verify -->
+        <rect x="550" y="355" width="100" height="25" rx="3" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+        <text x="600" y="372" text-anchor="middle" font-size="9" fill="#2e7d32">Resolve DID</text>
+
+        <rect x="550" y="390" width="100" height="25" rx="3" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+        <text x="600" y="407" text-anchor="middle" font-size="9" fill="#2e7d32">Verify proof</text>
+
+        <rect x="550" y="425" width="100" height="25" rx="3" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+        <text x="600" y="442" text-anchor="middle" font-size="9" fill="#2e7d32">Check status</text>
+
+        <rect x="550" y="460" width="100" height="25" rx="3" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+        <text x="600" y="477" text-anchor="middle" font-size="9" fill="#2e7d32">Check registry</text>
+
+        <!-- Step 9: Accept/Reject -->
+        <text x="670" y="510" text-anchor="middle" font-size="9" fill="#333">4. Outcome</text>
+        <line x1="615" y1="515" x2="725" y2="530" stroke="#333" stroke-width="1.5" marker-end="url(#arrow-seq)"/>
+
+        <rect x="690" y="535" width="100" height="25" rx="3" fill="#0288d1" stroke="#01579b" stroke-width="1"/>
+        <text x="740" y="552" text-anchor="middle" font-size="9" fill="#fff">Accept / Reject</text>
+
+        <!-- TIR check annotation -->
+        <line x1="645" y1="470" x2="710" y2="470" stroke="#e65100" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="720" y="465" font-size="8" fill="#e65100">via TIR</text>
+
+      </svg>
+      <p class="caption">Figure 1 — Canonical VSC information flow: Event capture, credential issuance, holder storage, verifier validation.</p>
+    </div>
 
     <p class="note" title="Failure paths">
-      Step 7 may fail if the DID cannot be resolved, the signature is
-      invalid, the credential has been revoked, or the issuer is not
-      in the required issuer registry. Verifier behavior in each failure
-      case is defined in <a href="#requirements"></a>.
+      Step 4 (verification) may fail if the DID cannot be resolved, the
+      signature is invalid, the credential has been revoked, or the issuer
+      is not in the required issuer registry. Verifier behavior in each
+      failure case is defined in <a href="#requirements">Requirements</a>.
     </p>
   </section>
 </section>
@@ -1134,64 +1096,28 @@
 
   <dl>
     <dt>GS1 EPCIS 2.0 [[EPCIS]] and Core Business Vocabulary [[GS1-CBV]]</dt>
-    <dd>
-      The primary event semantic foundation for VSC. All VSC event
-      credential schemas are derived from EPCIS event types. The CBV
-      provides the controlled vocabularies for business step and
-      disposition values. VSC is designed to be backward-compatible with
-      EPCIS 2.0 JSON-LD serialization.
-    </dd>
+    <dd>The primary event semantic foundation for VSC. All VSC event credential schemas are derived from EPCIS event types. VSC is designed to be backward-compatible with EPCIS 2.0 JSON-LD serialization.</dd>
 
     <dt>W3C Verifiable Credentials Data Model [[VC-DATA-MODEL]]</dt>
-    <dd>
-      The foundational credential data model. VSC event credentials
-      are valid Verifiable Credentials and MUST satisfy all MUST-level
-      requirements of [[VC-DATA-MODEL]] in addition to VSC-specific
-      requirements.
-    </dd>
+    <dd>The foundational credential data model. VSC event credentials are valid Verifiable Credentials and MUST satisfy all MUST-level requirements of [[VC-DATA-MODEL]] in addition to VSC-specific requirements.</dd>
 
     <dt>W3C Decentralized Identifiers [[DID-CORE]]</dt>
-    <dd>
-      The identity layer. All VSC issuer and subject identifiers use
-      DID syntax. VSC does not mandate a specific DID method;
-      implementations SHOULD support at minimum <code>did:web</code>
-      and one additional DID method.
-    </dd>
+    <dd>The identity layer. All VSC issuer and subject identifiers use DID syntax. VSC does not mandate a specific DID method; implementations SHOULD support at minimum <code>did:web</code> and one additional DID method.</dd>
 
     <dt>W3C CCG Traceability Vocabulary [[TRACEABILITY-V1]]</dt>
-    <dd>
-      An existing community vocabulary for supply chain credentials.
-      VSC SHOULD reuse credential types from [[TRACEABILITY-V1]] where
-      semantically equivalent types exist rather than defining new types.
-    </dd>
+    <dd>An existing community vocabulary for supply chain credentials. VSC SHOULD reuse credential types from [[TRACEABILITY-V1]] where semantically equivalent types exist rather than defining new types.</dd>
 
     <dt>W3C CCG Traceability Interoperability Profile [[TRACEABILITY-INTEROP]]</dt>
-    <dd>
-      Defines the HTTP API and exchange protocol for traceability
-      credentials. VSC-conformant implementations that expose HTTP APIs
-      SHOULD conform to [[TRACEABILITY-INTEROP]].
-    </dd>
+    <dd>Defines the HTTP API and exchange protocol for traceability credentials. VSC-conformant implementations that expose HTTP APIs SHOULD conform to [[TRACEABILITY-INTEROP]].</dd>
 
     <dt>UN/CEFACT Transparency Protocol [[UNTP]]</dt>
-    <dd>
-      A UN-level framework for product and facility passports using
-      Verifiable Credentials. VSC SHOULD align event credential schemas
-      with [[UNTP]] Digital Product Passport structures where applicable.
-    </dd>
+    <dd>A UN-level framework for product and facility passports using Verifiable Credentials. VSC SHOULD align event credential schemas with [[UNTP]] Digital Product Passport structures where applicable.</dd>
 
     <dt>GS1 Digital Link [[GS1-DIGITAL-LINK]]</dt>
-    <dd>
-      Provides resolvable URIs for GS1 identifiers (GTIN, SSCC, GLN).
-      VSC event credentials SHOULD use GS1 Digital Link URIs as EPC
-      and location identifiers to enable linked-data resolution.
-    </dd>
+    <dd>Provides resolvable URIs for GS1 identifiers (GTIN, SSCC, GLN). VSC event credentials SHOULD use GS1 Digital Link URIs as EPC and location identifiers to enable linked-data resolution.</dd>
 
     <dt>Data Integrity and Cryptosuites [[VC-DATA-INTEGRITY]], [[BBS-2023]], [[LINKED-DATA-PROOFS]]</dt>
-    <dd>
-      VSC event credentials MUST carry at least one
-      [[VC-DATA-INTEGRITY]] proof. Implementations supporting
-      [=Selective Disclosure=] SHOULD support [[BBS-2023]] proofs.
-    </dd>
+    <dd>VSC event credentials MUST carry at least one [[VC-DATA-INTEGRITY]] proof. Implementations supporting Selective Disclosure SHOULD support [[BBS-2023]] proofs.</dd>
   </dl>
 </section>
 
@@ -1207,7 +1133,7 @@
     mapping to the requirements it motivates. Use cases are non-normative.
   </p>
 
-  <!-- UC-01 ─────────────────────────────────────────────── -->
+  <!-- UC-01 -->
   <section id="uc-provenance">
     <h3>UC-01: Raw Material Provenance for Deforestation Due Diligence</h3>
 
@@ -1215,92 +1141,33 @@
       <dt>Regulatory driver</dt>
       <dd>EU Deforestation Regulation [[EUDR]], Article 3 — operators must ensure commodities are deforestation-free and legally produced.</dd>
       <dt>Actors</dt>
-      <dd>
-        Raw material supplier (issuer); first processor (holder/issuer);
-        EU market operator / importer (holder/verifier); EU competent authority (verifier).
-      </dd>
+      <dd>Raw material supplier (issuer); first processor (holder/issuer); EU market operator / importer (holder/verifier); EU competent authority (verifier).</dd>
       <dt>Preconditions</dt>
-      <dd>
-        Supplier holds a <code>did:web</code> identifier registered with a
-        sector trust framework. Importer has declared a reference DID set
-        of accepted supplier issuers.
-      </dd>
+      <dd>Supplier holds a <code>did:web</code> identifier registered with a sector trust framework. Importer has declared a reference DID set of accepted supplier issuers.</dd>
     </dl>
 
     <p><strong>Nominal flow:</strong></p>
     <ol class="uc-step">
-      <li>
-        A soy supplier in Brazil harvests a batch and records an
-        ObjectEvent in their EPCIS system with the batch EPC, harvest
-        timestamp, geo-coordinates of the plot, and species information.
-      </li>
-      <li>
-        The supplier's VSC-conformant software applies the
-        [=Event-to-Credential Mapping=] and signs a
-        <code>VscObjectEventCredential</code>, with an extension for
-        geospatial data and the relevant commodity type.
-      </li>
-      <li>
-        The credential includes a reference to the supplier's
-        deforestation-free certification credential (issued by a
-        certification body) as a linked credential.
-      </li>
-      <li>
-        The signed credential is transmitted to the first processor
-        (crusher), who stores it and issues their own ObjectEvent
-        credential for the crushing step, referencing the supplier's
-        credential.
-      </li>
-      <li>
-        The EU importer requests a Verifiable Presentation from the
-        processor containing the full [=Event Chain=] from harvest to
-        processed shipment.
-      </li>
-      <li>
-        The importer's system verifies each credential in the chain:
-        DID resolution, signature, revocation status, and presence in
-        the sector [=Issuer Registry=].
-      </li>
-      <li>
-        The importer submits the presentation to the EU Information
-        System for EUDR due diligence statements.
-      </li>
+      <li>A soy supplier in Brazil harvests a batch and records an ObjectEvent in their EPCIS system with the batch EPC, harvest timestamp, geo-coordinates of the plot, and species information.</li>
+      <li>The supplier's VSC-conformant software applies the <a>Event-to-Credential Mapping</a> and signs a <code>VscObjectEventCredential</code>, with an extension for geospatial data and the relevant commodity type.</li>
+      <li>The credential includes a reference to the supplier's deforestation-free certification credential (issued by a certification body) as a linked credential.</li>
+      <li>The signed credential is transmitted to the first processor (crusher), who stores it and issues their own ObjectEvent credential for the crushing step, referencing the supplier's credential.</li>
+      <li>The EU importer requests a Verifiable Presentation from the processor containing the full <a>Event Chain</a> from harvest to processed shipment.</li>
+      <li>The importer's system verifies each credential in the chain: DID resolution, signature, revocation status, and presence in the sector <a>Issuer Registry</a>.</li>
+      <li>The importer submits the presentation to the EU Information System for EUDR due diligence statements.</li>
     </ol>
 
     <p><strong>Failure modes:</strong></p>
     <ul>
-      <li>
-        <em>Missing link:</em> The processor's credential does not
-        reference the supplier's credential. The importer's system SHOULD
-        detect the gap in the [=Event Chain=] and flag the presentation
-        as incomplete (see <a href="#broken-custody"></a>).
-      </li>
-      <li>
-        <em>Revoked certification:</em> The certification credential
-        referenced in step 3 has been revoked. The verifier MUST treat
-        the linked certification as invalid; the event credential itself
-        remains valid but the claim of deforestation-free status is
-        unsupported.
-      </li>
-      <li>
-        <em>DID not resolvable:</em> The supplier's DID cannot be
-        resolved. The verifier MUST NOT accept the credential and SHOULD
-        surface a specific error indicating DID resolution failure.
-      </li>
+      <li><em>Missing link:</em> The processor's credential does not reference the supplier's credential. The importer's system SHOULD detect the gap in the <a>Event Chain</a> and flag the presentation as incomplete.</li>
+      <li><em>Revoked certification:</em> The certification credential referenced in step 3 has been revoked. The verifier MUST treat the linked certification as invalid; the event credential itself remains valid but the claim of deforestation-free status is unsupported.</li>
+      <li><em>DID not resolvable:</em> The supplier's DID cannot be resolved. The verifier MUST NOT accept the credential and SHOULD surface a specific error indicating DID resolution failure.</li>
     </ul>
 
-    <p>
-      <strong>Requirements motivated:</strong>
-      <a href="#req-f01">REQ-F01</a>,
-      <a href="#req-f02">REQ-F02</a>,
-      <a href="#req-f03">REQ-F03</a>,
-      <a href="#req-f04">REQ-F04</a>,
-      <a href="#req-f07">REQ-F07</a>,
-      <a href="#req-nf03">REQ-NF03</a>.
-    </p>
+    <p><strong>Requirements motivated:</strong> <a href="#req-f01">REQ-F01</a>, <a href="#req-f02">REQ-F02</a>, <a href="#req-f03">REQ-F03</a>, <a href="#req-f04">REQ-F04</a>, <a href="#req-f07">REQ-F07</a>, <a href="#req-nf03">REQ-NF03</a>.</p>
   </section>
 
-  <!-- UC-02 ─────────────────────────────────────────────── -->
+  <!-- UC-02 -->
   <section id="uc-pharma">
     <h3>UC-02: Pharmaceutical Custody Transfer (DSCSA Compliance)</h3>
 
@@ -1308,92 +1175,33 @@
       <dt>Regulatory driver</dt>
       <dd>US Drug Supply Chain Security Act [[DSCSA]] Section 582 — electronic, interoperable product tracing at the package level by November 2023.</dd>
       <dt>Actors</dt>
-      <dd>
-        Manufacturer (issuer); wholesaler (holder/issuer); dispenser /
-        pharmacy (holder/verifier); US FDA (verifier).
-      </dd>
+      <dd>Manufacturer (issuer); wholesaler (holder/issuer); dispenser / pharmacy (holder/verifier); US FDA (verifier).</dd>
       <dt>Preconditions</dt>
-      <dd>
-        All actors are registered in an FDA-recognized DSCSA authorized
-        trading partner registry that maps GLN identifiers to DIDs.
-      </dd>
+      <dd>All actors are registered in an FDA-recognized DSCSA authorized trading partner registry that maps GLN identifiers to DIDs.</dd>
     </dl>
 
     <p><strong>Nominal flow:</strong></p>
     <ol class="uc-step">
-      <li>
-        The manufacturer applies a serialized SGTIN (GS1 item-level
-        identifier) to each drug package and records an ObjectEvent
-        (bizStep: <code>commissioning</code>) as a signed VSC credential.
-      </li>
-      <li>
-        At shipping, the manufacturer records an ObjectEvent
-        (bizStep: <code>shipping</code>) credential for the pallet SSCC,
-        referencing the commissioned item credentials via AggregationEvent.
-      </li>
-      <li>
-        The wholesaler records an ObjectEvent (bizStep:
-        <code>receiving</code>) and issues their own credential
-        referencing the manufacturer's shipping credential by its
-        credential identifier.
-      </li>
-      <li>
-        The process repeats at each custody transfer (repackaging,
-        onward shipment, final delivery to pharmacy).
-      </li>
-      <li>
-        The pharmacy's dispensing system requests a Verifiable
-        Presentation covering the product's full custody chain before
-        dispensing.
-      </li>
-      <li>
-        The presentation is verified: each credential's signature,
-        issuer DID, revocation status, and authorized trading partner
-        registration are confirmed.
-      </li>
-      <li>
-        In the event of a recall, the manufacturer revokes the relevant
-        event credentials. Verifiers checking revocation status MUST
-        reject these credentials and SHOULD surface a specific recall
-        indicator.
-      </li>
+      <li>The manufacturer applies a serialized SGTIN (GS1 item-level identifier) to each drug package and records an ObjectEvent (bizStep: <code>commissioning</code>) as a signed VSC credential.</li>
+      <li>At shipping, the manufacturer records an ObjectEvent (bizStep: <code>shipping</code>) credential for the pallet SSCC, referencing the commissioned item credentials via AggregationEvent.</li>
+      <li>The wholesaler records an ObjectEvent (bizStep: <code>receiving</code>) and issues their own credential referencing the manufacturer's shipping credential by its credential identifier.</li>
+      <li>The process repeats at each custody transfer (repackaging, onward shipment, final delivery to pharmacy).</li>
+      <li>The pharmacy's dispensing system requests a Verifiable Presentation covering the product's full custody chain before dispensing.</li>
+      <li>The presentation is verified: each credential's signature, issuer DID, revocation status, and authorized trading partner registration are confirmed.</li>
+      <li>In the event of a recall, the manufacturer revokes the relevant event credentials. Verifiers checking revocation status MUST reject these credentials and SHOULD surface a specific recall indicator.</li>
     </ol>
 
     <p><strong>Failure modes:</strong></p>
     <ul>
-      <li>
-        <em>Salami injection attack:</em> An adversary inserts a
-        fabricated custody transfer credential between two legitimate
-        steps. The verifier MUST detect that the fabricated credential's
-        issuer is not in the authorized trading partner registry.
-      </li>
-      <li>
-        <em>Credential replay:</em> A credential valid for one shipment
-        is replayed against a different shipment. Credentials SHOULD
-        carry a transaction-scoped identifier binding them to a specific
-        shipment context (see <a href="#credential-replay"></a>).
-      </li>
-      <li>
-        <em>Revocation propagation delay:</em> The recall is issued but
-        the pharmacy has cached a stale revocation status. Implementations
-        SHOULD define maximum cache lifetimes for revocation status
-        (see <a href="#req-f08">REQ-F08</a>).
-      </li>
+      <li><em>Salami injection attack:</em> An adversary inserts a fabricated custody transfer credential between two legitimate steps. The verifier MUST detect that the fabricated credential's issuer is not in the authorized trading partner registry.</li>
+      <li><em>Credential replay:</em> A credential valid for one shipment is replayed against a different shipment. Credentials SHOULD carry a transaction-scoped identifier binding them to a specific shipment context.</li>
+      <li><em>Revocation propagation delay:</em> The recall is issued but the pharmacy has cached a stale revocation status. Implementations SHOULD define maximum cache lifetimes for revocation status (see <a href="#req-f08">REQ-F08</a>).</li>
     </ul>
 
-    <p>
-      <strong>Requirements motivated:</strong>
-      <a href="#req-f01">REQ-F01</a>,
-      <a href="#req-f02">REQ-F02</a>,
-      <a href="#req-f03">REQ-F03</a>,
-      <a href="#req-f04">REQ-F04</a>,
-      <a href="#req-f05">REQ-F05</a>,
-      <a href="#req-f08">REQ-F08</a>,
-      <a href="#req-nf01">REQ-NF01</a>.
-    </p>
+    <p><strong>Requirements motivated:</strong> <a href="#req-f01">REQ-F01</a>, <a href="#req-f02">REQ-F02</a>, <a href="#req-f03">REQ-F03</a>, <a href="#req-f04">REQ-F04</a>, <a href="#req-f05">REQ-F05</a>, <a href="#req-f08">REQ-F08</a>, <a href="#req-nf01">REQ-NF01</a>.</p>
   </section>
 
-  <!-- UC-03 ─────────────────────────────────────────────── -->
+  <!-- UC-03 -->
   <section id="uc-customs">
     <h3>UC-03: Automated Customs Clearance</h3>
 
@@ -1408,133 +1216,54 @@
 
     <p><strong>Nominal flow:</strong></p>
     <ol class="uc-step">
-      <li>
-        The exporter assembles a Verifiable Presentation containing:
-        an origin credential (country of origin declaration), an
-        inspection credential (phytosanitary or product safety), and
-        transport event credentials covering the journey from factory
-        to port.
-      </li>
-      <li>
-        The presentation uses [=Selective Disclosure=] to reveal only
-        the fields required by customs (e.g., tariff codes, declared
-        value, origin) without exposing commercially sensitive pricing
-        or supplier identity data.
-      </li>
-      <li>
-        The freight forwarder's system submits the presentation to the
-        customs authority's automated clearance API.
-      </li>
-      <li>
-        The customs system verifies each credential against its trusted
-        issuer registry, checks signatures and revocation status, and
-        runs automated rules (e.g., sanctions screening, tariff
-        classification validation).
-      </li>
-      <li>
-        Clearance is granted or a referral for physical inspection is
-        issued, with the verification result recorded.
-      </li>
+      <li>The exporter assembles a Verifiable Presentation containing: an origin credential (country of origin declaration), an inspection credential (phytosanitary or product safety), and transport event credentials covering the journey from factory to port.</li>
+      <li>The presentation uses <a>Selective Disclosure</a> to reveal only the fields required by customs (e.g., tariff codes, declared value, origin) without exposing commercially sensitive pricing or supplier identity data.</li>
+      <li>The freight forwarder's system submits the presentation to the customs authority's automated clearance API.</li>
+      <li>The customs system verifies each credential against its trusted issuer registry, checks signatures and revocation status, and runs automated rules (e.g., sanctions screening, tariff classification validation).</li>
+      <li>Clearance is granted or a referral for physical inspection is issued, with the verification result recorded.</li>
     </ol>
 
     <p><strong>Failure modes:</strong></p>
     <ul>
-      <li>
-        <em>Partial presentation:</em> The presentation is missing the
-        inspection credential. The customs system SHOULD surface a
-        specific missing-credential error rather than a generic
-        verification failure.
-      </li>
-      <li>
-        <em>Selective disclosure proof failure:</em> A malformed
-        [[BBS-2023]] or [[SD-JWT]] proof is submitted. The verifier MUST
-        reject the credential and SHOULD indicate the proof type and
-        failure reason.
-      </li>
+      <li><em>Partial presentation:</em> The presentation is missing the inspection credential. The customs system SHOULD surface a specific missing-credential error rather than a generic verification failure.</li>
+      <li><em>Selective disclosure proof failure:</em> A malformed [[BBS-2023]] or [[SD-JWT]] proof is submitted. The verifier MUST reject the credential and SHOULD indicate the proof type and failure reason.</li>
     </ul>
 
-    <p>
-      <strong>Requirements motivated:</strong>
-      <a href="#req-f05">REQ-F05</a>,
-      <a href="#req-f06">REQ-F06</a>,
-      <a href="#req-f07">REQ-F07</a>,
-      <a href="#req-nf02">REQ-NF02</a>,
-      <a href="#req-nf03">REQ-NF03</a>.
-    </p>
+    <p><strong>Requirements motivated:</strong> <a href="#req-f05">REQ-F05</a>, <a href="#req-f06">REQ-F06</a>, <a href="#req-f07">REQ-F07</a>, <a href="#req-nf02">REQ-NF02</a>, <a href="#req-nf03">REQ-NF03</a>.</p>
   </section>
 
-  <!-- UC-04 ─────────────────────────────────────────────── -->
+  <!-- UC-04 -->
   <section id="uc-battery">
     <h3>UC-04: Battery Passport for EV Supply Chain</h3>
 
     <dl class="uc-meta">
       <dt>Regulatory driver</dt>
-      <dd>EU Battery and Electric Vehicle Regulation [[EU-BEV]], Article 77 — battery passport required for EV batteries ≥ 2 kWh from February 2027.</dd>
+      <dd>EU Battery and Electric Vehicle Regulation [[EU-BEV]], Article 77 — battery passport required for EV batteries from February 2027.</dd>
       <dt>Actors</dt>
-      <dd>
-        Cathode material supplier (issuer); cell manufacturer (holder/issuer);
-        battery pack manufacturer (holder/issuer); vehicle OEM (holder/verifier);
-        EU market surveillance authority (verifier); end consumer (verifier).
-      </dd>
+      <dd>Cathode material supplier (issuer); cell manufacturer (holder/issuer); battery pack manufacturer (holder/issuer); vehicle OEM (holder/verifier); EU market surveillance authority (verifier); end consumer (verifier).</dd>
       <dt>Preconditions</dt>
       <dd>Battery identifier issued using GS1 Digital Link [[GS1-DIGITAL-LINK]] scheme resolving to the battery passport.</dd>
     </dl>
 
     <p><strong>Nominal flow:</strong></p>
     <ol class="uc-step">
-      <li>
-        The cathode material supplier issues ObjectEvent credentials for
-        each batch, including cobalt and lithium provenance data, mine
-        location, and responsible sourcing certification references.
-      </li>
-      <li>
-        The cell manufacturer issues TransformationEvent credentials
-        mapping input material batches (cathode, anode, electrolyte)
-        to output cell identifiers.
-      </li>
-      <li>
-        The battery pack manufacturer assembles cell credentials into
-        AggregationEvent credentials and issues a composite battery
-        passport presentation referencing all upstream event credentials.
-      </li>
-      <li>
-        The vehicle OEM's system verifies the full passport presentation
-        and stores it linked to the Vehicle Identification Number (VIN).
-      </li>
-      <li>
-        A consumer or recycler can scan a GS1 Digital Link QR code on
-        the battery, resolve the battery passport, and verify the
-        event chain.
-      </li>
+      <li>The cathode material supplier issues ObjectEvent credentials for each batch, including cobalt and lithium provenance data, mine location, and responsible sourcing certification references.</li>
+      <li>The cell manufacturer issues TransformationEvent credentials mapping input material batches (cathode, anode, electrolyte) to output cell identifiers.</li>
+      <li>The battery pack manufacturer assembles cell credentials into AggregationEvent credentials and issues a composite battery passport presentation referencing all upstream event credentials.</li>
+      <li>The vehicle OEM's system verifies the full passport presentation and stores it linked to the Vehicle Identification Number (VIN).</li>
+      <li>A consumer or recycler can scan a GS1 Digital Link QR code on the battery, resolve the battery passport, and verify the event chain.</li>
     </ol>
 
     <p><strong>Failure modes:</strong></p>
     <ul>
-      <li>
-        <em>TransformationEvent linking gap:</em> The cell manufacturer
-        fails to reference upstream cathode credentials. The OEM system
-        SHOULD flag the TransformationEvent as having unverified input
-        provenance.
-      </li>
-      <li>
-        <em>Performance at scale:</em> A battery contains thousands of
-        cells; each cell may have multiple upstream event credentials.
-        Verifier performance MUST NOT degrade unacceptably at this scale
-        (see <a href="#req-nf01">REQ-NF01</a>).
-      </li>
+      <li><em>TransformationEvent linking gap:</em> The cell manufacturer fails to reference upstream cathode credentials. The OEM system SHOULD flag the TransformationEvent as having unverified input provenance.</li>
+      <li><em>Performance at scale:</em> A battery contains thousands of cells; each cell may have multiple upstream event credentials. Verifier performance MUST NOT degrade unacceptably at this scale (see <a href="#req-nf01">REQ-NF01</a>).</li>
     </ul>
 
-    <p>
-      <strong>Requirements motivated:</strong>
-      <a href="#req-f01">REQ-F01</a>,
-      <a href="#req-f04">REQ-F04</a>,
-      <a href="#req-f06">REQ-F06</a>,
-      <a href="#req-nf01">REQ-NF01</a>,
-      <a href="#req-nf04">REQ-NF04</a>.
-    </p>
+    <p><strong>Requirements motivated:</strong> <a href="#req-f01">REQ-F01</a>, <a href="#req-f04">REQ-F04</a>, <a href="#req-f06">REQ-F06</a>, <a href="#req-nf01">REQ-NF01</a>, <a href="#req-nf04">REQ-NF04</a>.</p>
   </section>
 
-  <!-- UC-05 ─────────────────────────────────────────────── -->
+  <!-- UC-05 -->
   <section id="uc-recall">
     <h3>UC-05: Product Recall Propagation</h3>
 
@@ -1549,42 +1278,17 @@
 
     <p><strong>Nominal flow:</strong></p>
     <ol class="uc-step">
-      <li>
-        A safety defect is identified. The manufacturer's system
-        identifies all event credentials linked to the affected batch
-        using batch-level identifiers.
-      </li>
-      <li>
-        The manufacturer revokes the ObjectEvent credential for the
-        affected batch via the [=Credential Status=] service.
-        The revocation is cryptographically signed by the manufacturer's DID.
-      </li>
-      <li>
-        Any downstream verifier checking an affected credential against
-        the status service receives a <code>revoked</code> status and
-        MUST reject the credential.
-      </li>
-      <li>
-        Downstream holders receive a recall notification (out-of-band)
-        and can verify the revocation independently by resolving the
-        credential status.
-      </li>
-      <li>
-        The regulator can independently verify the breadth of the recall
-        by querying which credentials issued by the manufacturer have
-        been revoked for the affected lot.
-      </li>
+      <li>A safety defect is identified. The manufacturer's system identifies all event credentials linked to the affected batch using batch-level identifiers.</li>
+      <li>The manufacturer revokes the ObjectEvent credential for the affected batch via the <a>Credential Status</a> service. The revocation is cryptographically signed by the manufacturer's DID.</li>
+      <li>Any downstream verifier checking an affected credential against the status service receives a <code>revoked</code> status and MUST reject the credential.</li>
+      <li>Downstream holders receive a recall notification (out-of-band) and can verify the revocation independently by resolving the credential status.</li>
+      <li>The regulator can independently verify the breadth of the recall by querying which credentials issued by the manufacturer have been revoked for the affected lot.</li>
     </ol>
 
-    <p>
-      <strong>Requirements motivated:</strong>
-      <a href="#req-f03">REQ-F03</a>,
-      <a href="#req-f08">REQ-F08</a>,
-      <a href="#req-nf01">REQ-NF01</a>.
-    </p>
+    <p><strong>Requirements motivated:</strong> <a href="#req-f03">REQ-F03</a>, <a href="#req-f08">REQ-F08</a>, <a href="#req-nf01">REQ-NF01</a>.</p>
   </section>
 
-  <!-- UC-06 ─────────────────────────────────────────────── -->
+  <!-- UC-06 -->
   <section id="uc-audit">
     <h3>UC-06: Regulatory Audit Trail</h3>
 
@@ -1599,43 +1303,18 @@
 
     <p><strong>Nominal flow:</strong></p>
     <ol class="uc-step">
-      <li>
-        A regulator issues a data request to a holder for all event
-        credentials related to a specific product class over a 5-year
-        period.
-      </li>
-      <li>
-        The holder assembles a Verifiable Presentation with selective
-        disclosure applied to protect third-party business data.
-      </li>
-      <li>
-        The regulator's system verifies each credential. For credentials
-        where the issuer DID is no longer resolvable, the system checks
-        a historical DID log maintained by the sector trust framework.
-      </li>
-      <li>
-        The audit result is recorded as a signed audit event credential
-        by the regulator, completing the audit trail.
-      </li>
+      <li>A regulator issues a data request to a holder for all event credentials related to a specific product class over a 5-year period.</li>
+      <li>The holder assembles a Verifiable Presentation with selective disclosure applied to protect third-party business data.</li>
+      <li>The regulator's system verifies each credential. For credentials where the issuer DID is no longer resolvable, the system checks a historical DID log maintained by the sector trust framework.</li>
+      <li>The audit result is recorded as a signed audit event credential by the regulator, completing the audit trail.</li>
     </ol>
 
     <p><strong>Failure modes:</strong></p>
     <ul>
-      <li>
-        <em>Historical DID resolution:</em> If a DID was deactivated,
-        verifiers MUST have a mechanism to obtain the historical public
-        key material needed to verify credentials signed before
-        deactivation (see <a href="#req-nf05">REQ-NF05</a>).
-      </li>
+      <li><em>Historical DID resolution:</em> If a DID was deactivated, verifiers MUST have a mechanism to obtain the historical public key material needed to verify credentials signed before deactivation (see <a href="#req-nf05">REQ-NF05</a>).</li>
     </ul>
 
-    <p>
-      <strong>Requirements motivated:</strong>
-      <a href="#req-f05">REQ-F05</a>,
-      <a href="#req-f07">REQ-F07</a>,
-      <a href="#req-nf02">REQ-NF02</a>,
-      <a href="#req-nf05">REQ-NF05</a>.
-    </p>
+    <p><strong>Requirements motivated:</strong> <a href="#req-f05">REQ-F05</a>, <a href="#req-f07">REQ-F07</a>, <a href="#req-nf02">REQ-NF02</a>, <a href="#req-nf05">REQ-NF05</a>.</p>
   </section>
 </section>
 
@@ -1647,8 +1326,8 @@
 
   <p>
     The following requirements are derived from the use cases in
-    <a href="#use-cases"></a> and from the regulatory and standards
-    landscape described in <a href="#introduction"></a>. Each requirement
+    <a href="#use-cases">Use Cases</a> and from the regulatory and standards
+    landscape described in <a href="#introduction">Introduction</a>. Each requirement
     is identified by a stable identifier, states the conformance level,
     provides a rationale grounded in published sources, and includes a
     testability statement to guide conformance test development.
@@ -1667,125 +1346,29 @@
 
     <table class="req-table" summary="Summary of all VSC requirements">
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Level</th>
-          <th>Class</th>
-          <th>Use Cases</th>
-        </tr>
+        <tr><th>ID</th><th>Title</th><th>Level</th><th>Class</th><th>Use Cases</th></tr>
       </thead>
       <tbody>
-        <tr>
-          <td><a href="#req-f01">REQ-F01</a></td>
-          <td>Event-to-Credential Mapping</td>
-          <td class="level-must">MUST</td>
-          <td>Issuer</td>
-          <td>UC-01–04</td>
-        </tr>
-        <tr>
-          <td><a href="#req-f02">REQ-F02</a></td>
-          <td>Event Semantics Preservation</td>
-          <td class="level-must">MUST</td>
-          <td>Issuer</td>
-          <td>UC-01, UC-02</td>
-        </tr>
-        <tr>
-          <td><a href="#req-f03">REQ-F03</a></td>
-          <td>Issuer DID Binding</td>
-          <td class="level-must">MUST</td>
-          <td>Issuer</td>
-          <td>UC-01–05</td>
-        </tr>
-        <tr>
-          <td><a href="#req-f04">REQ-F04</a></td>
-          <td>Event Linking</td>
-          <td class="level-should">SHOULD</td>
-          <td>Issuer</td>
-          <td>UC-01–04</td>
-        </tr>
-        <tr>
-          <td><a href="#req-f05">REQ-F05</a></td>
-          <td>Selective Disclosure</td>
-          <td class="level-must">MUST</td>
-          <td>Issuer, Verifier</td>
-          <td>UC-02, UC-03, UC-06</td>
-        </tr>
-        <tr>
-          <td><a href="#req-f06">REQ-F06</a></td>
-          <td>Batch and Lot Traceability</td>
-          <td class="level-should">SHOULD</td>
-          <td>Issuer</td>
-          <td>UC-03, UC-04</td>
-        </tr>
-        <tr>
-          <td><a href="#req-f07">REQ-F07</a></td>
-          <td>Issuer Authority Verification</td>
-          <td class="level-must">MUST</td>
-          <td>Verifier</td>
-          <td>UC-01, UC-03, UC-06</td>
-        </tr>
-        <tr>
-          <td><a href="#req-f08">REQ-F08</a></td>
-          <td>Credential Status and Revocation</td>
-          <td class="level-must">MUST</td>
-          <td>Issuer, Verifier</td>
-          <td>UC-02, UC-05</td>
-        </tr>
-        <tr>
-          <td><a href="#req-f09">REQ-F09</a></td>
-          <td>Chain Integrity Detection</td>
-          <td class="level-should">SHOULD</td>
-          <td>Verifier</td>
-          <td>UC-01, UC-02, UC-04</td>
-        </tr>
-        <tr>
-          <td><a href="#req-f10">REQ-F10</a></td>
-          <td>Trust Framework Reference</td>
-          <td class="level-should">SHOULD</td>
-          <td>Issuer, Verifier</td>
-          <td>UC-01–03</td>
-        </tr>
-        <tr>
-          <td><a href="#req-nf01">REQ-NF01</a></td>
-          <td>Scalability</td>
-          <td class="level-must">MUST</td>
-          <td>Issuer, Verifier</td>
-          <td>UC-02, UC-04, UC-05</td>
-        </tr>
-        <tr>
-          <td><a href="#req-nf02">REQ-NF02</a></td>
-          <td>Privacy Preservation</td>
-          <td class="level-should">SHOULD</td>
-          <td>Issuer, Verifier</td>
-          <td>UC-03, UC-06</td>
-        </tr>
-        <tr>
-          <td><a href="#req-nf03">REQ-NF03</a></td>
-          <td>Interoperability</td>
-          <td class="level-must">MUST</td>
-          <td>Issuer, Verifier</td>
-          <td>UC-01, UC-03</td>
-        </tr>
-        <tr>
-          <td><a href="#req-nf04">REQ-NF04</a></td>
-          <td>Extensibility</td>
-          <td class="level-should">SHOULD</td>
-          <td>Issuer</td>
-          <td>UC-04</td>
-        </tr>
-        <tr>
-          <td><a href="#req-nf05">REQ-NF05</a></td>
-          <td>Long-term Verifiability</td>
-          <td class="level-should">SHOULD</td>
-          <td>Verifier</td>
-          <td>UC-06</td>
-        </tr>
+        <tr><td><a href="#req-f01">REQ-F01</a></td><td>Event-to-Credential Mapping</td><td class="level-must">MUST</td><td>Issuer</td><td>UC-01–04</td></tr>
+        <tr><td><a href="#req-f02">REQ-F02</a></td><td>Event Semantics Preservation</td><td class="level-must">MUST</td><td>Issuer</td><td>UC-01, UC-02</td></tr>
+        <tr><td><a href="#req-f03">REQ-F03</a></td><td>Issuer DID Binding</td><td class="level-must">MUST</td><td>Issuer</td><td>UC-01–05</td></tr>
+        <tr><td><a href="#req-f04">REQ-F04</a></td><td>Event Linking</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-01–04</td></tr>
+        <tr><td><a href="#req-f05">REQ-F05</a></td><td>Selective Disclosure</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-02, UC-03, UC-06</td></tr>
+        <tr><td><a href="#req-f06">REQ-F06</a></td><td>Batch and Lot Traceability</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-03, UC-04</td></tr>
+        <tr><td><a href="#req-f07">REQ-F07</a></td><td>Issuer Authority Verification</td><td class="level-must">MUST</td><td>Verifier</td><td>UC-01, UC-03, UC-06</td></tr>
+        <tr><td><a href="#req-f08">REQ-F08</a></td><td>Credential Status and Revocation</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-02, UC-05</td></tr>
+        <tr><td><a href="#req-f09">REQ-F09</a></td><td>Chain Integrity Detection</td><td class="level-should">SHOULD</td><td>Verifier</td><td>UC-01, UC-02, UC-04</td></tr>
+        <tr><td><a href="#req-f10">REQ-F10</a></td><td>Trust Framework Reference</td><td class="level-should">SHOULD</td><td>Issuer, Verifier</td><td>UC-01–03</td></tr>
+        <tr><td><a href="#req-nf01">REQ-NF01</a></td><td>Scalability</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-02, UC-04, UC-05</td></tr>
+        <tr><td><a href="#req-nf02">REQ-NF02</a></td><td>Privacy Preservation</td><td class="level-should">SHOULD</td><td>Issuer, Verifier</td><td>UC-03, UC-06</td></tr>
+        <tr><td><a href="#req-nf03">REQ-NF03</a></td><td>Interoperability</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-01, UC-03</td></tr>
+        <tr><td><a href="#req-nf04">REQ-NF04</a></td><td>Extensibility</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-04</td></tr>
+        <tr><td><a href="#req-nf05">REQ-NF05</a></td><td>Long-term Verifiability</td><td class="level-should">SHOULD</td><td>Verifier</td><td>UC-06</td></tr>
       </tbody>
     </table>
   </section>
 
-  <!-- Functional Requirements ──────────────────────────── -->
+  <!-- Functional Requirements -->
   <section id="functional-requirements">
     <h3>Functional Requirements</h3>
 
@@ -1793,12 +1376,12 @@
       <span class="req-id">REQ-F01</span>
       <span class="req-title"> — Event-to-Credential Mapping</span>
       <p class="req-body">
-        A [=VSC Issuer=] <em class="rfc2119">MUST</em> support producing
+        A <a>VSC Issuer</a> <em class="rfc2119">MUST</em> support producing
         a [[VC-DATA-MODEL]]-conformant Verifiable Credential for each of
         the five [[EPCIS]] v2.0 event types: ObjectEvent,
         AggregationEvent, TransformationEvent, TransactionEvent, and
         AssociationEvent. The mapping applied <em class="rfc2119">MUST</em>
-        conform to the normative [=Event-to-Credential Mapping=] defined
+        conform to the normative <a>Event-to-Credential Mapping</a> defined
         in the VSC Core Data Model specification (once published).
       </p>
       <p class="req-rationale">
@@ -1817,16 +1400,14 @@
         (b) preserves all EPCIS fields specified in REQ-F02; and
         (c) carries a valid [[VC-DATA-INTEGRITY]] proof.
       </p>
-      <p class="req-refs">
-        [[EPCIS]] Section 7; [[GS1-CBV]]; [[VC-DATA-MODEL]] Section 4.
-      </p>
+      <p class="req-refs">[[EPCIS]] Section 7; [[GS1-CBV]]; [[VC-DATA-MODEL]] Section 4.</p>
     </div>
 
     <div class="req-block" id="req-f02">
       <span class="req-id">REQ-F02</span>
       <span class="req-title"> — Event Semantics Preservation</span>
       <p class="req-body">
-        The [=Event-to-Credential Mapping=] <em class="rfc2119">MUST</em>
+        The <a>Event-to-Credential Mapping</a> <em class="rfc2119">MUST</em>
         preserve, without loss or transformation, the following fields from
         the source [[EPCIS]] event:
         <code>eventTime</code>, <code>eventTimeZoneOffset</code>,
@@ -1856,21 +1437,19 @@
         to the source EPCIS event for each listed field. Automated
         round-trip tests MUST be defined in the conformance test suite.
       </p>
-      <p class="req-refs">
-        [[EPCIS]] Sections 7–9; [[DSCSA]]; [[EUDR]] Article 9; [[ISO28000]].
-      </p>
+      <p class="req-refs">[[EPCIS]] Sections 7–9; [[DSCSA]]; [[EUDR]] Article 9; [[ISO28000]].</p>
     </div>
 
     <div class="req-block" id="req-f03">
       <span class="req-id">REQ-F03</span>
       <span class="req-title"> — Issuer DID Binding</span>
       <p class="req-body">
-        Every Verifiable Credential representing a [=Supply Chain Event=]
+        Every Verifiable Credential representing a <a>Supply Chain Event</a>
         <em class="rfc2119">MUST</em> include an <code>issuer</code>
         value using [[DID-CORE]] syntax. The DID <em class="rfc2119">MUST</em>
         be resolvable to a DID Document containing the public key material
         used to verify the credential's [[VC-DATA-INTEGRITY]] proof.
-        A [=VSC Issuer=] <em class="rfc2119">MUST NOT</em> use a bare
+        A <a>VSC Issuer</a> <em class="rfc2119">MUST NOT</em> use a bare
         HTTP URL or an opaque identifier as the issuer value.
       </p>
       <p class="req-rationale">
@@ -1889,22 +1468,19 @@
         a <code>verificationMethod</code> entry whose public key
         successfully verifies the credential's proof.
       </p>
-      <p class="req-refs">
-        [[DID-CORE]] Sections 3, 7; [[VC-DATA-MODEL]] Section 4.5;
-        [[VC-DATA-INTEGRITY]].
-      </p>
+      <p class="req-refs">[[DID-CORE]] Sections 3, 7; [[VC-DATA-MODEL]] Section 4.5; [[VC-DATA-INTEGRITY]].</p>
     </div>
 
     <div class="req-block" id="req-f04">
       <span class="req-id">REQ-F04</span>
       <span class="req-title"> — Event Linking</span>
       <p class="req-body">
-        A [=VSC Issuer=] <em class="rfc2119">SHOULD</em> include, in
+        A <a>VSC Issuer</a> <em class="rfc2119">SHOULD</em> include, in
         event credentials that represent a step in a multi-party custody
         chain, a reference to the credential identifier(s) of immediately
         preceding events in the chain. References <em class="rfc2119">MUST</em>
         use the <code>id</code> property of the referenced credential,
-        expressed as a URI, in the credential subject. A [=VSC Verifier=]
+        expressed as a URI, in the credential subject. A <a>VSC Verifier</a>
         SHOULD follow event links to reconstruct the chain and verify each
         linked credential.
       </p>
@@ -1924,20 +1500,17 @@
         MUST signal non-verifiability if a referenced credential cannot
         be retrieved.
       </p>
-      <p class="req-refs">
-        [[DSCSA]]; [[EUDR]] Article 4; [[EU-BEV]] Annex XIII;
-        [[JSON-LD]] Section 3.
-      </p>
+      <p class="req-refs">[[DSCSA]]; [[EUDR]] Article 4; [[EU-BEV]] Annex XIII; [[JSON-LD]] Section 3.</p>
     </div>
 
     <div class="req-block" id="req-f05">
       <span class="req-id">REQ-F05</span>
       <span class="req-title"> — Selective Disclosure</span>
       <p class="req-body">
-        A [=VSC Issuer=] <em class="rfc2119">MUST</em> produce event
-        credentials using a proof format that supports [=Selective
-        Disclosure=]. Supported proof formats include [[BBS-2023]] and
-        [[SD-JWT]]. A [=VSC Verifier=] <em class="rfc2119">MUST</em>
+        A <a>VSC Issuer</a> <em class="rfc2119">MUST</em> produce event
+        credentials using a proof format that supports <a>Selective
+        Disclosure</a>. Supported proof formats include [[BBS-2023]] and
+        [[SD-JWT]]. A <a>VSC Verifier</a> <em class="rfc2119">MUST</em>
         be capable of verifying selective disclosure presentations
         produced by at least one of these proof formats.
         Selective disclosure presentations <em class="rfc2119">MUST NOT</em>
@@ -1962,17 +1535,14 @@
         fields from the proof material; (d) a tampered proof MUST be
         rejected.
       </p>
-      <p class="req-refs">
-        [[BBS-2023]]; [[SD-JWT]]; [[GDPR]] Article 5(1)(c);
-        [[VC-DATA-MODEL]] Section 5.9; [[NIST-SP800-53]] SI-12.
-      </p>
+      <p class="req-refs">[[BBS-2023]]; [[SD-JWT]]; [[GDPR]] Article 5(1)(c); [[VC-DATA-MODEL]] Section 5.9; [[NIST-SP800-53]] SI-12.</p>
     </div>
 
     <div class="req-block" id="req-f06">
       <span class="req-id">REQ-F06</span>
       <span class="req-title"> — Batch and Lot Traceability</span>
       <p class="req-body">
-        A [=VSC Issuer=] <em class="rfc2119">SHOULD</em> support
+        A <a>VSC Issuer</a> <em class="rfc2119">SHOULD</em> support
         batch-level and lot-level identifiers (e.g., LGTIN as defined in
         [[GS1-CBV]]) in event credentials, in addition to
         serialized-item identifiers (SGTIN, SSCC). Implementations
@@ -1993,21 +1563,18 @@
         LGTIN quantity element. A conformant verifier MUST parse and
         validate this element without error.
       </p>
-      <p class="req-refs">
-        [[EPCIS]] Section 7.3.3; [[GS1-CBV]] Section 7;
-        [[EUDR]] Article 9(1)(d); [[EU-BEV]] Annex XIII.
-      </p>
+      <p class="req-refs">[[EPCIS]] Section 7.3.3; [[GS1-CBV]] Section 7; [[EUDR]] Article 9(1)(d); [[EU-BEV]] Annex XIII.</p>
     </div>
 
     <div class="req-block" id="req-f07">
       <span class="req-id">REQ-F07</span>
       <span class="req-title"> — Issuer Authority Verification</span>
       <p class="req-body">
-        A [=VSC Verifier=] <em class="rfc2119">MUST</em> verify that the
+        A <a>VSC Verifier</a> <em class="rfc2119">MUST</em> verify that the
         credential issuer's DID is authorized to assert events for the
-        claimed business context when an [=Issuer Registry=] is
+        claimed business context when an <a>Issuer Registry</a> is
         referenced in the credential or specified by the verifier's
-        [=Trust Framework=]. A verifier <em class="rfc2119">MUST NOT</em>
+        <a>Trust Framework</a>. A verifier <em class="rfc2119">MUST NOT</em>
         accept a credential whose issuer DID does not appear in a
         required issuer registry.
         Where no issuer registry is required by the verification context,
@@ -2032,10 +1599,7 @@
         whose issuer IS in the registry MUST be accepted (assuming
         valid signature and status).
       </p>
-      <p class="req-refs">
-        [[NIST-SP800-53]] IA-5; [[RFC6749]] Section 1.1;
-        [[ISO28000]] Section 6.5; [[DSCSA]] Section 582(c).
-      </p>
+      <p class="req-refs">[[NIST-SP800-53]] IA-5; [[RFC6749]] Section 1.1; [[ISO28000]] Section 6.5; [[DSCSA]] Section 582(c).</p>
     </div>
 
     <div class="req-block" id="req-f08">
@@ -2045,7 +1609,7 @@
         Every VSC event credential <em class="rfc2119">MUST</em> include
         a <code>credentialStatus</code> property referencing a
         machine-readable status endpoint conformant with
-        [[VC-DATA-MODEL]] Section 7. A [=VSC Verifier=]
+        [[VC-DATA-MODEL]] Section 7. A <a>VSC Verifier</a>
         <em class="rfc2119">MUST</em> check the status of each credential
         presented before accepting it. Cached revocation status
         information <em class="rfc2119">SHOULD NOT</em> be relied upon
@@ -2070,18 +1634,15 @@
         (c) A verifier MUST distinguish "revoked" from "status service
         unreachable" and SHOULD treat the latter as a verification failure.
       </p>
-      <p class="req-refs">
-        [[VC-DATA-MODEL]] Section 7; [[DSCSA]] Section 582(h);
-        [[NIST-SP800-53]] SI-7.
-      </p>
+      <p class="req-refs">[[VC-DATA-MODEL]] Section 7; [[DSCSA]] Section 582(h); [[NIST-SP800-53]] SI-7.</p>
     </div>
 
     <div class="req-block" id="req-f09">
       <span class="req-id">REQ-F09</span>
       <span class="req-title"> — Event Chain Integrity Detection</span>
       <p class="req-body">
-        A [=VSC Verifier=] <em class="rfc2119">SHOULD</em> detect gaps
-        in an [=Event Chain=] — specifically, cases where a credential
+        A <a>VSC Verifier</a> <em class="rfc2119">SHOULD</em> detect gaps
+        in an <a>Event Chain</a> — specifically, cases where a credential
         references a predecessor credential that cannot be retrieved,
         verified, or that has been revoked — and <em class="rfc2119">MUST</em>
         signal non-verifiability of the chain in such cases, with a
@@ -2105,10 +1666,7 @@
         B has been revoked MUST return a "revoked predecessor" error.
         A complete valid chain MUST return success.
       </p>
-      <p class="req-refs">
-        [[NIST-SP800-53]] AU-12; [[DSCSA]] Section 582(j);
-        [[ISO28000]] Section 6.4.
-      </p>
+      <p class="req-refs">[[NIST-SP800-53]] AU-12; [[DSCSA]] Section 582(j); [[ISO28000]] Section 6.4.</p>
     </div>
 
     <div class="req-block" id="req-f10">
@@ -2116,11 +1674,11 @@
       <span class="req-title"> — Trust Framework Reference</span>
       <p class="req-body">
         A VSC event credential <em class="rfc2119">SHOULD</em> include
-        a machine-readable reference to the [=Trust Framework=] under
+        a machine-readable reference to the <a>Trust Framework</a> under
         which it was issued, expressed as a URI in the credential's
-        terms-of-use or evidence property. A [=VSC Verifier=]
+        terms-of-use or evidence property. A <a>VSC Verifier</a>
         <em class="rfc2119">SHOULD</em> use this reference to determine
-        which [=Issuer Registry=] to consult for authority verification
+        which <a>Issuer Registry</a> to consult for authority verification
         (REQ-F07).
       </p>
       <p class="req-rationale">
@@ -2139,14 +1697,11 @@
         framework URI MUST be accepted with a warning (not rejected) by
         a verifier that does not require one.
       </p>
-      <p class="req-refs">
-        [[VC-DATA-MODEL]] Section 5.12 (terms of use);
-        [[PEPPOL]]; [[TRACEABILITY-INTEROP]] Section 4.
-      </p>
+      <p class="req-refs">[[VC-DATA-MODEL]] Section 5.12 (terms of use); [[PEPPOL]]; [[TRACEABILITY-INTEROP]] Section 4.</p>
     </div>
   </section>
 
-  <!-- Non-Functional Requirements ────────────────────────── -->
+  <!-- Non-Functional Requirements -->
   <section id="non-functional-requirements">
     <h3>Non-Functional Requirements</h3>
 
@@ -2154,7 +1709,7 @@
       <span class="req-id">REQ-NF01</span>
       <span class="req-title"> — Scalability</span>
       <p class="req-body">
-        A [=VSC-conformant implementation=] <em class="rfc2119">MUST</em>
+        A <a>VSC-conformant implementation</a> <em class="rfc2119">MUST</em>
         be capable of issuing and verifying event credentials at a rate
         commensurate with enterprise supply chain event volumes. As a
         benchmark, conformant implementations SHOULD be capable of
@@ -2179,9 +1734,7 @@
         of 10 credentials within 2 seconds, recording pass/fail and
         actual throughput figures.
       </p>
-      <p class="req-refs">
-        [[EPCIS]] Appendix D (performance guidance); [[ISO28000]].
-      </p>
+      <p class="req-refs">[[EPCIS]] Appendix D (performance guidance); [[ISO28000]].</p>
     </div>
 
     <div class="req-block" id="req-nf02">
@@ -2212,10 +1765,7 @@
         verifier MUST NOT require a holder to present more fields than
         the minimum needed for the stated verification purpose.
       </p>
-      <p class="req-refs">
-        [[GDPR]] Articles 5, 25; [[NIST-SP800-53]] AR-7;
-        [[VC-DATA-MODEL]] Section 10 (privacy considerations).
-      </p>
+      <p class="req-refs">[[GDPR]] Articles 5, 25; [[NIST-SP800-53]] AR-7; [[VC-DATA-MODEL]] Section 10 (privacy considerations).</p>
     </div>
 
     <div class="req-block" id="req-nf03">
@@ -2247,10 +1797,7 @@
         by implementation A MUST be verified successfully by
         implementation B without any bilateral pre-configuration.
       </p>
-      <p class="req-refs">
-        [[TRACEABILITY-INTEROP]]; [[VC-DATA-MODEL]] Section 1.3;
-        [[JSON-LD]] Section 5.
-      </p>
+      <p class="req-refs">[[TRACEABILITY-INTEROP]]; [[VC-DATA-MODEL]] Section 1.3; [[JSON-LD]] Section 5.</p>
     </div>
 
     <div class="req-block" id="req-nf04">
@@ -2278,9 +1825,7 @@
         verifier that does not have the extension context loaded.
         Verifier MUST NOT fail on unknown extension terms.
       </p>
-      <p class="req-refs">
-        [[JSON-LD]] Sections 5, 9; [[TRACEABILITY-V1]]; [[UNTP]].
-      </p>
+      <p class="req-refs">[[JSON-LD]] Sections 5, 9; [[TRACEABILITY-V1]]; [[UNTP]].</p>
     </div>
 
     <div class="req-block" id="req-nf05">
@@ -2309,10 +1854,7 @@
         using the pre-rotation key retrieved from the DID Document
         history or trust framework archive.
       </p>
-      <p class="req-refs">
-        [[DID-CORE]] Section 7.2 (DID Document history);
-        [[NIST-SP800-53]] SI-12; [[DSCSA]] Section 582(n).
-      </p>
+      <p class="req-refs">[[DID-CORE]] Section 7.2 (DID Document history); [[NIST-SP800-53]] SI-12; [[DSCSA]] Section 582(n).</p>
     </div>
   </section>
 </section>
@@ -2341,59 +1883,46 @@
 
     <table class="threat-table" summary="VSC STRIDE threat model">
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>STRIDE Category</th>
-          <th>Threat</th>
-          <th>Severity</th>
-          <th>Mitigation</th>
-          <th>Req</th>
-        </tr>
+        <tr><th>ID</th><th>STRIDE Category</th><th>Threat</th><th>Severity</th><th>Mitigation</th><th>Req</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td>T-01</td>
-          <td>Spoofing</td>
+          <td>T-01</td><td>Spoofing</td>
           <td>Adversary creates a fabricated event credential using a DID they control, not authorized for the business context.</td>
           <td class="severity-high">High</td>
           <td>Issuer authority verification against an issuer registry (REQ-F07). Trust framework reference in credential (REQ-F10).</td>
           <td>REQ-F07, REQ-F10</td>
         </tr>
         <tr>
-          <td>T-02</td>
-          <td>Tampering</td>
+          <td>T-02</td><td>Tampering</td>
           <td>Adversary modifies event data (e.g., alters origin coordinates or timestamps) after credential issuance.</td>
           <td class="severity-high">High</td>
           <td>Cryptographic proof over all credential fields (REQ-F03). Selective disclosure proofs protect unrevealed fields (REQ-F05).</td>
           <td>REQ-F03, REQ-F05</td>
         </tr>
         <tr>
-          <td>T-03</td>
-          <td>Repudiation</td>
+          <td>T-03</td><td>Repudiation</td>
           <td>Issuer denies having issued a specific event credential.</td>
           <td class="severity-medium">Medium</td>
           <td>Non-repudiation is provided by the issuer's DID-bound cryptographic signature. Verifiers SHOULD log verification results.</td>
           <td>REQ-F03</td>
         </tr>
         <tr>
-          <td>T-04</td>
-          <td>Information Disclosure</td>
+          <td>T-04</td><td>Information Disclosure</td>
           <td>Verifier extracts commercially sensitive supply chain data from a credential beyond what was intended for disclosure.</td>
           <td class="severity-medium">Medium</td>
           <td>Selective disclosure (REQ-F05) ensures unrevealed fields cannot be recovered from proof material. Pairwise DIDs (REQ-NF02) limit correlation.</td>
           <td>REQ-F05, REQ-NF02</td>
         </tr>
         <tr>
-          <td>T-05</td>
-          <td>Denial of Service</td>
+          <td>T-05</td><td>Denial of Service</td>
           <td>Adversary floods the credential status service or DID resolution endpoint, preventing legitimate verification.</td>
           <td class="severity-medium">Medium</td>
           <td>Status service SHOULD implement rate limiting and geographic redundancy. Verifiers SHOULD implement caching per REQ-F08 cache lifetime limits.</td>
           <td>REQ-F08</td>
         </tr>
         <tr>
-          <td>T-06</td>
-          <td>Elevation of Privilege</td>
+          <td>T-06</td><td>Elevation of Privilege</td>
           <td>Adversary registers a DID in an issuer registry without meeting the registry's eligibility requirements.</td>
           <td class="severity-high">High</td>
           <td>Issuer registry governance is out of scope for VSC but trust frameworks MUST define eligibility criteria. Credential SHOULD reference the registry (REQ-F10).</td>
@@ -2406,12 +1935,12 @@
   <section id="fraudulent-injection">
     <h3>Fraudulent Event Injection (T-01)</h3>
     <p>
-      A malicious actor may attempt to inject fabricated [=Supply Chain
-      Event=]s by creating validly signed credentials from an authorized
+      A malicious actor may attempt to inject fabricated <a>Supply Chain
+      Events</a> by creating validly signed credentials from an authorized
       DID for events that never occurred, or from an unauthorized DID.
       VSC implementations MUST verify issuer identity and authority as
       specified in REQ-F03 and REQ-F07. Verification SHOULD include
-      checking the issuer's DID against the [=Issuer Registry=]
+      checking the issuer's DID against the <a>Issuer Registry</a>
       referenced in the credential or the verifier's trust framework
       configuration.
     </p>
@@ -2437,32 +1966,16 @@
       context-binding mechanisms to mitigate replay:
     </p>
     <ul>
-      <li>
-        <strong>Presentation challenge:</strong> Verifiers SHOULD
-        provide a cryptographic challenge nonce that the holder must
-        include in the Verifiable Presentation's proof, binding the
-        presentation to the specific verification session. This is
-        supported by [[VC-DATA-MODEL]] Section 6.3.
-      </li>
-      <li>
-        <strong>Audience binding:</strong> Credentials SHOULD include
-        an <code>audience</code> or equivalent field identifying the
-        intended verifier DID, preventing use of the credential
-        by a different verifier.
-      </li>
-      <li>
-        <strong>Temporal constraints:</strong> Credentials MUST include
-        <code>validFrom</code> and SHOULD include <code>validUntil</code>
-        values. Verifiers MUST reject credentials outside their validity
-        period.
-      </li>
+      <li><strong>Presentation challenge:</strong> Verifiers SHOULD provide a cryptographic challenge nonce that the holder must include in the Verifiable Presentation's proof, binding the presentation to the specific verification session. This is supported by [[VC-DATA-MODEL]] Section 6.3.</li>
+      <li><strong>Audience binding:</strong> Credentials SHOULD include an <code>audience</code> or equivalent field identifying the intended verifier DID, preventing use of the credential by a different verifier.</li>
+      <li><strong>Temporal constraints:</strong> Credentials MUST include <code>validFrom</code> and SHOULD include <code>validUntil</code> values. Verifiers MUST reject credentials outside their validity period.</li>
     </ul>
   </section>
 
   <section id="broken-custody">
     <h3>Broken Custody Chains (T-02)</h3>
     <p>
-      A verifier may receive an [=Event Chain=] from which one or more
+      A verifier may receive an <a>Event Chain</a> from which one or more
       credentials have been omitted — either accidentally (data loss) or
       deliberately (to conceal an unauthorized custody transfer).
       VSC-conformant verifiers MUST detect gaps in event chains and
@@ -2516,18 +2029,9 @@
       by a verification context:
     </p>
     <ul>
-      <li>
-        Violates [[GDPR]] Article 5(1)(c) data minimization principle
-        for EU-based participants;
-      </li>
-      <li>
-        May constitute trade secret misappropriation under applicable
-        national law; and
-      </li>
-      <li>
-        Undermines commercial trust between supply chain participants,
-        reducing adoption of VSC.
-      </li>
+      <li>Violates [[GDPR]] Article 5(1)(c) data minimization principle for EU-based participants;</li>
+      <li>May constitute trade secret misappropriation under applicable national law; and</li>
+      <li>Undermines commercial trust between supply chain participants, reducing adoption of VSC.</li>
     </ul>
     <p>
       VSC implementations MUST support selective disclosure (REQ-F05)
@@ -2539,7 +2043,7 @@
   <section id="privacy-linkability">
     <h3>Credential Linkability</h3>
     <p>
-      If all credentials issued by a given [=Supply Chain Actor=] use
+      If all credentials issued by a given <a>Supply Chain Actor</a> use
       the same long-lived DID, a verifier can correlate all events
       asserted by that actor across time and contexts. This enables
       surveillance of supply chain participants' business activity beyond
@@ -2579,20 +2083,9 @@
     SHOULD conform to WCAG 2.1 Level AA guidelines. In particular:
   </p>
   <ul>
-    <li>
-      Verification results MUST be communicated in a way that is
-      accessible to users of assistive technologies (screen readers,
-      refreshable Braille displays).
-    </li>
-    <li>
-      Error messages for verification failures (invalid signature,
-      revoked credential, broken chain) MUST be expressed in plain
-      language, not only as machine-readable codes.
-    </li>
-    <li>
-      Credential data displayed to human reviewers MUST use sufficient
-      color contrast and not rely solely on color to convey status.
-    </li>
+    <li>Verification results MUST be communicated in a way that is accessible to users of assistive technologies (screen readers, refreshable Braille displays).</li>
+    <li>Error messages for verification failures (invalid signature, revoked credential, broken chain) MUST be expressed in plain language, not only as machine-readable codes.</li>
+    <li>Credential data displayed to human reviewers MUST use sufficient color contrast and not rely solely on color to convey status.</li>
   </ul>
 </section>
 
@@ -2607,27 +2100,11 @@
     handle data from multiple locales and character sets.
   </p>
   <ul>
-    <li>
-      All string values in VSC credentials MUST be encoded in UTF-8.
-    </li>
-    <li>
-      Date and time values MUST use ISO 8601 format as required by
-      [[EPCIS]] v2.0, with explicit timezone offsets.
-    </li>
-    <li>
-      Implementations MUST NOT assume any locale for parsing or
-      displaying numeric quantities or date values.
-    </li>
-    <li>
-      Human-readable labels in credential schemas (e.g., business step
-      descriptions) SHOULD use [[JSON-LD]] language-tagged literals
-      where multiple language variants are required.
-    </li>
-    <li>
-      GS1 identifiers (EPC, GTIN, GLN, SSCC) MUST be represented using
-      GS1 URI syntax as specified in [[GS1-DIGITAL-LINK]], which is
-      locale-independent.
-    </li>
+    <li>All string values in VSC credentials MUST be encoded in UTF-8.</li>
+    <li>Date and time values MUST use ISO 8601 format as required by [[EPCIS]] v2.0, with explicit timezone offsets.</li>
+    <li>Implementations MUST NOT assume any locale for parsing or displaying numeric quantities or date values.</li>
+    <li>Human-readable labels in credential schemas (e.g., business step descriptions) SHOULD use [[JSON-LD]] language-tagged literals where multiple language variants are required.</li>
+    <li>GS1 identifiers (EPC, GTIN, GLN, SSCC) MUST be represented using GS1 URI syntax as specified in [[GS1-DIGITAL-LINK]], which is locale-independent.</li>
   </ul>
 </section>
 
@@ -2644,42 +2121,12 @@
   </p>
 
   <ol>
-    <li>
-      <strong>VSC Core Data Model</strong> — Normative JSON-LD context
-      and credential schemas for each [[EPCIS]] event type, including
-      required and optional fields, JSON-LD context URI, and extensibility
-      patterns. This is the immediate follow-on deliverable to this
-      document.
-    </li>
-    <li>
-      <strong>EPCIS–VC Mapping Specification</strong> — A detailed,
-      testable normative mapping from [[EPCIS]] v2.0 event structures
-      to VSC credential schemas, including handling of EPCIS 1.2
-      backward compatibility.
-    </li>
-    <li>
-      <strong>VSC Interoperability Test Suite</strong> — A machine-executable
-      conformance test suite covering all MUST-level requirements in this
-      document, with test vectors for each event type and failure mode
-      scenario.
-    </li>
-    <li>
-      <strong>VSC Trust Framework Guidance</strong> — Non-normative
-      guidance on establishing [=Trust Framework=]s for specific sectors
-      (pharmaceutical, food and agriculture, automotive), including
-      [=Issuer Registry=] design patterns and key management requirements.
-    </li>
-    <li>
-      <strong>Credential Exchange Profile</strong> — A normative profile
-      of [[TRACEABILITY-INTEROP]] adapted for VSC event credentials,
-      including endpoint definitions, error codes, and authentication
-      requirements using [[RFC6749]].
-    </li>
-    <li>
-      <strong>Sensor Data and IoT Integration Guidance</strong> — Non-normative
-      guidance on binding IoT sensor data (temperature, location) to
-      VSC event credentials as corroboration evidence.
-    </li>
+    <li><strong>VSC Core Data Model</strong> — Normative JSON-LD context and credential schemas for each [[EPCIS]] event type, including required and optional fields, JSON-LD context URI, and extensibility patterns. This is the immediate follow-on deliverable to this document.</li>
+    <li><strong>EPCIS–VC Mapping Specification</strong> — A detailed, testable normative mapping from [[EPCIS]] v2.0 event structures to VSC credential schemas, including handling of EPCIS 1.2 backward compatibility.</li>
+    <li><strong>VSC Interoperability Test Suite</strong> — A machine-executable conformance test suite covering all MUST-level requirements in this document, with test vectors for each event type and failure mode scenario.</li>
+    <li><strong>VSC Trust Framework Guidance</strong> — Non-normative guidance on establishing <a>Trust Frameworks</a> for specific sectors (pharmaceutical, food and agriculture, automotive), including <a>Issuer Registry</a> design patterns and key management requirements.</li>
+    <li><strong>Credential Exchange Profile</strong> — A normative profile of [[TRACEABILITY-INTEROP]] adapted for VSC event credentials, including endpoint definitions, error codes, and authentication requirements using [[RFC6749]].</li>
+    <li><strong>Sensor Data and IoT Integration Guidance</strong> — Non-normative guidance on binding IoT sensor data (temperature, location) to VSC event credentials as corroboration evidence.</li>
   </ol>
 </section>
 
@@ -2697,35 +2144,10 @@
   <section id="contrib-how">
     <h3>How to Contribute</h3>
     <ul>
-      <li>
-        <strong>File an issue:</strong> The fastest way to contribute
-        feedback is to open a
-        <a href="https://github.com/w3c-cg/vsc-requirements/issues/new">GitHub issue</a>.
-        Use the issue labels to classify your contribution:
-        <code>bug</code> (error in existing text),
-        <code>enhancement</code> (new requirement or use case),
-        <code>question</code> (seeking clarification),
-        <code>editorial</code> (typo, formatting).
-      </li>
-      <li>
-        <strong>Submit a pull request:</strong> For substantive edits,
-        fork the
-        <a href="https://github.com/w3c-cg/vsc-requirements">repository</a>,
-        make your changes on a branch, and submit a pull request with a
-        clear description of what you are changing and why. Link the PR
-        to any related issues.
-      </li>
-      <li>
-        <strong>Join the mailing list:</strong> Subscribe to the
-        <a href="https://lists.w3.org/Archives/Public/public-vsc/">public-vsc</a>
-        mailing list for design discussions and meeting announcements.
-      </li>
-      <li>
-        <strong>Attend a meeting:</strong> The VSC Community Group holds
-        regular calls. See the
-        <a href="https://www.w3.org/community/vsc/">group homepage</a>
-        for the current schedule.
-      </li>
+      <li><strong>File an issue:</strong> The fastest way to contribute feedback is to open a <a href="https://github.com/w3c-cg/vsc-requirements/issues/new">GitHub issue</a>. Use the issue labels to classify your contribution: <code>bug</code> (error in existing text), <code>enhancement</code> (new requirement or use case), <code>question</code> (seeking clarification), <code>editorial</code> (typo, formatting).</li>
+      <li><strong>Submit a pull request:</strong> For substantive edits, fork the <a href="https://github.com/w3c-cg/vsc-requirements">repository</a>, make your changes on a branch, and submit a pull request with a clear description of what you are changing and why. Link the PR to any related issues.</li>
+      <li><strong>Join the mailing list:</strong> Subscribe to the <a href="https://lists.w3.org/Archives/Public/public-vsc/">public-vsc</a> mailing list for design discussions and meeting announcements.</li>
+      <li><strong>Attend a meeting:</strong> The VSC Community Group holds regular calls. See the <a href="https://www.w3.org/community/vsc/">group homepage</a> for the current schedule.</li>
     </ul>
   </section>
 
