@@ -4541,6 +4541,409 @@ labels = {
   </ul>
 </section>
 
+  <!-- ═══════════════════════════════════════════════════════════════
+       X+4. REGULATORY RULE COMPILER — MACHINE-EXECUTABLE COMPLIANCE
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="regulatory-rule-compiler">
+    <h2>Regulatory Rule Compiler — Machine-Executable Compliance</h2>
+
+    <section id="rrc-overview">
+      <h3>Design Principle: Regulation as Executable Code</h3>
+      <p>
+        Every trade regulation, without exception, is a conditional
+        statement. DSCSA §582 requires product tracing if the product is a
+        prescription drug sold in the United States. EUDR Article 3 requires
+        due diligence if the commodity is listed in Annex I and is placed on
+        the EU market. UCP 600 Article 14 requires documentary compliance
+        within five banking days if the payment instrument is a Letter of
+        Credit. INCOTERMS® 2020 CIF requires insurance at 110% of invoice
+        value if the named place is a port of destination.
+      </p>
+      <p>
+        These conditions are expressed in legal prose — precise to lawyers,
+        opaque to machines. Each regulation requires a separate
+        interpretation, a separate compliance team, a separate software
+        module. When a regulation changes — a new HS code is added to an
+        annex, a tariff rate is adjusted, a documentary requirement is
+        modified — the software must be updated. When a new regulation
+        emerges — a carbon border adjustment, a digital product passport, a
+        forced labour due diligence — a new software module must be built.
+      </p>
+      <p>
+        The VSC Regulatory Rule Compiler eliminates this cycle. It treats
+        regulation as <strong>executable code over the Event Matrix</strong>.
+        Every regulatory requirement is expressed as a deterministic
+        function that accepts a matrix row as input and returns a compliance
+        status as output. The function references only the five standardized
+        dimensions of the matrix. When a regulation changes, only the rule
+        changes — not the verification engine. When a new regulation
+        emerges, a new rule is written — no new software is required.
+      </p>
+    </section>
+
+    <section id="rrc-architecture">
+      <h3>Architecture: Compiler Pipeline</h3>
+
+      <div class="figure">
+        <p><strong>The VSC Regulatory Rule Compiler — Architecture and Data Flow</strong></p>
+        <svg viewBox="0 0 1100 620" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="srrc"><feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#000" flood-opacity=".06"/></filter>
+            <marker id="ar-rule" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#0d9488"/></marker>
+          </defs>
+          <rect width="1100" height="620" fill="#fff" rx="16"/>
+          <pattern id="prrc" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="1" fill="#f8fafc"/></pattern>
+          <rect width="1100" height="620" fill="url(#prrc)" rx="16"/>
+
+          <text x="550" y="30" text-anchor="middle" font-size="15" font-weight="800" fill="#0f172a">VSC Regulatory Rule Compiler — Architecture and Data Flow</text>
+          <text x="550" y="52" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b">Regulation → Executable Rule → Matrix Validation → Compliance Determination</text>
+
+          <!-- LEFT: Regulatory Sources -->
+          <rect x="25" y="75" width="230" height="220" rx="14" fill="#fff" stroke="#1d4ed8" stroke-width="2" filter="url(#srrc)"/>
+          <rect x="25" y="75" width="230" height="44" rx="14" fill="#1d4ed8"/><rect x="25" y="107" width="230" height="12" fill="#1d4ed8"/>
+          <text x="140" y="102" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Regulatory Sources</text>
+
+          <rect x="40" y="132" width="200" height="28" rx="6" fill="#dbeafe"/>
+          <text x="140" y="150" text-anchor="middle" font-size="8" font-weight="700" fill="#1e40af">DSCSA §582 (US Pharma)</text>
+          <rect x="40" y="166" width="200" height="28" rx="6" fill="#dbeafe"/>
+          <text x="140" y="184" text-anchor="middle" font-size="8" font-weight="700" fill="#1e40af">EUDR Art. 3 (Deforestation)</text>
+          <rect x="40" y="200" width="200" height="28" rx="6" fill="#dbeafe"/>
+          <text x="140" y="218" text-anchor="middle" font-size="8" font-weight="700" fill="#1e40af">UCP 600 Art. 14 (LC Docs)</text>
+          <rect x="40" y="234" width="200" height="28" rx="6" fill="#dbeafe"/>
+          <text x="140" y="252" text-anchor="middle" font-size="8" font-weight="700" fill="#1e40af">EU-BEV Art. 77 (Battery)</text>
+          <rect x="40" y="268" width="200" height="22" rx="6" fill="#eff6ff"/>
+          <text x="140" y="283" text-anchor="middle" font-size="8" font-weight="600" fill="#64748b">+ any regulation, any jurisdiction</text>
+
+          <!-- Arrow: Sources → Compiler -->
+          <line x1="258" y1="185" x2="340" y2="185" stroke="#0d9488" stroke-width="2.5" marker-end="url(#ar-rule)" class="fl"/>
+
+          <!-- CENTER: Rule Compiler Engine -->
+          <rect x="348" y="75" width="400" height="220" rx="14" fill="#fff" stroke="#0d9488" stroke-width="2.5" filter="url(#srrc)"/>
+          <rect x="348" y="75" width="400" height="44" rx="14" fill="#0d9488"/><rect x="348" y="107" width="400" height="12" fill="#0d9488"/>
+          <text x="548" y="102" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Rule Compiler Engine</text>
+
+          <rect x="368" y="132" width="360" height="32" rx="8" fill="#f0fdfa"/>
+          <text x="548" y="146" text-anchor="middle" font-size="9" font-weight="700" fill="#0f766e">Step 1: Parse Regulation → Extract Conditions</text>
+          <text x="548" y="160" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">Identify: jurisdiction, product scope (HS), actor roles, required events, documentary conditions</text>
+
+          <rect x="368" y="172" width="360" height="32" rx="8" fill="#f0fdfa"/>
+          <text x="548" y="186" text-anchor="middle" font-size="9" font-weight="700" fill="#0f766e">Step 2: Map Conditions → Matrix Dimensions</text>
+          <text x="548" y="200" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">Product scope → D3 (HS codes) · Actor roles → D2 (DID registry) · Documentary → D5 (LC requirements)</text>
+
+          <rect x="368" y="212" width="360" height="32" rx="8" fill="#f0fdfa"/>
+          <text x="548" y="226" text-anchor="middle" font-size="9" font-weight="700" fill="#0f766e">Step 3: Compile → Executable Rule</text>
+          <text x="548" y="240" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">Output: Deterministic function over D1–D5 returning COMPLIANT / NON-COMPLIANT / CONDITIONAL</text>
+
+          <rect x="368" y="256" width="360" height="26" rx="6" fill="#ccfbf1"/>
+          <text x="548" y="273" text-anchor="middle" font-size="8" font-weight="700" fill="#0f766e">Published to VSC Rule Registry → Available to all verifiers</text>
+
+          <!-- Arrow: Compiler → Verifier -->
+          <line x1="748" y1="185" x2="840" y2="185" stroke="#0d9488" stroke-width="2.5" marker-end="url(#ar-rule)" class="fl"/>
+
+          <!-- RIGHT: Verification Engine -->
+          <rect x="848" y="75" width="230" height="220" rx="14" fill="#fff" stroke="#059669" stroke-width="2.5" filter="url(#srrc)"/>
+          <rect x="848" y="75" width="230" height="44" rx="14" fill="#059669"/><rect x="848" y="107" width="230" height="12" fill="#059669"/>
+          <text x="963" y="102" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Compliance Determination</text>
+
+          <rect x="868" y="132" width="190" height="28" rx="6" fill="#d1fae5"/>
+          <text x="963" y="150" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">Apply Rules → Matrix Row</text>
+          <rect x="868" y="166" width="190" height="28" rx="6" fill="#d1fae5"/>
+          <text x="963" y="184" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">Per-Dimension Validation</text>
+          <rect x="868" y="200" width="190" height="28" rx="6" fill="#d1fae5"/>
+          <text x="963" y="218" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">Cross-Dimension Rules</text>
+          <rect x="868" y="240" width="190" height="50" rx="8" fill="#047857"/>
+          <text x="963" y="260" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">Output:</text>
+          <text x="963" y="278" text-anchor="middle" font-size="8" font-weight="700" fill="#a7f3d0">COMPLIANT / NON-COMPLIANT / CONDITIONAL</text>
+
+          <!-- BOTTOM: Rule Registry and Versioning -->
+          <line x1="25" y1="320" x2="1075" y2="320" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="550" y="348" text-anchor="middle" font-size="13" font-weight="800" fill="#0f172a">Rule Registry and Lifecycle Management</text>
+
+          <rect x="25" y="368" width="1050" height="110" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" filter="url(#srrc)"/>
+
+          <!-- Rule lifecycle steps -->
+          <rect x="50" y="388" width="160" height="50" rx="8" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="130" y="410" text-anchor="middle" font-size="9" font-weight="800" fill="#1e40af">1. Publish</text>
+          <text x="130" y="428" text-anchor="middle" font-size="7" fill="#64748b">Regulator or Trust Framework publishes rule</text>
+
+          <line x1="215" y1="413" x2="250" y2="413" stroke="#0d9488" stroke-width="1.5" marker-end="url(#ar-rule)"/>
+
+          <rect x="258" y="388" width="160" height="50" rx="8" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="338" y="410" text-anchor="middle" font-size="9" font-weight="800" fill="#1e40af">2. Distribute</text>
+          <text x="338" y="428" text-anchor="middle" font-size="7" fill="#64748b">Verifiers subscribe to rule updates</text>
+
+          <line x1="423" y1="413" x2="458" y2="413" stroke="#0d9488" stroke-width="1.5" marker-end="url(#ar-rule)"/>
+
+          <rect x="466" y="388" width="160" height="50" rx="8" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="546" y="410" text-anchor="middle" font-size="9" font-weight="800" fill="#1e40af">3. Apply</text>
+          <text x="546" y="428" text-anchor="middle" font-size="7" fill="#64748b">Verifier executes rule on each event</text>
+
+          <line x1="631" y1="413" x2="666" y2="413" stroke="#0d9488" stroke-width="1.5" marker-end="url(#ar-rule)"/>
+
+          <rect x="674" y="388" width="160" height="50" rx="8" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="754" y="410" text-anchor="middle" font-size="9" font-weight="800" fill="#1e40af">4. Deprecate</text>
+          <text x="754" y="428" text-anchor="middle" font-size="7" fill="#64748b">Old rule version superseded by new</text>
+
+          <line x1="839" y1="413" x2="874" y2="413" stroke="#0d9488" stroke-width="1.5" marker-end="url(#ar-rule)"/>
+
+          <rect x="882" y="388" width="160" height="50" rx="8" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="962" y="410" text-anchor="middle" font-size="9" font-weight="800" fill="#1e40af">5. Archive</text>
+          <text x="962" y="428" text-anchor="middle" font-size="7" fill="#64748b">Historical rules for audit trail</text>
+
+          <!-- Rule examples at bottom -->
+          <line x1="25" y1="505" x2="1075" y2="505" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="550" y="530" text-anchor="middle" font-size="12" font-weight="800" fill="#0f172a">Example: Compiled Rules Across Regulatory Domains</text>
+
+          <rect x="25" y="545" width="240" height="55" rx="10" fill="#fff" stroke="#3b82f6" stroke-width="1.5" filter="url(#srrc)"/>
+          <text x="145" y="568" text-anchor="middle" font-size="9" font-weight="800" fill="#1e40af">Pharma: DSCSA §582</text>
+          <text x="145" y="588" text-anchor="middle" font-size="7" fill="#475569">IF D3=Ch30 &amp; D5.jurisdiction=US</text>
+          <text x="145" y="600" text-anchor="middle" font-size="7" fill="#475569">REQUIRE chain A→B→C→D WITH ATP</text>
+
+          <rect x="285" y="545" width="240" height="55" rx="10" fill="#fff" stroke="#059669" stroke-width="1.5" filter="url(#srrc)"/>
+          <text x="405" y="568" text-anchor="middle" font-size="9" font-weight="800" fill="#065f46">Environment: EUDR Art. 3</text>
+          <text x="405" y="588" text-anchor="middle" font-size="7" fill="#475569">IF D3=Ch09/12/15 &amp; D5.jurisdiction=EU</text>
+          <text x="405" y="600" text-anchor="middle" font-size="7" fill="#475569">REQUIRE deforestation-free cert VC</text>
+
+          <rect x="545" y="545" width="240" height="55" rx="10" fill="#fff" stroke="#d97706" stroke-width="1.5" filter="url(#srrc)"/>
+          <text x="665" y="568" text-anchor="middle" font-size="9" font-weight="800" fill="#92400e">Trade Finance: UCP 600</text>
+          <text x="665" y="588" text-anchor="middle" font-size="7" fill="#475569">IF D5=LC AND D4=CIF/CIP</text>
+          <text x="665" y="600" text-anchor="middle" font-size="7" fill="#475569">REQUIRE insurance VC + all LC docs</text>
+
+          <rect x="805" y="545" width="240" height="55" rx="10" fill="#fff" stroke="#7c3aed" stroke-width="1.5" filter="url(#srrc)"/>
+          <text x="925" y="568" text-anchor="middle" font-size="9" font-weight="800" fill="#5b21b6">Carbon: CBAM</text>
+          <text x="925" y="588" text-anchor="middle" font-size="7" fill="#475569">IF D3=Ch25/31/72/76 &amp; D5.jurisdiction=EU</text>
+          <text x="925" y="600" text-anchor="middle" font-size="7" fill="#475569">REQUIRE D6.carbonEmissions POPULATED</text>
+        </svg>
+        <p class="caption">The VSC Regulatory Rule Compiler — a three-stage pipeline that ingests regulatory text, compiles it into executable matrix rules, and distributes them to verifiers through a versioned rule registry with full lifecycle management.</p>
+      </div>
+    </section>
+
+    <section id="rrc-grammar">
+      <h3>The VSC Rule Grammar</h3>
+      <p>
+        Every rule is expressed in a structured format that references only
+        the five standard matrix dimensions. The grammar is designed to be
+        both human-writable and machine-executable, using a syntax familiar
+        to regulatory professionals while producing deterministic
+        verification outcomes.
+      </p>
+
+      <pre class="example" title="VSC Rule Grammar — Complete Syntax">
+RULE: &lt;rule_identifier&gt;
+VERSION: &lt;semantic_version&gt;
+JURISDICTION: &lt;ISO_3166-1_alpha2&gt;
+REGULATORY_REFERENCE: &lt;citation&gt;
+EFFECTIVE_DATE: &lt;ISO_8601_date&gt;
+DEPRECATES: &lt;previous_rule_identifier | null&gt;
+
+WHEN:
+  D1.event_type IN [&lt;event_type_list&gt;]
+  AND D2.did_method IN [&lt;did_method_list&gt;]
+  AND D3.hs_chapter IN [&lt;chapter_list&gt;]
+  AND D3.hs_heading IN [&lt;heading_list&gt;]
+  AND D3.hs_code IN [&lt;hs_code_list&gt;]
+  AND D4.incoterms IN [&lt;incoterms_list&gt;]
+  AND D4.incoterms_version = &lt;version_year&gt;
+  AND D5.payment_instrument IN [&lt;instrument_list&gt;]
+  AND D5.jurisdiction = &lt;ISO_3166-1_alpha2&gt;
+
+REQUIRE:
+  DIMENSION: &lt;D1|D2|D3|D4|D5&gt;
+  CHECK: &lt;validation_function&gt;
+  PARAMETERS: &lt;key_value_pairs&gt;
+  ON_FAILURE: &lt;NON_COMPLIANT | CONDITIONAL | FLAG&gt;
+
+OUTCOME:
+  COMPLIANT: &lt;action_if_all_requirements_met&gt;
+  NON_COMPLIANT: &lt;action_if_any_requirement_failed&gt;
+  CONDITIONAL: &lt;action_if_conditional_requirements&gt;</pre>
+    </section>
+
+    <section id="rrc-examples">
+      <h3>Compiled Rule Examples</h3>
+
+      <div class="figure">
+        <p><strong>Example 1: DSCSA Pharmaceutical Traceability</strong></p>
+        <svg viewBox="0 0 1050 140" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="1050" height="140" fill="#fff" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+          <rect x="15" y="15" width="1020" height="110" rx="8" fill="#1e293b"/>
+          <text x="35" y="40" font-size="11" font-weight="700" fill="#60a5fa">RULE: DSCSA_Package_Traceability</text>
+          <text x="35" y="58" font-size="9" fill="#94a3b8">VERSION: 1.0.0 | JURISDICTION: US | REFERENCE: DSCSA §582(b)-(e) | EFFECTIVE: 2023-11-27</text>
+          <text x="35" y="80" font-size="9" fill="#e2e8f0">WHEN: D3.hs_chapter IN ["30"] AND D5.jurisdiction = "US"</text>
+          <text x="35" y="98" font-size="9" fill="#e2e8f0">REQUIRE: D1.chain CONTAINS [ObjectEvent(commissioning), ObjectEvent(shipping), ObjectEvent(receiving), ObjectEvent(dispensing)]</text>
+          <text x="35" y="116" font-size="9" fill="#e2e8f0">REQUIRE: D2.issuer IN FDA_ATP_Registry FOR EACH EVENT IN D1.chain</text>
+        </svg>
+      </div>
+
+      <div class="figure">
+        <p><strong>Example 2: CIF Insurance Compliance Under INCOTERMS® 2020</strong></p>
+        <svg viewBox="0 0 1050 140" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="1050" height="140" fill="#fff" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+          <rect x="15" y="15" width="1020" height="110" rx="8" fill="#1e293b"/>
+          <text x="35" y="40" font-size="11" font-weight="700" fill="#fbbf24">RULE: CIF_Insurance_Coverage_2020</text>
+          <text x="35" y="58" font-size="9" fill="#94a3b8">VERSION: 1.0.0 | REFERENCE: INCOTERMS® 2020 CIF, ICC Publication 723E | EFFECTIVE: 2020-01-01</text>
+          <text x="35" y="80" font-size="9" fill="#e2e8f0">WHEN: D4.incoterms = "CIF" AND D4.incotermsVersion = "2020"</text>
+          <text x="35" y="98" font-size="9" fill="#e2e8f0">REQUIRE: linked_credentials CONTAINS InsuranceCredential WITH coverage IN [ICC_C, ICC_B, ICC_A]</text>
+          <text x="35" y="116" font-size="9" fill="#e2e8f0">REQUIRE: insurance.insuredValue >= 1.10 * D5.lcAmount</text>
+        </svg>
+      </div>
+
+      <div class="figure">
+        <p><strong>Example 3: EU Carbon Border Adjustment Mechanism (CBAM)</strong></p>
+        <svg viewBox="0 0 1050 140" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="1050" height="140" fill="#fff" rx="12" stroke="#e2e8f0" stroke-width="1"/>
+          <rect x="15" y="15" width="1020" height="110" rx="8" fill="#1e293b"/>
+          <text x="35" y="40" font-size="11" font-weight="700" fill="#34d399">RULE: EU_CBAM_Emissions_Declaration</text>
+          <text x="35" y="58" font-size="9" fill="#94a3b8">VERSION: 1.0.0 | JURISDICTION: EU | REFERENCE: Regulation (EU) 2023/956 | EFFECTIVE: 2026-01-01</text>
+          <text x="35" y="80" font-size="9" fill="#e2e8f0">WHEN: D3.hs_chapter IN ["25", "31", "72", "76"] AND D5.jurisdiction = "EU"</text>
+          <text x="35" y="98" font-size="9" fill="#e2e8f0">REQUIRE: D6.carbonEmissions IS_POPULATED AND D6.methodology IN [GLEC, ISO_14083]</text>
+          <text x="35" y="116" font-size="9" fill="#e2e8f0">REQUIRE: D6.totalEmissions <= CBAM_Benchmark(D3.hs_code) ON_FAILURE: CONDITIONAL (CBAM certificate purchase required)</text>
+        </svg>
+      </div>
+    </section>
+
+    <section id="rrc-properties">
+      <h3>Essential Properties of the Rule Compiler</h3>
+
+      <dl>
+        <dt>Regulation-Neutral</dt>
+        <dd>
+          The compiler does not encode any specific regulation. It provides
+          the grammar for expressing regulations as executable rules. Any
+          regulation from any jurisdiction that can be expressed as
+          conditions over the five matrix dimensions can be compiled into a
+          VSC rule. The compiler is to regulations what a programming
+          language compiler is to source code: it translates human-readable
+          requirements into machine-executable instructions without
+          understanding the domain.
+        </dd>
+
+        <dt>Deterministic Output</dt>
+        <dd>
+          For a given rule and a given matrix row, the compliance
+          determination is always identical. Two verifiers applying the same
+          rule version to the same event will produce the same outcome. This
+          eliminates the interpretive variation that currently requires
+          multiple compliance teams to reach different conclusions from the
+          same regulatory text.
+        </dd>
+
+        <dt>Versioned and Deprecatable</dt>
+        <dd>
+          Rules carry semantic versions. When a regulation changes — a new
+          HS code is added to an annex, a threshold is adjusted, a
+          documentary requirement is modified — a new rule version is
+          published. The previous version is marked as deprecated but
+          remains available for audit purposes. Verifiers specify which rule
+          versions they apply. An event verified against DSCSA_Package_
+          Traceability v1.0.0 on 15 June 2025 can be re-verified against
+          v1.1.0 on 15 December 2025 without ambiguity about which
+          requirements applied at the time of the event.
+        </dd>
+
+        <dt>Composable</dt>
+        <dd>
+          Multiple rules can apply to a single event. A pharmaceutical
+          shipment from India to Kenya under CIF terms with LC payment
+          triggers DSCSA export requirements, INCOTERMS® CIF insurance
+          requirements, UCP 600 documentary requirements, and potentially
+          CBAM carbon declaration requirements. Each rule is evaluated
+          independently. The verifier aggregates results: an event is
+          COMPLIANT only if all applicable rules pass.
+        </dd>
+
+        <dt>Graduated Failure Modes</dt>
+        <dd>
+          Rules produce three outcomes, not two. COMPLIANT means all
+          requirements are satisfied. NON_COMPLIANT means a mandatory
+          requirement failed — the event cannot proceed. CONDITIONAL means
+          a requirement failed but the event can proceed with additional
+          conditions (e.g., CBAM certificate purchase, physical inspection,
+          additional documentation). This tri-state logic reflects how
+          regulations actually work: not all failures are hard stops.
+        </dd>
+      </dl>
+    </section>
+
+    <div class="req-block" id="req-f19">
+      <span class="req-id">REQ-F19</span>
+      <span class="req-title"> — Machine-Executable Regulatory Rule Representation</span>
+      <p class="req-body">
+        A <a>VSC Verifier</a> <em class="rfc2119">MAY</em> support
+        machine-executable regulatory rules using the VSC Rule Grammar.
+        When supported, the verifier <em class="rfc2119">MUST</em> accept
+        rules expressed in the grammar defined in this section.
+        Rules <em class="rfc2119">MUST</em> reference only the five
+        standardized matrix dimensions (D1–D5) and any registered
+        extension dimensions. A rule <em class="rfc2119">MUST</em> produce
+        one of three deterministic outcomes for any given matrix row:
+        COMPLIANT, NON_COMPLIANT, or CONDITIONAL.
+      </p>
+      <p class="req-rationale">
+        Every trade regulation is expressible as a conditional statement
+        over product classification, actor identity, commercial terms,
+        and financial instruments — precisely the dimensions of the VSC
+        Event Matrix. By compiling regulations into machine-executable
+        rules, the VSC verifier can determine regulatory compliance
+        without domain-specific code. When a regulation changes, only the
+        rule changes — not the verifier. When a new regulation emerges,
+        a new rule is written — no software update is required. The
+        tri-state outcome model reflects regulatory reality: not all
+        compliance failures are hard stops.
+      </p>
+      <p class="req-test">
+        Given a verifier configured with DSCSA_Package_Traceability v1.0.0
+        and an event matrix with D3.hs_chapter="30" and
+        D5.jurisdiction="US": the verifier MUST verify that D1.chain
+        contains all four required event types and that D2.issuer is in
+        the FDA ATP Registry for each event. If both conditions pass,
+        output MUST be COMPLIANT. If any condition fails, output MUST be
+        NON_COMPLIANT with specific failure details. Given the same
+        verifier and an event with D3.hs_chapter="09" (coffee): the rule
+        MUST NOT be triggered and MUST return COMPLIANT (rule scope does
+        not apply).
+      </p>
+      <p class="req-refs">DSCSA §582; INCOTERMS® 2020 CIF; UCP 600 Article 14; CBAM Regulation (EU) 2023/956; WTO TFA Article 10.</p>
+    </div>
+
+    <div class="req-block" id="req-f20">
+      <span class="req-id">REQ-F20</span>
+      <span class="req-title"> — Rule Versioning and Lifecycle Management</span>
+      <p class="req-body">
+        Every VSC regulatory rule <em class="rfc2119">MUST</em> carry a
+        semantic version identifier, a regulatory reference citation, an
+        effective date, and an optional deprecation reference to a
+        previous rule version. A VSC Rule Registry
+        <em class="rfc2119">MAY</em> maintain the authoritative set of
+        active rules. Verifiers <em class="rfc2119">MUST</em> specify
+        which rule versions they apply to each verification. An event
+        verified against a specific rule version
+        <em class="rfc2119">MUST</em> be re-verifiable against that same
+        version at any future date for audit purposes.
+      </p>
+      <p class="req-rationale">
+        Regulations change over time — new HS codes are added to annexes,
+        thresholds are adjusted, documentary requirements are modified.
+        Without versioned rules, a verification performed in January 2025
+        against the then-current rule cannot be audited in December 2025
+        if the rule has changed. Versioned rules solve this by making the
+        rule itself an immutable artifact referenced by version
+        identifier. The deprecation chain ensures that the provenance of
+        regulatory requirements is fully traceable.
+      </p>
+      <p class="req-test">
+        Given a verifier with DSCSA_Package_Traceability v1.0.0 and
+        v1.1.0 (where v1.1.0 deprecates v1.0.0): an event verified
+        against v1.0.0 on 2025-06-15 MUST be re-verifiable against
+        v1.0.0 on 2025-12-15 with identical result. The same event
+        verified against v1.1.0 MAY produce a different result if rule
+        requirements changed. The verifier MUST record which rule
+        version was applied in the verification result.
+      </p>
+      <p class="req-refs">This specification Section X+4; Semantic Versioning 2.0.0; WTO TFA Article 10.3 (Advance Rulings).</p>
+    </div>
+  </section>
+
 <!-- ═══════════════════════════════════════════════════════════════
      13. FUTURE WORK
      ═══════════════════════════════════════════════════════════════ -->
