@@ -792,145 +792,48 @@
     as shown here.
   </p>
 
-  <!-- ─────────────────────────────────────────────────────────────
-       2.1 Conformance Classes
-       ───────────────────────────────────────────────────────────── -->
-  <section id="conformance-classes">
-    <h3>Conformance Classes</h3>
+  <p>
+    This document defines conformance requirements for
+    <dfn>VSC Specifications</dfn>—technical specifications that claim
+    alignment with the VSC vision and architecture. A conformant
+    VSC Specification <em class="rfc2119">MUST</em> satisfy all normative
+    requirements in <a href="#requirements">Requirements</a>.
+  </p>
 
-    <p>
-      This specification defines two <dfn data-lt="conformance class">conformance classes</dfn>,
-      each with a <em>Core</em> tier and an optional <em>Vocabulary</em> tier.
-    </p>
+  <p>
+    Conformance to this document is assessed at two levels:
+  </p>
 
-    <dl>
-      <dt><dfn>VSC Issuer</dfn></dt>
-      <dd>
-        A software component that produces
-        <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>
-        representing <a>Supply Chain Events</a>
-        in conformance with this specification.
-      </dd>
+  <dl>
+    <dt><dfn>Core Conformance</dfn></dt>
+    <dd>
+      A VSC Specification satisfies the foundational requirements
+      for representing <a>Supply Chain Events</a> using the SEAL
+      data structure, the VSC State Machine, and the Event Matrix
+      envelope. Core Conformance <em class="rfc2119">MUST NOT</em>
+      depend on any specific vocabulary, industry code list, or
+      domain-specific binding.
+    </dd>
 
-      <dt><dfn>VSC Verifier</dfn></dt>
-      <dd>
-        A software component that accepts and validates
-        <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>
-        or
-        <a data-cite="VC-DATA-MODEL#dfn-verifiable-presentation">Verifiable Presentations</a>
-        representing <a>Supply Chain Events</a>
-        in conformance with this specification.
-      </dd>
-    </dl>
+    <dt><dfn>Vocabulary Conformance</dfn></dt>
+    <dd>
+      A VSC Specification <em class="rfc2119">MAY</em> extend Core
+      Conformance by defining one or more +Dn vocabularies that
+      bind the Event Matrix to specific domains (such as customs
+      classification, trade finance, or sustainability reporting).
+      Vocabulary Conformance is <em class="rfc2119">ALWAYS OPTIONAL</em>
+      and supplementary. No VSC Specification <em class="rfc2119">SHALL</em>
+      require Vocabulary Conformance as a precondition for Core
+      Conformance.
+    </dd>
+  </dl>
 
-    <p class="note" title="Holder conformance">
-      Holder conformance requirements are not independently specified in
-      this document because a holder can be implemented by either an issuer
-      or verifier system. Future VSC specifications MAY define an explicit
-      holder conformance class.
-    </p>
-  </section>
-
-  <!-- ─────────────────────────────────────────────────────────────
-       2.2 Core Conformance (Mandatory)
-       ───────────────────────────────────────────────────────────── -->
-  <section id="core-conformance">
-    <h3>Core Conformance</h3>
-
-    <p>
-      A <dfn>VSC Core-Conformant</dfn> implementation <em class="rfc2119">MUST</em>
-      satisfy all normative requirements in the following sections of this
-      specification:
-    </p>
-
-    <ul>
-      <li><a href="#terminology">Terminology</a></li>
-      <li><a href="#supply-chain-event">Supply Chain Event</a></li>
-      <li><a href="#seal-data-structure">SEAL Data Structure</a></li>
-      <li><a href="#vsc-state-machine">VSC State Machine</a></li>
-      <li><a href="#event-matrix">Event Matrix Envelope</a></li>
-      <li><a href="#securing-mechanisms">Securing Mechanisms</a></li>
-    </ul>
-
-    <p>
-      Core Conformance <em class="rfc2119">MUST NOT</em> require implementation
-      of any specific <a>+Dn vocabulary</a>. An implementation achieves Core
-      Conformance by correctly implementing the geometry of the
-      <a>Event Matrix</a>—the SEAL structure, the four-quadrant VSC state
-      machine, the Event envelope, and the securing mechanisms—independent
-      of any particular vocabulary binding.
-    </p>
-
-    <p>
-      This separation ensures that no single vocabulary steward can hold the
-      ecosystem hostage. The VSC Matrix operates as neutral infrastructure,
-      and Core Conformance reflects this principle.
-    </p>
-  </section>
-
-  <!-- ─────────────────────────────────────────────────────────────
-       2.3 Vocabulary Conformance (Optional)
-       ───────────────────────────────────────────────────────────── -->
-  <section id="vocabulary-conformance">
-    <h3>Vocabulary Conformance</h3>
-
-    <p>
-      An implementation <em class="rfc2119">MAY</em> additionally claim
-      conformance to one or more <dfn data-lt="+Dn vocabulary">+Dn vocabularies</dfn>.
-      Vocabulary conformance is <em class="rfc2119">ALWAYS OPTIONAL</em> and
-      supplementary to <a>Core Conformance</a>.
-    </p>
-
-    <p>
-      A <dfn>VSC Vocabulary-Conformant</dfn> implementation for a given
-      +Dn vocabulary <em class="rfc2119">MUST</em>:
-    </p>
-
-    <ul>
-      <li>Satisfy all requirements of <a>Core Conformance</a>.</li>
-      <li>Implement the specific vocabulary bindings defined in that
-          vocabulary's companion specification (for example, population of
-          HS codes as a +D1 vocabulary, or INCOTERMS® rules as a +D2
-          vocabulary).</li>
-    </ul>
-
-    <p>
-      Vocabularies are defined in separate specifications maintained by
-      their respective stewards. The VSC Community Group does not endorse,
-      rank, or prioritize any +Dn vocabulary over another. All vocabularies
-      that correctly implement the extension mechanics defined in
-      <a href="#extensibility">Extensibility Model (+Dn)</a>
-      are first-class citizens of the ecosystem.
-    </p>
-
-    <p>
-      No conformance claim of any class <em class="rfc2119">SHALL</em> be
-      denied on the basis of vocabulary selection or non-selection.
-    </p>
-  </section>
-
-  <!-- ─────────────────────────────────────────────────────────────
-       2.4 Testability
-       ───────────────────────────────────────────────────────────── -->
-  <section id="testability">
-    <h3>Testability</h3>
-
-    <p>
-      Conformance is assessed against the testability statements
-      accompanying each normative requirement in this specification.
-      Testability statements for Core Conformance are maintained
-      within this document. Testability statements for Vocabulary
-      Conformance are maintained within each vocabulary's companion
-      specification.
-    </p>
-
-    <p>
-      The VSC Community Group <em class="rfc2119">MAY</em> maintain a
-      community test suite for Core Conformance. Vocabulary stewards
-      <em class="rfc2119">SHOULD</em> provide their own test suites
-      for Vocabulary Conformance claims.
-    </p>
-  </section>
+  <p class="note" title="Implementation conformance">
+    This document defines conformance for <em>specifications</em>,
+    not for software implementations. Implementation conformance
+    classes (VSC Issuer, VSC Verifier) will be defined in the
+    VSC Technical Specification.
+  </p>
 </section>
 <!-- ═══════════════════════════════════════════════════════════════
      3. SCOPE
