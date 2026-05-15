@@ -845,6 +845,15 @@
     <h3>In Scope</h3>
     <ul>
       <li><strong>Event-to-credential mapping:</strong> A normative, field-level mapping from each [[EPCIS]] event type (ObjectEvent, AggregationEvent, TransformationEvent, TransactionEvent, AssociationEvent) to a corresponding [[VC-DATA-MODEL]] credential schema.</li>
+            <li><strong>Physical binding alignment:</strong> VSC credentials are
+      designed to be compatible with emerging physical-to-digital binding
+      specifications, including the W3C Physical Asset Attestation (UORA)
+      Community Group's work on DID-native object addressing and secure
+      physical anchors (NFC, QR codes, IoT sensors). VSC defines the trade
+      and compliance layer operating above the physical binding layer,
+      enabling a UORA-anchored object identifier to carry VSC trade
+      classifications, commercial terms, and regulatory compliance
+      attestations through the global supply chain.</li>
       <li><strong>Identity binding:</strong> Specification of how <a>Supply Chain Actors</a> are identified using [[DID-CORE]] and how their authority to assert events for a given business context is established.</li>
       <li><strong>Verification model:</strong> Rules for verifying the integrity, authenticity, and provenance of <a>Supply Chain Events</a> represented as <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>.</li>
       <li><strong>Selective disclosure:</strong> Mechanisms allowing holders to reveal only a subset of event fields to a given verifier.</li>
@@ -1286,9 +1295,195 @@
         Animated flow lines represent continuous, tamper-evident data transmission between actors and trust infrastructure.
     </p>
 
-    <div class="figure">
+    <div class="figure" style="overflow-x:auto">
         <svg viewBox="0 0 1200 900" width="100%" xmlns="http://www.w3.org/2000/svg">
-            <!-- [SVG content unchanged from original] -->
+            <defs>
+                <style>
+                    @keyframes flowDash { to { stroke-dashoffset: -24; } }
+                    .flow-line { stroke-dasharray: 6 4; animation: flowDash .6s linear infinite; }
+                </style>
+                <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#2563eb"/></marker>
+                <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#7c3aed"/></marker>
+                <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#059669"/></marker>
+                <marker id="arrowAmber" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#d97706"/></marker>
+                <filter id="shadowCard"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.06"/></filter>
+                <filter id="shadowLight"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.04"/></filter>
+            </defs>
+
+            <rect width="1200" height="900" fill="#f8fafc" rx="16"/>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1.5" fill="#e2e8f0"/></pattern>
+            <rect width="1200" height="900" fill="url(#grid)" rx="16"/>
+
+            <!-- LAYER 1: PROBLEM SPACE & STANDARDS CONVERGENCE -->
+            <g transform="translate(30, 20)">
+                <rect width="340" height="150" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" filter="url(#shadowCard)"/>
+                <rect width="340" height="44" rx="16" fill="#f1f5f9"/><rect y="28" width="340" height="16" fill="#f1f5f9"/>
+                <text x="170" y="30" text-anchor="middle" font-size="15" font-weight="800" fill="#0f172a">Fragmented Data Landscape</text>
+                <text x="170" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">Proprietary silos · No shared proof · Unverifiable claims</text>
+                <rect x="30" y="82" width="80" height="42" rx="10" fill="#fee2e2" stroke="#fecaca"/><text x="70" y="107" text-anchor="middle" font-size="13" font-weight="800" fill="#b91c1c">Mfr A</text>
+                <line x1="116" y1="103" x2="144" y2="103" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 3"/>
+                <rect x="150" y="82" width="80" height="42" rx="10" fill="#fee2e2" stroke="#fecaca"/><text x="190" y="107" text-anchor="middle" font-size="13" font-weight="800" fill="#b91c1c">Whl B</text>
+                <line x1="236" y1="103" x2="264" y2="103" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 3"/>
+                <rect x="270" y="82" width="45" height="42" rx="10" fill="#fee2e2" stroke="#fecaca"/><text x="292" y="107" text-anchor="middle" font-size="13" font-weight="800" fill="#b91c1c">Ret C</text>
+                <text x="170" y="142" text-anchor="middle" font-size="11" font-weight="700" fill="#dc2626">⚠ No cryptographic proof · No identity binding</text>
+            </g>
+
+            <!-- Arrow: Problem to Standards -->
+            <line x1="375" y1="95" x2="455" y2="95" stroke="#2563eb" stroke-width="3" marker-end="url(#arrowBlue)" class="flow-line"/>
+
+            <!-- Three Standards Cards -->
+            <g transform="translate(470, 20)">
+                <rect width="220" height="120" rx="16" fill="#ffffff" stroke="#93c5fd" stroke-width="2" filter="url(#shadowCard)"/>
+                <rect width="220" height="38" rx="16" fill="#dbeafe"/><rect y="22" width="220" height="16" fill="#dbeafe"/>
+                <text x="110" y="26" text-anchor="middle" font-size="14" font-weight="800" fill="#1e3a8a">EPCIS 2.0</text>
+                <text x="110" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">Event vocabulary</text>
+                <text x="110" y="78" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">What, when, where, why</text>
+                <text x="110" y="108" text-anchor="middle" font-size="10" font-weight="800" fill="#2563eb">Layer 1: Physical Events</text>
+            </g>
+            <text x="698" y="82" text-anchor="middle" font-size="22" font-weight="800" fill="#64748b">+</text>
+            <g transform="translate(714, 20)">
+                <rect width="220" height="120" rx="16" fill="#ffffff" stroke="#6ee7b7" stroke-width="2" filter="url(#shadowCard)"/>
+                <rect width="220" height="38" rx="16" fill="#d1fae5"/><rect y="22" width="220" height="16" fill="#d1fae5"/>
+                <text x="110" y="26" text-anchor="middle" font-size="14" font-weight="800" fill="#064e3b">VC Data Model</text>
+                <text x="110" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">Cryptographic proof</text>
+                <text x="110" y="78" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">Tamper-evident · Verifiable</text>
+                <text x="110" y="108" text-anchor="middle" font-size="10" font-weight="800" fill="#059669">Layer 2: Integrity</text>
+            </g>
+            <text x="942" y="82" text-anchor="middle" font-size="22" font-weight="800" fill="#64748b">+</text>
+            <g transform="translate(958, 20)">
+                <rect width="220" height="120" rx="16" fill="#ffffff" stroke="#fcd34d" stroke-width="2" filter="url(#shadowCard)"/>
+                <rect width="220" height="38" rx="16" fill="#fef3c7"/><rect y="22" width="220" height="16" fill="#fef3c7"/>
+                <text x="110" y="26" text-anchor="middle" font-size="14" font-weight="800" fill="#78350f">DID Core</text>
+                <text x="110" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">Identity binding</text>
+                <text x="110" y="78" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">Who asserted this event</text>
+                <text x="110" y="108" text-anchor="middle" font-size="10" font-weight="800" fill="#d97706">Layer 3: Identity</text>
+            </g>
+
+            <!-- Convergence into VSC Framework -->
+            <line x1="580" y1="145" x2="580" y2="185" stroke="#2563eb" stroke-width="3" marker-end="url(#arrowBlue)" class="flow-line"/>
+            <line x1="824" y1="145" x2="710" y2="185" stroke="#2563eb" stroke-width="3" marker-end="url(#arrowBlue)" class="flow-line"/>
+            <line x1="1068" y1="145" x2="830" y2="185" stroke="#2563eb" stroke-width="3" marker-end="url(#arrowBlue)" class="flow-line"/>
+
+            <g transform="translate(470, 190)">
+                <rect width="710" height="64" rx="16" fill="#eef2ff" stroke="#2563eb" stroke-width="3" filter="url(#shadowCard)"/>
+                <text x="355" y="30" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">VSC Framework: Unified Verifiable Supply Chain</text>
+                <text x="355" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">EPCIS Semantics + Verifiable Credential Proof + DID Identity Binding</text>
+            </g>
+
+            <!-- LAYER 2: ACTOR PIPELINE (Issuer → Holder → Verifier) -->
+            <g transform="translate(30, 280)">
+                <!-- ISSUER -->
+                <rect width="340" height="280" rx="16" fill="#ffffff" stroke="#1e3a8a" stroke-width="2" filter="url(#shadowCard)"/>
+                <rect width="340" height="50" rx="16" fill="#2563eb"/><rect y="34" width="340" height="16" fill="#2563eb"/>
+                <text x="170" y="32" text-anchor="middle" font-size="18" font-weight="800" fill="#ffffff">Issuer</text>
+                <text x="170" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Manufacturer · Supplier · Producer</text>
+
+                <rect x="25" y="90" width="290" height="38" rx="8" fill="#dbeafe"/><text x="170" y="113" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">1. EPCIS event captured</text>
+                <line x1="170" y1="132" x2="170" y2="148" stroke="#93c5fd" stroke-width="2"/>
+                <rect x="25" y="148" width="290" height="38" rx="8" fill="#dbeafe"/><text x="170" y="171" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">2. Lossless mapping to VC schema</text>
+                <line x1="170" y1="190" x2="170" y2="206" stroke="#93c5fd" stroke-width="2"/>
+                <rect x="25" y="206" width="290" height="38" rx="8" fill="#dbeafe"/><text x="170" y="229" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">3. Signed with DID private key</text>
+                <rect x="25" y="252" width="290" height="38" rx="10" fill="#1e3a8a"/>
+                <text x="170" y="276" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">▰▰▰ Verifiable Credential ▰▰▰</text>
+            </g>
+
+            <line x1="375" y1="420" x2="455" y2="420" stroke="#2563eb" stroke-width="3" marker-end="url(#arrowBlue)" class="flow-line"/>
+            <text x="415" y="410" text-anchor="middle" font-size="11" font-weight="800" fill="#1d4ed8">transmits</text>
+
+            <!-- HOLDER -->
+            <g transform="translate(470, 280)">
+                <rect width="340" height="280" rx="16" fill="#ffffff" stroke="#5b21b6" stroke-width="2" filter="url(#shadowCard)"/>
+                <rect width="340" height="50" rx="16" fill="#7c3aed"/><rect y="34" width="340" height="16" fill="#7c3aed"/>
+                <text x="170" y="32" text-anchor="middle" font-size="18" font-weight="800" fill="#ffffff">Holder</text>
+                <text x="170" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Wholesaler · Logistics · Distributor</text>
+
+                <rect x="25" y="90" width="290" height="38" rx="8" fill="#ede9fe"/><text x="170" y="113" text-anchor="middle" font-size="12" font-weight="700" fill="#4c1d95">4. Receives &amp; stores credential</text>
+                <line x1="170" y1="132" x2="170" y2="148" stroke="#c4b5fd" stroke-width="2"/>
+                <rect x="25" y="148" width="290" height="38" rx="8" fill="#ede9fe"/><text x="170" y="171" text-anchor="middle" font-size="12" font-weight="700" fill="#4c1d95">5. Assembles verifiable presentation</text>
+                <line x1="170" y1="190" x2="170" y2="206" stroke="#c4b5fd" stroke-width="2"/>
+                <rect x="25" y="206" width="290" height="38" rx="8" fill="#ede9fe"/><text x="170" y="229" text-anchor="middle" font-size="12" font-weight="700" fill="#4c1d95">6. Selective disclosure applied</text>
+                <rect x="25" y="252" width="290" height="38" rx="10" fill="#5b21b6"/>
+                <text x="170" y="276" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">▰▰ Verifiable Presentation ▰▰</text>
+            </g>
+
+            <line x1="815" y1="420" x2="895" y2="420" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrowPurple)" class="flow-line"/>
+            <text x="855" y="410" text-anchor="middle" font-size="11" font-weight="800" fill="#6d28d9">presents</text>
+
+            <!-- VERIFIER -->
+            <g transform="translate(910, 280)">
+                <rect width="260" height="280" rx="16" fill="#ffffff" stroke="#064e3b" stroke-width="2" filter="url(#shadowCard)"/>
+                <rect width="260" height="50" rx="16" fill="#059669"/><rect y="34" width="260" height="16" fill="#059669"/>
+                <text x="130" y="32" text-anchor="middle" font-size="18" font-weight="800" fill="#ffffff">Verifier</text>
+                <text x="130" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Regulator · Auditor · Retailer</text>
+
+                <rect x="15" y="90" width="230" height="38" rx="8" fill="#d1fae5"/><text x="130" y="113" text-anchor="middle" font-size="12" font-weight="700" fill="#064e3b">7. Resolve DID → public key</text>
+                <line x1="130" y1="132" x2="130" y2="148" stroke="#6ee7b7" stroke-width="2"/>
+                <rect x="15" y="148" width="230" height="38" rx="8" fill="#d1fae5"/><text x="130" y="171" text-anchor="middle" font-size="12" font-weight="700" fill="#064e3b">8. Verify cryptographic proof</text>
+                <line x1="130" y1="190" x2="130" y2="206" stroke="#6ee7b7" stroke-width="2"/>
+                <rect x="15" y="206" width="230" height="38" rx="8" fill="#d1fae5"/><text x="130" y="229" text-anchor="middle" font-size="12" font-weight="700" fill="#064e3b">9. Check status &amp; authority</text>
+                <rect x="40" y="252" width="180" height="38" rx="10" fill="#064e3b"/>
+                <text x="130" y="276" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">✓ Verified &amp; Accepted</text>
+            </g>
+
+            <!-- LAYER 3: TRUST ANCHOR GOVERNANCE -->
+            <g transform="translate(30, 590)">
+                <rect width="1140" height="90" rx="16" fill="#fffbeb" stroke="#f59e0b" stroke-width="2" filter="url(#shadowCard)"/>
+                <text x="570" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#0f172a">Layer 4: Trust Anchor Governance &amp; Issuer Registry</text>
+                <text x="570" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">Authorization governance · DID-to-Legal Entity binding · Credential status lists · Revocation infrastructure</text>
+                <text x="570" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">Separates cryptographic proof verification from real-world authorization legitimacy</text>
+                <rect x="90" y="60" width="160" height="24" rx="8" fill="#fef3c7"/><text x="170" y="76" text-anchor="middle" font-size="11" font-weight="800" fill="#78350f">Issuer Authorization</text>
+                <rect x="270" y="60" width="160" height="24" rx="8" fill="#fef3c7"/><text x="350" y="76" text-anchor="middle" font-size="11" font-weight="800" fill="#78350f">Credential Status Lists</text>
+                <rect x="450" y="60" width="160" height="24" rx="8" fill="#fef3c7"/><text x="530" y="76" text-anchor="middle" font-size="11" font-weight="800" fill="#78350f">DID Registry &amp; Key Mgmt</text>
+                <rect x="630" y="60" width="160" height="24" rx="8" fill="#fef3c7"/><text x="710" y="76" text-anchor="middle" font-size="11" font-weight="800" fill="#78350f">Trust Anchors (e.g., GS1)</text>
+                <rect x="810" y="60" width="160" height="24" rx="8" fill="#fef3c7"/><text x="890" y="76" text-anchor="middle" font-size="11" font-weight="800" fill="#78350f">Historical Key Archive</text>
+                <rect x="990" y="60" width="160" height="24" rx="8" fill="#fef3c7"/><text x="1070" y="76" text-anchor="middle" font-size="11" font-weight="800" fill="#78350f">Cross-Border Recognition</text>
+            </g>
+
+            <!-- Flow lines from actors to Trust Layer -->
+            <line x1="200" y1="565" x2="200" y2="598" stroke="#d97706" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrowAmber)" class="flow-line"/>
+            <line x1="640" y1="565" x2="640" y2="598" stroke="#d97706" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrowAmber)" class="flow-line"/>
+            <line x1="1040" y1="565" x2="1040" y2="598" stroke="#d97706" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrowAmber)" class="flow-line"/>
+            <text x="200" y="585" text-anchor="middle" font-size="10" font-weight="800" fill="#b45309">register DID</text>
+            <text x="1040" y="585" text-anchor="middle" font-size="10" font-weight="800" fill="#b45309">verify authorization</text>
+
+            <!-- LAYER 4: SECTOR & REGULATORY OVERLAYS -->
+            <g transform="translate(30, 700)">
+                <rect width="1140" height="48" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" filter="url(#shadowLight)"/>
+                <text x="570" y="30" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">Layer 5: Sector-Specific &amp; Global Regulatory Overlays</text>
+            </g>
+
+            <g transform="translate(30, 760)">
+                <!-- Sector Cards -->
+                <rect width="170" height="100" rx="12" fill="#ffffff" stroke="#60a5fa" stroke-width="2" filter="url(#shadowLight)"/>
+                <text x="85" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">Pharmaceuticals</text>
+                <text x="85" y="52" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">DSCSA · FMD · PMD Act</text>
+                <text x="85" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">ANVISA · DTAB · SFDA</text>
+
+                <rect x="190" width="170" height="100" rx="12" fill="#ffffff" stroke="#34d399" stroke-width="2" filter="url(#shadowLight)"/>
+                <text x="275" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#064e3b">Food &amp; Agriculture</text>
+                <text x="275" y="52" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">FSMA · EUDR · GFL</text>
+                <text x="275" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">SAMR · FSSAI · AfCFTA</text>
+
+                <rect x="380" width="170" height="100" rx="12" fill="#ffffff" stroke="#a78bfa" stroke-width="2" filter="url(#shadowLight)"/>
+                <text x="465" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#4c1d95">Electronics &amp; Batteries</text>
+                <text x="465" y="52" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">EU-BEV · ESPR · IRA</text>
+                <text x="465" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">CPSIA · MIIT · K-REACH</text>
+
+                <rect x="570" width="170" height="100" rx="12" fill="#ffffff" stroke="#fbbf24" stroke-width="2" filter="url(#shadowLight)"/>
+                <text x="655" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#78350f">Critical Minerals</text>
+                <text x="655" y="52" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">CRMA · DPA · DOE</text>
+                <text x="655" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">MIIT · CMS · IGF</text>
+
+                <rect x="760" width="170" height="100" rx="12" fill="#ffffff" stroke="#f87171" stroke-width="2" filter="url(#shadowLight)"/>
+                <text x="845" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#7f1d1d">Aerospace &amp; Defense</text>
+                <text x="845" y="52" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">DFARS · ITAR · EASA</text>
+                <text x="845" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">AS9100 · ATLA · DGCA</text>
+
+                <rect x="950" width="220" height="100" rx="12" fill="#ffffff" stroke="#22d3ee" stroke-width="2" filter="url(#shadowLight)"/>
+                <text x="1060" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#164e63">Cross-Sector Global</text>
+                <text x="1060" y="52" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">WCO SAFE · ISO 28000</text>
+                <text x="1060" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#475569">UNTP · UN/CEFACT · WTO TFA</text>
+            </g>
         </svg>
         <p class="caption">
             Figure 1 — VSC Architecture: Five-layer convergence of physical events (EPCIS), cryptographic integrity (VC Data Model),
@@ -1334,6 +1529,27 @@
         vocabularies for <code>bizStep</code> and <code>disposition</code>
         fields. EPCIS 2.0 was published in 2022 and remains the current
         version.
+      </dd>
+
+      <dt>W3C Physical Asset Attestation (UORA) Community Group</dt>
+      <dd>
+        The Universal Object & Resource Attestation (UORA) Community Group
+        develops protocols for binding physical objects to digital
+        identifiers using DIDs and Verifiable Credentials. UORA focuses on
+        universal object addressing at batch, SKU, and serial levels;
+        lifecycle attestation schemas for Origin, Transfer, Transformation,
+        and Disposition events; and secure physical-to-digital binding
+        through tamper-evident anchors such as NFC, QR codes, and IoT
+        sensors. VSC extends UORA's attestation model with normative trade
+        vocabularies (HS Codes, INCOTERMS®, UCP 600), cross-domain
+        verification via the Event Matrix, and machine-executable
+        regulatory compliance via the Rule Compiler. VSC credentials are
+        designed to be compatible with UORA's physical binding layer:
+        a UORA-anchored object identifier can serve as the subject of a
+        VSC credential carrying trade-specific classifications and
+        compliance data. Implementations MAY use UORA specifications for
+        physical-to-digital binding while using VSC for the trade and
+        compliance layer above.
       </dd>
 
       <dt>W3C Verifiable Credentials Data Model v2.0 [[VC-DATA-MODEL]]</dt>
