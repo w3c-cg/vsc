@@ -5315,18 +5315,261 @@ labels = {
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     8. REQUIREMENTS
+     12. REQUIREMENTS
      ═══════════════════════════════════════════════════════════════ -->
 <section id="requirements">
+
+  <div class="figure" style="overflow-x:auto;background:#fff;padding:30px 0;">
+  <svg viewBox="0 0 1100 950" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <style>
+        @keyframes subtlePulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+        .pulse-live { animation: subtlePulse 3s ease-in-out infinite; }
+      </style>
+      <filter id="sh"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity=".05"/></filter>
+      <filter id="sh-icon"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity=".12"/></filter>
+      <linearGradient id="g-blue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient>
+      <linearGradient id="g-purple" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#5b21b6"/></linearGradient>
+      <linearGradient id="g-amber" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
+      <linearGradient id="g-teal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#14b8a6"/><stop offset="100%" stop-color="#0f766e"/></linearGradient>
+      <linearGradient id="g-green" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient>
+    </defs>
+
+    <rect width="1100" height="950" fill="#fff" rx="16"/>
+
+    <!-- Title -->
+    <text x="550" y="30" text-anchor="middle" font-size="18" font-weight="900" fill="#0f172a" letter-spacing="-0.5">VSC REQUIREMENTS ARCHITECTURE</text>
+    <text x="550" y="52" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b" letter-spacing="1">25 CONFORMANCE GATES · 20 FUNCTIONAL · 5 NON-FUNCTIONAL</text>
+
+    <!-- ═══════════════ ROW 1: CORE ARCHITECTURE ═══════════════ -->
+    <text x="50" y="85" font-size="11" font-weight="800" fill="#2563eb" letter-spacing="0.5">CORE EVENT ARCHITECTURE</text>
+    <text x="250" y="85" font-size="9" font-weight="500" fill="#64748b">— How events become verifiable</text>
+    <line x1="50" y1="94" x2="1050" y2="94" stroke="#f1f5f9" stroke-width="2"/>
+
+    <rect x="50" y="108" width="185" height="88" rx="14" fill="#fff" stroke="#bfdbfe" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="78" cy="137" r="18" fill="url(#g-blue)" filter="url(#sh-icon)"/>
+    <text x="78" y="142" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">01</text>
+    <text x="108" y="134" font-size="12" font-weight="800" fill="#1e40af">Event-to-VC</text>
+    <text x="108" y="152" font-size="12" font-weight="800" fill="#1e40af">Mapping</text>
+    <rect x="108" y="168" width="48" height="15" rx="4" fill="#dbeafe"/><text x="132" y="179" text-anchor="middle" font-size="7" font-weight="800" fill="#2563eb">MUST</text>
+    <text x="164" y="179" font-size="7" font-weight="600" fill="#475569">Issuer</text>
+
+    <rect x="250" y="108" width="185" height="88" rx="14" fill="#fff" stroke="#bfdbfe" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="278" cy="137" r="18" fill="url(#g-blue)" filter="url(#sh-icon)"/>
+    <text x="278" y="142" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">02</text>
+    <text x="308" y="134" font-size="12" font-weight="800" fill="#1e40af">Semantics</text>
+    <text x="308" y="152" font-size="12" font-weight="800" fill="#1e40af">Preservation</text>
+    <rect x="308" y="168" width="48" height="15" rx="4" fill="#dbeafe"/><text x="332" y="179" text-anchor="middle" font-size="7" font-weight="800" fill="#2563eb">MUST</text>
+    <text x="364" y="179" font-size="7" font-weight="600" fill="#475569">Issuer</text>
+
+    <rect x="450" y="108" width="185" height="88" rx="14" fill="#fff" stroke="#bfdbfe" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="478" cy="137" r="18" fill="url(#g-blue)" filter="url(#sh-icon)"/>
+    <text x="478" y="142" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">03</text>
+    <text x="508" y="134" font-size="12" font-weight="800" fill="#1e40af">DID</text>
+    <text x="508" y="152" font-size="12" font-weight="800" fill="#1e40af">Binding</text>
+    <rect x="508" y="168" width="48" height="15" rx="4" fill="#dbeafe"/><text x="532" y="179" text-anchor="middle" font-size="7" font-weight="800" fill="#2563eb">MUST</text>
+    <text x="564" y="179" font-size="7" font-weight="600" fill="#475569">Issuer</text>
+
+    <rect x="650" y="108" width="185" height="88" rx="14" fill="#fff" stroke="#c4b5fd" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="678" cy="137" r="18" fill="url(#g-purple)" filter="url(#sh-icon)"/>
+    <text x="678" y="142" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">04</text>
+    <text x="708" y="134" font-size="12" font-weight="800" fill="#5b21b6">Event</text>
+    <text x="708" y="152" font-size="12" font-weight="800" fill="#5b21b6">Linking</text>
+    <rect x="708" y="168" width="55" height="15" rx="4" fill="#ede9fe"/><text x="735" y="179" text-anchor="middle" font-size="7" font-weight="800" fill="#7c3aed">SHOULD</text>
+    <text x="770" y="179" font-size="7" font-weight="600" fill="#475569">Issuer</text>
+
+    <rect x="850" y="108" width="200" height="88" rx="14" fill="#fff" stroke="#c4b5fd" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="878" cy="137" r="18" fill="url(#g-purple)" filter="url(#sh-icon)"/>
+    <text x="878" y="142" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">05</text>
+    <text x="908" y="134" font-size="12" font-weight="800" fill="#5b21b6">Selective</text>
+    <text x="908" y="152" font-size="12" font-weight="800" fill="#5b21b6">Disclosure</text>
+    <rect x="908" y="168" width="48" height="15" rx="4" fill="#ede9fe"/><text x="932" y="179" text-anchor="middle" font-size="7" font-weight="800" fill="#7c3aed">MUST</text>
+    <text x="964" y="179" font-size="7" font-weight="600" fill="#475569">Issuer / Verifier</text>
+
+    <!-- ═══════════════ ROW 2: TRUST & AUTHORITY ═══════════════ -->
+    <text x="50" y="225" font-size="11" font-weight="800" fill="#d97706" letter-spacing="0.5">TRUST &amp; AUTHORITY</text>
+    <text x="210" y="225" font-size="9" font-weight="500" fill="#64748b">— Who is authorized to assert what</text>
+    <line x1="50" y1="234" x2="1050" y2="234" stroke="#f1f5f9" stroke-width="2"/>
+
+    <rect x="50" y="248" width="185" height="88" rx="14" fill="#fff" stroke="#fde68a" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="78" cy="277" r="18" fill="url(#g-amber)" filter="url(#sh-icon)"/>
+    <text x="78" y="282" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">06</text>
+    <text x="108" y="274" font-size="12" font-weight="800" fill="#92400e">Batch &amp;</text>
+    <text x="108" y="292" font-size="12" font-weight="800" fill="#92400e">Lot Trace</text>
+    <rect x="108" y="308" width="55" height="15" rx="4" fill="#fef3c7"/><text x="135" y="319" text-anchor="middle" font-size="7" font-weight="800" fill="#d97706">SHOULD</text>
+    <text x="170" y="319" font-size="7" font-weight="600" fill="#475569">Issuer</text>
+
+    <rect x="250" y="248" width="185" height="88" rx="14" fill="#fff" stroke="#fde68a" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="278" cy="277" r="18" fill="url(#g-amber)" filter="url(#sh-icon)"/>
+    <text x="278" y="282" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">07</text>
+    <text x="308" y="274" font-size="12" font-weight="800" fill="#92400e">Issuer</text>
+    <text x="308" y="292" font-size="12" font-weight="800" fill="#92400e">Authority</text>
+    <rect x="308" y="308" width="48" height="15" rx="4" fill="#fef3c7"/><text x="332" y="319" text-anchor="middle" font-size="7" font-weight="800" fill="#d97706">MUST</text>
+    <text x="364" y="319" font-size="7" font-weight="600" fill="#475569">Verifier</text>
+
+    <rect x="450" y="248" width="185" height="88" rx="14" fill="#fff" stroke="#fde68a" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="478" cy="277" r="18" fill="url(#g-amber)" filter="url(#sh-icon)"/>
+    <text x="478" y="282" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">08</text>
+    <text x="508" y="274" font-size="12" font-weight="800" fill="#92400e">Credential</text>
+    <text x="508" y="292" font-size="12" font-weight="800" fill="#92400e">Status</text>
+    <rect x="508" y="308" width="48" height="15" rx="4" fill="#fef3c7"/><text x="532" y="319" text-anchor="middle" font-size="7" font-weight="800" fill="#d97706">MUST</text>
+    <text x="564" y="319" font-size="7" font-weight="600" fill="#475569">Both</text>
+
+    <rect x="650" y="248" width="185" height="88" rx="14" fill="#fff" stroke="#fde68a" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="678" cy="277" r="18" fill="url(#g-amber)" filter="url(#sh-icon)"/>
+    <text x="678" y="282" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">09</text>
+    <text x="708" y="274" font-size="12" font-weight="800" fill="#92400e">Chain</text>
+    <text x="708" y="292" font-size="12" font-weight="800" fill="#92400e">Integrity</text>
+    <rect x="708" y="308" width="55" height="15" rx="4" fill="#fef3c7"/><text x="735" y="319" text-anchor="middle" font-size="7" font-weight="800" fill="#d97706">SHOULD</text>
+    <text x="770" y="319" font-size="7" font-weight="600" fill="#475569">Verifier</text>
+
+    <rect x="850" y="248" width="200" height="88" rx="14" fill="#fff" stroke="#fde68a" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="878" cy="277" r="18" fill="url(#g-amber)" filter="url(#sh-icon)"/>
+    <text x="878" y="282" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">10</text>
+    <text x="908" y="274" font-size="12" font-weight="800" fill="#92400e">Trust</text>
+    <text x="908" y="292" font-size="12" font-weight="800" fill="#92400e">Framework</text>
+    <rect x="908" y="308" width="55" height="15" rx="4" fill="#fef3c7"/><text x="935" y="319" text-anchor="middle" font-size="7" font-weight="800" fill="#d97706">SHOULD</text>
+    <text x="970" y="319" font-size="7" font-weight="600" fill="#475569">Both</text>
+
+    <!-- ═══════════════ ROW 3: NORMATIVE VOCABULARIES ═══════════════ -->
+    <text x="50" y="365" font-size="11" font-weight="800" fill="#0d9488" letter-spacing="0.5">NORMATIVE VOCABULARY BINDINGS</text>
+    <text x="290" y="365" font-size="9" font-weight="500" fill="#64748b">— Standardized languages VSC speaks</text>
+    <line x1="50" y1="374" x2="1050" y2="374" stroke="#f1f5f9" stroke-width="2"/>
+
+    <rect x="50" y="388" width="185" height="88" rx="14" fill="#fff" stroke="#99f6e4" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="78" cy="417" r="18" fill="url(#g-teal)" filter="url(#sh-icon)"/>
+    <text x="78" y="422" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">11</text>
+    <text x="108" y="414" font-size="12" font-weight="800" fill="#0f766e">HS Code</text>
+    <text x="108" y="432" font-size="12" font-weight="800" fill="#0f766e">Inclusion</text>
+    <rect x="108" y="448" width="55" height="15" rx="4" fill="#ccfbf1"/><text x="135" y="459" text-anchor="middle" font-size="7" font-weight="800" fill="#0d9488">SHOULD</text>
+    <text x="170" y="459" font-size="7" font-weight="600" fill="#475569">Issuer</text>
+
+    <rect x="250" y="388" width="185" height="88" rx="14" fill="#fff" stroke="#99f6e4" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="278" cy="417" r="18" fill="url(#g-teal)" filter="url(#sh-icon)"/>
+    <text x="278" y="422" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">12</text>
+    <text x="308" y="414" font-size="12" font-weight="800" fill="#0f766e">HS Trans-</text>
+    <text x="308" y="432" font-size="12" font-weight="800" fill="#0f766e">formation</text>
+    <rect x="308" y="448" width="48" height="15" rx="4" fill="#ccfbf1"/><text x="332" y="459" text-anchor="middle" font-size="7" font-weight="800" fill="#0d9488">MAY</text>
+    <text x="364" y="459" font-size="7" font-weight="600" fill="#475569">Issuer</text>
+
+    <rect x="450" y="388" width="185" height="88" rx="14" fill="#fff" stroke="#fde68a" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="478" cy="417" r="18" fill="url(#g-amber)" filter="url(#sh-icon)"/>
+    <text x="478" y="422" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">13</text>
+    <text x="508" y="414" font-size="12" font-weight="800" fill="#92400e">INCOTERMS®</text>
+    <text x="508" y="432" font-size="12" font-weight="800" fill="#92400e">Inclusion</text>
+    <rect x="508" y="448" width="55" height="15" rx="4" fill="#fef3c7"/><text x="535" y="459" text-anchor="middle" font-size="7" font-weight="800" fill="#d97706">SHOULD</text>
+    <text x="570" y="459" font-size="7" font-weight="600" fill="#475569">Issuer</text>
+
+    <rect x="650" y="388" width="185" height="88" rx="14" fill="#fff" stroke="#fde68a" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="678" cy="417" r="18" fill="url(#g-amber)" filter="url(#sh-icon)"/>
+    <text x="678" y="422" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">14</text>
+    <text x="708" y="414" font-size="12" font-weight="800" fill="#92400e">Auto</text>
+    <text x="708" y="432" font-size="12" font-weight="800" fill="#92400e">Liability</text>
+    <rect x="708" y="448" width="48" height="15" rx="4" fill="#fef3c7"/><text x="732" y="459" text-anchor="middle" font-size="7" font-weight="800" fill="#d97706">MAY</text>
+    <text x="764" y="459" font-size="7" font-weight="600" fill="#475569">Verifier</text>
+
+    <rect x="850" y="388" width="200" height="88" rx="14" fill="#fff" stroke="#a7f3d0" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="878" cy="417" r="18" fill="url(#g-green)" filter="url(#sh-icon)"/>
+    <text x="878" y="422" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">15</text>
+    <text x="908" y="414" font-size="12" font-weight="800" fill="#065f46">Trade</text>
+    <text x="908" y="432" font-size="12" font-weight="800" fill="#065f46">Finance</text>
+    <rect x="908" y="448" width="48" height="15" rx="4" fill="#d1fae5"/><text x="932" y="459" text-anchor="middle" font-size="7" font-weight="800" fill="#059669">MAY</text>
+    <text x="964" y="459" font-size="7" font-weight="600" fill="#475569">Issuer</text>
+
+    <!-- F16 centered -->
+    <rect x="350" y="490" width="185" height="88" rx="14" fill="#fff" stroke="#a7f3d0" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="378" cy="519" r="18" fill="url(#g-green)" filter="url(#sh-icon)"/>
+    <text x="378" y="524" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">16</text>
+    <text x="408" y="516" font-size="12" font-weight="800" fill="#065f46">LC</text>
+    <text x="408" y="534" font-size="12" font-weight="800" fill="#065f46">Compliance</text>
+    <rect x="408" y="550" width="48" height="15" rx="4" fill="#d1fae5"/><text x="432" y="561" text-anchor="middle" font-size="7" font-weight="800" fill="#059669">MAY</text>
+    <text x="464" y="561" font-size="7" font-weight="600" fill="#475569">Verifier</text>
+
+    <!-- ═══════════════ ROW 4: ARCHITECTURAL FRAMEWORKS ═══════════════ -->
+    <text x="50" y="610" font-size="11" font-weight="800" fill="#7c3aed" letter-spacing="0.5">ARCHITECTURAL FRAMEWORKS</text>
+    <text x="260" y="610" font-size="9" font-weight="500" fill="#64748b">— The verification operating system</text>
+    <line x1="50" y1="619" x2="1050" y2="619" stroke="#f1f5f9" stroke-width="2"/>
+
+    <rect x="100" y="633" width="200" height="88" rx="14" fill="#fff" stroke="#c4b5fd" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="128" cy="662" r="18" fill="url(#g-purple)" filter="url(#sh-icon)"/>
+    <text x="128" y="667" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">17</text>
+    <text x="158" y="659" font-size="12" font-weight="800" fill="#5b21b6">Event Matrix</text>
+    <text x="158" y="677" font-size="12" font-weight="800" fill="#5b21b6">Representation</text>
+    <rect x="158" y="693" width="48" height="15" rx="4" fill="#ede9fe"/><text x="182" y="704" text-anchor="middle" font-size="7" font-weight="800" fill="#7c3aed">MAY</text>
+    <text x="214" y="704" font-size="7" font-weight="600" fill="#475569">Both</text>
+
+    <rect x="320" y="633" width="200" height="88" rx="14" fill="#fff" stroke="#c4b5fd" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="348" cy="662" r="18" fill="url(#g-purple)" filter="url(#sh-icon)"/>
+    <text x="348" y="667" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">18</text>
+    <text x="378" y="659" font-size="12" font-weight="800" fill="#5b21b6">Dimension</text>
+    <text x="378" y="677" font-size="12" font-weight="800" fill="#5b21b6">Extensibility</text>
+    <rect x="378" y="693" width="48" height="15" rx="4" fill="#ede9fe"/><text x="402" y="704" text-anchor="middle" font-size="7" font-weight="800" fill="#7c3aed">MUST</text>
+    <text x="434" y="704" font-size="7" font-weight="600" fill="#475569">Verifier</text>
+
+    <rect x="540" y="633" width="200" height="88" rx="14" fill="#fff" stroke="#a7f3d0" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="568" cy="662" r="18" fill="url(#g-green)" filter="url(#sh-icon)"/>
+    <text x="568" y="667" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">19</text>
+    <text x="598" y="659" font-size="12" font-weight="800" fill="#065f46">Machine</text>
+    <text x="598" y="677" font-size="12" font-weight="800" fill="#065f46">Exec. Rules</text>
+    <rect x="598" y="693" width="48" height="15" rx="4" fill="#d1fae5"/><text x="622" y="704" text-anchor="middle" font-size="7" font-weight="800" fill="#059669">MAY</text>
+    <text x="654" y="704" font-size="7" font-weight="600" fill="#475569">Verifier</text>
+
+    <rect x="760" y="633" width="200" height="88" rx="14" fill="#fff" stroke="#a7f3d0" stroke-width="1.5" filter="url(#sh)"/>
+    <circle cx="788" cy="662" r="18" fill="url(#g-green)" filter="url(#sh-icon)"/>
+    <text x="788" y="667" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">20</text>
+    <text x="818" y="659" font-size="12" font-weight="800" fill="#065f46">Rule</text>
+    <text x="818" y="677" font-size="12" font-weight="800" fill="#065f46">Versioning</text>
+    <rect x="818" y="693" width="48" height="15" rx="4" fill="#d1fae5"/><text x="842" y="704" text-anchor="middle" font-size="7" font-weight="800" fill="#059669">MUST</text>
+    <text x="874" y="704" font-size="7" font-weight="600" fill="#475569">Verifier</text>
+
+    <!-- ═══════════════ ROW 5: NON-FUNCTIONAL ═══════════════ -->
+    <text x="50" y="750" font-size="11" font-weight="800" fill="#059669" letter-spacing="0.5">NON-FUNCTIONAL REQUIREMENTS</text>
+    <text x="280" y="750" font-size="9" font-weight="500" fill="#64748b">— Performance · Privacy · Interoperability · Extensibility · Longevity</text>
+    <line x1="50" y1="759" x2="1050" y2="759" stroke="#f1f5f9" stroke-width="2"/>
+
+    <rect x="50" y="773" width="185" height="52" rx="12" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+    <text x="142" y="798" text-anchor="middle" font-size="10" font-weight="800" fill="#065f46">NF01</text>
+    <text x="142" y="816" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">Scalability</text>
+
+    <rect x="250" y="773" width="185" height="52" rx="12" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+    <text x="342" y="798" text-anchor="middle" font-size="10" font-weight="800" fill="#065f46">NF02</text>
+    <text x="342" y="816" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">Privacy Preservation</text>
+
+    <rect x="450" y="773" width="185" height="52" rx="12" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+    <text x="542" y="798" text-anchor="middle" font-size="10" font-weight="800" fill="#065f46">NF03</text>
+    <text x="542" y="816" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">Interoperability</text>
+
+    <rect x="650" y="773" width="185" height="52" rx="12" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+    <text x="742" y="798" text-anchor="middle" font-size="10" font-weight="800" fill="#065f46">NF04</text>
+    <text x="742" y="816" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">Extensibility</text>
+
+    <rect x="850" y="773" width="200" height="52" rx="12" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+    <text x="950" y="798" text-anchor="middle" font-size="10" font-weight="800" fill="#065f46">NF05</text>
+    <text x="950" y="816" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">Long-term Verifiability</text>
+
+    <!-- ═══════════════ BOTTOM STATS BAR ═══════════════ -->
+    <rect x="50" y="855" width="1000" height="44" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+    <circle cx="120" cy="877" r="8" fill="#3b82f6"/><text x="140" y="881" font-size="9" font-weight="700" fill="#1e40af">8 MUST</text>
+    <circle cx="260" cy="877" r="8" fill="#8b5cf6"/><text x="280" y="881" font-size="9" font-weight="700" fill="#5b21b6">7 SHOULD</text>
+    <circle cx="400" cy="877" r="8" fill="#94a3b8"/><text x="420" y="881" font-size="9" font-weight="700" fill="#64748b">5 MAY</text>
+    <text x="600" y="881" text-anchor="middle" font-size="9" font-weight="600" fill="#475569">= 25 Conformance Gates · Core Architecture → Trust → Vocabularies → Frameworks → Non-Functional</text>
+    <circle cx="1000" cy="877" r="14" fill="#047857" filter="url(#sh-icon)"/>
+    <text x="1000" y="882" text-anchor="middle" font-size="11" font-weight="900" fill="#fff">25</text>
+  </svg>
+  <p class="caption">
+    Figure 4 — The 25 VSC Conformance Gates. Requirements are organized into five horizontal rows: Core Event Architecture (01–05) covers EPCIS mapping, semantics preservation, DID binding, event linking, and selective disclosure. Trust &amp; Authority (06–10) covers batch traceability, issuer authorization, credential status, chain integrity detection, and trust framework references. Normative Vocabulary Bindings (11–16) covers HS code inclusion and transformation, INCOTERMS® binding and automated liability, and trade finance instrument binding with automated LC compliance. Architectural Frameworks (17–20) covers the Event Matrix, dimension extensibility, machine-executable regulatory rules, and rule versioning. Non-Functional Requirements (NF01–NF05) covers scalability, privacy, interoperability, extensibility, and long-term verifiability.
+  </p>
+</div>
   <h2>Requirements</h2>
 
   <p>
     The following requirements are derived from the use cases in
-    <a href="#use-cases">Use Cases</a> and from the regulatory and standards
-    landscape described in <a href="#introduction">Introduction</a>. Each requirement
-    is identified by a stable identifier, states the conformance level,
-    provides a rationale grounded in published sources, and includes a
-    testability statement to guide conformance test development.
+    <a href="#use-cases">§11 Use Cases</a> and from the regulatory and
+    standards landscape described in <a href="#introduction">§1 Introduction</a>.
+    Each requirement is identified by a stable identifier, states the
+    conformance level, provides a rationale grounded in published sources,
+    and includes a testability statement to guide conformance test
+    development.
   </p>
 
   <p class="note" title="Relationship to VC Data Model">
@@ -5336,38 +5579,71 @@ labels = {
     VC Data Model.
   </p>
 
-  <!-- Requirements summary table -->
+  <!-- ═════════════════════════════════════════════════════════════ -->
+  <!-- 12.1 Requirements Summary -->
+  <!-- ═════════════════════════════════════════════════════════════ -->
   <section id="requirements-summary">
     <h3>Requirements Summary</h3>
 
+    <p>
+      The following table provides a high-level overview of all twenty
+      functional and five non-functional requirements. Each requirement
+      is linked to its detailed specification below and cross-referenced
+      to the use cases that motivate it.
+    </p>
+
     <table class="req-table" summary="Summary of all VSC requirements">
       <thead>
-        <tr><th>ID</th><th>Title</th><th>Level</th><th>Class</th><th>Use Cases</th></tr>
+        <tr><th>ID</th><th>Title</th><th>Level</th><th>Conformance Class</th><th>Use Cases</th></tr>
       </thead>
       <tbody>
-        <tr><td><a href="#req-f01">REQ-F01</a></td><td>Event-to-Credential Mapping</td><td class="level-must">MUST</td><td>Issuer</td><td>UC-01–04</td></tr>
-        <tr><td><a href="#req-f02">REQ-F02</a></td><td>Event Semantics Preservation</td><td class="level-must">MUST</td><td>Issuer</td><td>UC-01, UC-02</td></tr>
-        <tr><td><a href="#req-f03">REQ-F03</a></td><td>Issuer DID Binding</td><td class="level-must">MUST</td><td>Issuer</td><td>UC-01–05</td></tr>
-        <tr><td><a href="#req-f04">REQ-F04</a></td><td>Event Linking</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-01–04</td></tr>
-        <tr><td><a href="#req-f05">REQ-F05</a></td><td>Selective Disclosure</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-02, UC-03, UC-06</td></tr>
+        <tr><td><a href="#req-f01">REQ-F01</a></td><td>Event-to-Credential Mapping</td><td class="level-must">MUST</td><td>Issuer</td><td>UC-01–04, UC-07–11</td></tr>
+        <tr><td><a href="#req-f02">REQ-F02</a></td><td>Event Semantics Preservation</td><td class="level-must">MUST</td><td>Issuer</td><td>UC-01, UC-02, UC-08</td></tr>
+        <tr><td><a href="#req-f03">REQ-F03</a></td><td>Issuer DID Binding</td><td class="level-must">MUST</td><td>Issuer</td><td>UC-01–05, UC-07–11</td></tr>
+        <tr><td><a href="#req-f04">REQ-F04</a></td><td>Event Linking</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-01–04, UC-07–09</td></tr>
+        <tr><td><a href="#req-f05">REQ-F05</a></td><td>Selective Disclosure</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-02, UC-03, UC-06, UC-07, UC-09</td></tr>
         <tr><td><a href="#req-f06">REQ-F06</a></td><td>Batch and Lot Traceability</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-03, UC-04</td></tr>
-        <tr><td><a href="#req-f07">REQ-F07</a></td><td>Issuer Authority Verification</td><td class="level-must">MUST</td><td>Verifier</td><td>UC-01, UC-03, UC-06</td></tr>
-        <tr><td><a href="#req-f08">REQ-F08</a></td><td>Credential Status and Revocation</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-02, UC-05</td></tr>
-        <tr><td><a href="#req-f09">REQ-F09</a></td><td>Chain Integrity Detection</td><td class="level-should">SHOULD</td><td>Verifier</td><td>UC-01, UC-02, UC-04</td></tr>
+        <tr><td><a href="#req-f07">REQ-F07</a></td><td>Issuer Authority Verification</td><td class="level-must">MUST</td><td>Verifier</td><td>UC-01–03, UC-06–11</td></tr>
+        <tr><td><a href="#req-f08">REQ-F08</a></td><td>Credential Status and Revocation</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-02, UC-05, UC-07</td></tr>
+        <tr><td><a href="#req-f09">REQ-F09</a></td><td>Chain Integrity Detection</td><td class="level-should">SHOULD</td><td>Verifier</td><td>UC-01, UC-02, UC-04, UC-08</td></tr>
         <tr><td><a href="#req-f10">REQ-F10</a></td><td>Trust Framework Reference</td><td class="level-should">SHOULD</td><td>Issuer, Verifier</td><td>UC-01–03</td></tr>
-        <tr><td><a href="#req-nf01">REQ-NF01</a></td><td>Scalability</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-02, UC-04, UC-05</td></tr>
+        <tr><td><a href="#req-f11">REQ-F11</a></td><td>HS Code Inclusion</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-03, UC-09–11</td></tr>
+        <tr><td><a href="#req-f12">REQ-F12</a></td><td>HS Transformation in Manufacturing</td><td class="level-may">MAY</td><td>Issuer</td><td>UC-04, UC-09</td></tr>
+        <tr><td><a href="#req-f13">REQ-F13</a></td><td>INCOTERMS® Inclusion</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-03, UC-10, UC-11</td></tr>
+        <tr><td><a href="#req-f14">REQ-F14</a></td><td>Automated INCOTERMS Liability</td><td class="level-may">MAY</td><td>Verifier</td><td>UC-10</td></tr>
+        <tr><td><a href="#req-f15">REQ-F15</a></td><td>Trade Finance Instrument Binding</td><td class="level-may">MAY</td><td>Issuer</td><td>UC-11</td></tr>
+        <tr><td><a href="#req-f16">REQ-F16</a></td><td>Automated LC Compliance</td><td class="level-may">MAY</td><td>Verifier</td><td>UC-11</td></tr>
+        <tr><td><a href="#req-f17">REQ-F17</a></td><td>Event Matrix Representation</td><td class="level-may">MAY</td><td>Issuer, Verifier</td><td>UC-01–11</td></tr>
+        <tr><td><a href="#req-f18">REQ-F18</a></td><td>Dimension Extensibility</td><td class="level-must">MUST</td><td>Verifier</td><td>All</td></tr>
+        <tr><td><a href="#req-f19">REQ-F19</a></td><td>Machine-Executable Regulatory Rules</td><td class="level-may">MAY</td><td>Verifier</td><td>All</td></tr>
+        <tr><td><a href="#req-f20">REQ-F20</a></td><td>Rule Versioning and Lifecycle</td><td class="level-must">MUST</td><td>Verifier</td><td>All</td></tr>
+        <tr><td><a href="#req-nf01">REQ-NF01</a></td><td>Scalability</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-02, UC-04, UC-05, UC-07</td></tr>
         <tr><td><a href="#req-nf02">REQ-NF02</a></td><td>Privacy Preservation</td><td class="level-should">SHOULD</td><td>Issuer, Verifier</td><td>UC-03, UC-06</td></tr>
-        <tr><td><a href="#req-nf03">REQ-NF03</a></td><td>Interoperability</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-01, UC-03</td></tr>
-        <tr><td><a href="#req-nf04">REQ-NF04</a></td><td>Extensibility</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-04</td></tr>
+        <tr><td><a href="#req-nf03">REQ-NF03</a></td><td>Interoperability</td><td class="level-must">MUST</td><td>Issuer, Verifier</td><td>UC-01, UC-03, UC-09–11</td></tr>
+        <tr><td><a href="#req-nf04">REQ-NF04</a></td><td>Extensibility</td><td class="level-should">SHOULD</td><td>Issuer</td><td>UC-04, UC-08–10</td></tr>
         <tr><td><a href="#req-nf05">REQ-NF05</a></td><td>Long-term Verifiability</td><td class="level-should">SHOULD</td><td>Verifier</td><td>UC-06</td></tr>
       </tbody>
     </table>
   </section>
 
-  <!-- Functional Requirements -->
+  <!-- ═════════════════════════════════════════════════════════════ -->
+  <!-- 12.2 Functional Requirements -->
+  <!-- ═════════════════════════════════════════════════════════════ -->
   <section id="functional-requirements">
     <h3>Functional Requirements</h3>
 
+    <p>
+      This section specifies the twenty functional requirements (REQ-F01
+      through REQ-F20) that govern VSC-conformant implementations. Each
+      requirement includes its conformance level, the conformance class
+      to which it applies, a rationale citing published standards or
+      regulations, and a testability statement suitable for inclusion in
+      a formal conformance test suite.
+    </p>
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F01 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f01">
       <span class="req-id">REQ-F01</span>
       <span class="req-title"> — Event-to-Credential Mapping</span>
@@ -5378,7 +5654,7 @@ labels = {
         AggregationEvent, TransformationEvent, TransactionEvent, and
         AssociationEvent. The mapping applied <em class="rfc2119">MUST</em>
         conform to the normative <a>Event-to-Credential Mapping</a> defined
-        in the VSC Core Data Model specification (once published).
+        in the VSC Core Data Model specification.
       </p>
       <p class="req-rationale">
         EPCIS v2.0 [[EPCIS]] defines five event types covering the full
@@ -5399,6 +5675,9 @@ labels = {
       <p class="req-refs">[[EPCIS]] Section 7; [[GS1-CBV]]; [[VC-DATA-MODEL]] Section 4.</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F02 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f02">
       <span class="req-id">REQ-F02</span>
       <span class="req-title"> — Event Semantics Preservation</span>
@@ -5436,6 +5715,9 @@ labels = {
       <p class="req-refs">[[EPCIS]] Sections 7–9; [[DSCSA]]; [[EUDR]] Article 9; [[ISO28000]].</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F03 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f03">
       <span class="req-id">REQ-F03</span>
       <span class="req-title"> — Issuer DID Binding</span>
@@ -5467,6 +5749,9 @@ labels = {
       <p class="req-refs">[[DID-CORE]] Sections 3, 7; [[VC-DATA-MODEL]] Section 4.5; [[VC-DATA-INTEGRITY]].</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F04 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f04">
       <span class="req-id">REQ-F04</span>
       <span class="req-title"> — Event Linking</span>
@@ -5477,8 +5762,8 @@ labels = {
         preceding events in the chain. References <em class="rfc2119">MUST</em>
         use the <code>id</code> property of the referenced credential,
         expressed as a URI, in the credential subject. A <a>VSC Verifier</a>
-        SHOULD follow event links to reconstruct the chain and verify each
-        linked credential.
+        <em class="rfc2119">SHOULD</em> follow event links to reconstruct
+        the chain and verify each linked credential.
       </p>
       <p class="req-rationale">
         Custody chain reconstruction is required by [[DSCSA]] (full tracing
@@ -5499,6 +5784,9 @@ labels = {
       <p class="req-refs">[[DSCSA]]; [[EUDR]] Article 4; [[EU-BEV]] Annex XIII; [[JSON-LD]] Section 3.</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F05 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f05">
       <span class="req-id">REQ-F05</span>
       <span class="req-title"> — Selective Disclosure</span>
@@ -5508,8 +5796,8 @@ labels = {
         Disclosure</a>. Supported proof formats include [[BBS-2023]] and
         [[SD-JWT]]. A <a>VSC Verifier</a> <em class="rfc2119">MUST</em>
         be capable of verifying selective disclosure presentations
-        produced by at least one of these proof formats.
-        Selective disclosure presentations <em class="rfc2119">MUST NOT</em>
+        produced by at least one of these proof formats. Selective
+        disclosure presentations <em class="rfc2119">MUST NOT</em>
         allow an adversary to infer unrevealed field values from the
         presented proof.
       </p>
@@ -5534,17 +5822,20 @@ labels = {
       <p class="req-refs">[[BBS-2023]]; [[SD-JWT]]; [[GDPR]] Article 5(1)(c); [[VC-DATA-MODEL]] Section 5.9; [[NIST-SP800-53]] SI-12.</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F06 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f06">
       <span class="req-id">REQ-F06</span>
       <span class="req-title"> — Batch and Lot Traceability</span>
       <p class="req-body">
         A <a>VSC Issuer</a> <em class="rfc2119">SHOULD</em> support
         batch-level and lot-level identifiers (e.g., LGTIN as defined in
-        [[GS1-CBV]]) in event credentials, in addition to
-        serialized-item identifiers (SGTIN, SSCC). Implementations
-        supporting batch traceability <em class="rfc2119">MUST</em>
-        ensure that batch identifiers are expressed using GS1 EPCIS
-        quantity element syntax or an equivalent normative vocabulary.
+        [[GS1-CBV]]) in event credentials, in addition to serialized-item
+        identifiers (SGTIN, SSCC). Implementations supporting batch
+        traceability <em class="rfc2119">MUST</em> ensure that batch
+        identifiers are expressed using GS1 EPCIS quantity element syntax
+        or an equivalent normative vocabulary.
       </p>
       <p class="req-rationale">
         Not all supply chain scenarios track at the per-item serialization
@@ -5562,6 +5853,9 @@ labels = {
       <p class="req-refs">[[EPCIS]] Section 7.3.3; [[GS1-CBV]] Section 7; [[EUDR]] Article 9(1)(d); [[EU-BEV]] Annex XIII.</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F07 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f07">
       <span class="req-id">REQ-F07</span>
       <span class="req-title"> — Issuer Authority Verification</span>
@@ -5572,10 +5866,10 @@ labels = {
         referenced in the credential or specified by the verifier's
         <a>Trust Framework</a>. A verifier <em class="rfc2119">MUST NOT</em>
         accept a credential whose issuer DID does not appear in a
-        required issuer registry.
-        Where no issuer registry is required by the verification context,
-        the verifier <em class="rfc2119">SHOULD</em> surface a warning
-        indicating that issuer authority has not been confirmed.
+        required issuer registry. Where no issuer registry is required
+        by the verification context, the verifier <em class="rfc2119">SHOULD</em>
+        surface a warning indicating that issuer authority has not been
+        independently confirmed.
       </p>
       <p class="req-rationale">
         Cryptographic proof of integrity (signature verification) is
@@ -5598,6 +5892,9 @@ labels = {
       <p class="req-refs">[[NIST-SP800-53]] IA-5; [[RFC6749]] Section 1.1; [[ISO28000]] Section 6.5; [[DSCSA]] Section 582(c).</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F08 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f08">
       <span class="req-id">REQ-F08</span>
       <span class="req-title"> — Credential Status and Revocation</span>
@@ -5633,6 +5930,9 @@ labels = {
       <p class="req-refs">[[VC-DATA-MODEL]] Section 7; [[DSCSA]] Section 582(h); [[NIST-SP800-53]] SI-7.</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F09 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f09">
       <span class="req-id">REQ-F09</span>
       <span class="req-title"> — Event Chain Integrity Detection</span>
@@ -5665,6 +5965,9 @@ labels = {
       <p class="req-refs">[[NIST-SP800-53]] AU-12; [[DSCSA]] Section 582(j); [[ISO28000]] Section 6.4.</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F10 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-f10">
       <span class="req-id">REQ-F10</span>
       <span class="req-title"> — Trust Framework Reference</span>
@@ -5672,10 +5975,10 @@ labels = {
         A VSC event credential <em class="rfc2119">SHOULD</em> include
         a machine-readable reference to the <a>Trust Framework</a> under
         which it was issued, expressed as a URI in the credential's
-        terms-of-use or evidence property. A <a>VSC Verifier</a>
-        <em class="rfc2119">SHOULD</em> use this reference to determine
-        which <a>Issuer Registry</a> to consult for authority verification
-        (REQ-F07).
+        <code>termsOfUse</code> or <code>evidence</code> property. A
+        <a>VSC Verifier</a> <em class="rfc2119">SHOULD</em> use this
+        reference to determine which <a>Issuer Registry</a> to consult
+        for authority verification (REQ-F07).
       </p>
       <p class="req-rationale">
         Supply chains operate under sector-specific governance frameworks
@@ -5693,14 +5996,107 @@ labels = {
         framework URI MUST be accepted with a warning (not rejected) by
         a verifier that does not require one.
       </p>
-      <p class="req-refs">[[VC-DATA-MODEL]] Section 5.12 (terms of use); [[PEPPOL]]; [[TRACEABILITY-INTEROP]] Section 4.</p>
+      <p class="req-refs">[[VC-DATA-MODEL]] Section 5.12; [[PEPPOL]]; [[TRACEABILITY-INTEROP]] Section 4.</p>
     </div>
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F11 -->
+    <!-- ─────────────────────────────────────────────────── -->
+    <div class="req-block" id="req-f11">
+      <span class="req-id">REQ-F11</span>
+      <span class="req-title"> — HS Code Inclusion in Product Credentials</span>
+      <p class="req-body">
+        A <a>VSC Issuer</a> <em class="rfc2119">SHOULD</em> include the
+        <code>hsClassification</code> object in the credential subject of
+        any event credential that describes a product, commodity, or trade
+        item. When included, the <code>hsCode</code> and
+        <code>hsCodeVersion</code> fields <em class="rfc2119">MUST</em>
+        be populated. The <code>hsDescription</code> field
+        <em class="rfc2119">SHOULD</em> be populated with the
+        WCO-recommended description.
+      </p>
+      <p class="req-rationale">
+        HS codes are used by 200+ countries for customs clearance, tariff
+        determination, trade statistics, and Rules of Origin. Embedding
+        HS codes in VSC credentials enables instant regulatory
+        classification without requiring customs authorities to parse
+        product descriptions or maintain proprietary code mappings. The
+        <code>hsCodeVersion</code> field addresses the WCO's five-year
+        revision cycle, ensuring credentials remain verifiable across
+        nomenclature boundaries.
+      </p>
+      <p class="req-test">
+        A conformant issuer MUST produce a valid credential containing:
+        (a) <code>hsCode</code> with a valid 6-digit HS code;
+        (b) <code>hsCodeVersion</code> with the applicable WCO nomenclature
+        year; (c) <code>hsDescription</code> with the WCO-recommended
+        textual description; and optionally (d) <code>hsCodeNational</code>
+        and <code>hsCodeJurisdiction</code> for jurisdiction-specific
+        declarations. A conformant verifier MUST parse and validate the
+        HS code against the WCO nomenclature for the stated version.
+      </p>
+      <p class="req-refs">WCO HS Convention (1983) Articles 3, 4; WCO HS Nomenclature 2022 Edition; WTO Trade Facilitation Agreement Article 10.</p>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F12 -->
+    <!-- ─────────────────────────────────────────────────── -->
+    <div class="req-block" id="req-f12">
+      <span class="req-id">REQ-F12</span>
+      <span class="req-title"> — HS Transformation in Manufacturing Events</span>
+      <p class="req-body">
+        A <a>VSC Issuer</a> <em class="rfc2119">MAY</em> include input
+        HS classifications and an HS change indicator in
+        <a>TransformationEvent</a> credentials. When included, the input
+        HS classifications <em class="rfc2119">MUST</em> reference the
+        HS codes from the input EPCs' credentials, and the output HS
+        classification <em class="rfc2119">MUST</em> be present. The HS
+        change indicator <em class="rfc2119">MUST</em> specify whether
+        a change occurred at the Chapter (2-digit), Heading (4-digit),
+        or Subheading (6-digit) level.
+      </p>
+      <p class="req-rationale">
+        In HS nomenclature, parts and accessories often fall under
+        different headings than finished goods. A TransformationEvent
+        that captures this classification change provides the data
+        foundation for automated Rules of Origin verification via
+        Change in Tariff Classification (CTC). Most FTAs use CTC as
+        the primary origin criterion.
+      </p>
+      <p class="req-test">
+        Given a TransformationEvent with input HS "2924.29" (Chapter 29)
+        and output HS "3004.90" (Chapter 30), a conformant verifier MUST
+        detect the chapter-level change and signal "CTC Satisfied at
+        Chapter Level." A TransformationEvent where input and output HS
+        codes are in the same heading MUST signal "No CTC Change."
+      </p>
+      <p class="req-refs">WCO HS Convention; WTO Agreement on Rules of Origin Article 2; EU-India FTA Rules of Origin Protocol; USMCA Chapter 4.</p>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-F13 through REQ-F20 from INCOTERMS, Trade Finance, Event Matrix, and Rule Compiler sections -->
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- [REQ-F13 through REQ-F20 are already defined in their respective sections. -->
+    <!--  They are referenced here for completeness in the summary table above.] -->
+
   </section>
 
-  <!-- Non-Functional Requirements -->
+  <!-- ═════════════════════════════════════════════════════════════ -->
+  <!-- 12.3 Non-Functional Requirements -->
+  <!-- ═════════════════════════════════════════════════════════════ -->
   <section id="non-functional-requirements">
     <h3>Non-Functional Requirements</h3>
 
+    <p>
+      This section specifies the five non-functional requirements
+      (REQ-NF01 through REQ-NF05) that govern performance, privacy,
+      interoperability, extensibility, and long-term verifiability
+      characteristics of VSC-conformant implementations.
+    </p>
+
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-NF01 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-nf01">
       <span class="req-id">REQ-NF01</span>
       <span class="req-title"> — Scalability</span>
@@ -5711,9 +6107,9 @@ labels = {
         benchmark, conformant implementations SHOULD be capable of
         verifying a ten-credential event chain in under 2 seconds under
         normal network conditions, and of issuing 1,000 credentials per
-        minute on commodity cloud hardware. These benchmarks are indicative;
-        normative performance requirements will be specified in the
-        conformance test suite.
+        minute on commodity cloud hardware. These benchmarks are
+        indicative; normative performance requirements will be specified
+        in the conformance test suite.
       </p>
       <p class="req-rationale">
         Large retail and pharmaceutical supply chains generate millions of
@@ -5730,9 +6126,12 @@ labels = {
         of 10 credentials within 2 seconds, recording pass/fail and
         actual throughput figures.
       </p>
-      <p class="req-refs">[[EPCIS]] Appendix D (performance guidance); [[ISO28000]].</p>
+      <p class="req-refs">[[EPCIS]] Appendix D; [[ISO28000]].</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-NF02 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-nf02">
       <span class="req-id">REQ-NF02</span>
       <span class="req-title"> — Privacy Preservation</span>
@@ -5761,9 +6160,12 @@ labels = {
         verifier MUST NOT require a holder to present more fields than
         the minimum needed for the stated verification purpose.
       </p>
-      <p class="req-refs">[[GDPR]] Articles 5, 25; [[NIST-SP800-53]] AR-7; [[VC-DATA-MODEL]] Section 10 (privacy considerations).</p>
+      <p class="req-refs">[[GDPR]] Articles 5, 25; [[NIST-SP800-53]] AR-7; [[VC-DATA-MODEL]] Section 10.</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-NF03 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-nf03">
       <span class="req-id">REQ-NF03</span>
       <span class="req-title"> — Interoperability</span>
@@ -5774,8 +6176,8 @@ labels = {
         Implementations <em class="rfc2119">MUST</em> use the VSC
         JSON-LD context URI (to be defined in the VSC Core Data Model)
         and <em class="rfc2119">MUST NOT</em> require proprietary
-        extensions for basic credential exchange.
-        Implementations <em class="rfc2119">SHOULD</em> conform to the
+        extensions for basic credential exchange. Implementations
+        <em class="rfc2119">SHOULD</em> conform to the
         [[TRACEABILITY-INTEROP]] HTTP API profile for credential exchange.
       </p>
       <p class="req-rationale">
@@ -5796,6 +6198,9 @@ labels = {
       <p class="req-refs">[[TRACEABILITY-INTEROP]]; [[VC-DATA-MODEL]] Section 1.3; [[JSON-LD]] Section 5.</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-NF04 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-nf04">
       <span class="req-id">REQ-NF04</span>
       <span class="req-title"> — Extensibility</span>
@@ -5809,11 +6214,12 @@ labels = {
         able to verify the base credential.
       </p>
       <p class="req-rationale">
-        Supply chain verticals (pharmaceutical, food, automotive, aerospace)
-        have distinct data requirements. A rigid schema would require a
-        separate specification for each vertical. The JSON-LD extension
-        mechanism provides a standards-based, proven approach to
-        extensibility, as demonstrated by [[TRACEABILITY-V1]] and [[UNTP]].
+        Supply chain verticals (pharmaceutical, food, automotive,
+        aerospace) have distinct data requirements. A rigid schema would
+        require a separate specification for each vertical. The JSON-LD
+        extension mechanism provides a standards-based, proven approach
+        to extensibility, as demonstrated by [[TRACEABILITY-V1]] and
+        [[UNTP]].
       </p>
       <p class="req-test">
         A credential carrying an unknown JSON-LD extension term MUST be
@@ -5824,6 +6230,9 @@ labels = {
       <p class="req-refs">[[JSON-LD]] Sections 5, 9; [[TRACEABILITY-V1]]; [[UNTP]].</p>
     </div>
 
+    <!-- ─────────────────────────────────────────────────── -->
+    <!-- REQ-NF05 -->
+    <!-- ─────────────────────────────────────────────────── -->
     <div class="req-block" id="req-nf05">
       <span class="req-id">REQ-NF05</span>
       <span class="req-title"> — Long-term Verifiability</span>
@@ -5850,11 +6259,10 @@ labels = {
         using the pre-rotation key retrieved from the DID Document
         history or trust framework archive.
       </p>
-      <p class="req-refs">[[DID-CORE]] Section 7.2 (DID Document history); [[NIST-SP800-53]] SI-12; [[DSCSA]] Section 582(n).</p>
+      <p class="req-refs">[[DID-CORE]] Section 7.2; [[NIST-SP800-53]] SI-12; [[DSCSA]] Section 582(n).</p>
     </div>
   </section>
 </section>
-
   
   
   
