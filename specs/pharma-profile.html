@@ -792,49 +792,146 @@
     as shown here.
   </p>
 
-  <p>
-    A <dfn>VSC-conformant implementation</dfn> is a software system
-    that satisfies all <em class="rfc2119">MUST</em> and
-    <em class="rfc2119">MUST NOT</em> requirements in
-    <a href="#requirements">Requirements</a>. Conformance is assessed against
-    the testability statements accompanying each requirement.
-  </p>
+  <!-- ─────────────────────────────────────────────────────────────
+       2.1 Conformance Classes
+       ───────────────────────────────────────────────────────────── -->
+  <section id="conformance-classes">
+    <h3>Conformance Classes</h3>
 
-  <p>
-    This document defines two conformance classes:
-  </p>
+    <p>
+      This specification defines two <dfn data-lt="conformance class">conformance classes</dfn>,
+      each with a <em>Core</em> tier and an optional <em>Vocabulary</em> tier.
+    </p>
 
-  <dl>
-    <dt><dfn>VSC Issuer</dfn></dt>
-    <dd>
-      A software component that produces
-      <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>
-      representing <a>Supply Chain Events</a>
-      in conformance with this specification, including optional population
-      of HS codes, INCOTERMS® rules, and trade finance bindings.
-    </dd>
+    <dl>
+      <dt><dfn>VSC Issuer</dfn></dt>
+      <dd>
+        A software component that produces
+        <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>
+        representing <a>Supply Chain Events</a>
+        in conformance with this specification.
+      </dd>
 
-    <dt><dfn>VSC Verifier</dfn></dt>
-    <dd>
-      A software component that accepts and validates
-      <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>
-      or
-      <a data-cite="VC-DATA-MODEL#dfn-verifiable-presentation">Verifiable Presentations</a>
-      representing <a>Supply Chain Events</a>
-      in conformance with this specification, including validation of
-      HS classifications, INCOTERMS® rules, documentary compliance, and
-      machine-executable regulatory rules.
-    </dd>
-  </dl>
+      <dt><dfn>VSC Verifier</dfn></dt>
+      <dd>
+        A software component that accepts and validates
+        <a data-cite="VC-DATA-MODEL#dfn-verifiable-credential">Verifiable Credentials</a>
+        or
+        <a data-cite="VC-DATA-MODEL#dfn-verifiable-presentation">Verifiable Presentations</a>
+        representing <a>Supply Chain Events</a>
+        in conformance with this specification.
+      </dd>
+    </dl>
 
-  <p class="note" title="Holder conformance">
-    Holder conformance requirements are not independently specified in
-    this document because a holder can be implemented by either an issuer
-    or verifier system. Future VSC specifications MAY define an explicit
-    holder conformance class.
-  </p>
+    <p class="note" title="Holder conformance">
+      Holder conformance requirements are not independently specified in
+      this document because a holder can be implemented by either an issuer
+      or verifier system. Future VSC specifications MAY define an explicit
+      holder conformance class.
+    </p>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────
+       2.2 Core Conformance (Mandatory)
+       ───────────────────────────────────────────────────────────── -->
+  <section id="core-conformance">
+    <h3>Core Conformance</h3>
+
+    <p>
+      A <dfn>VSC Core-Conformant</dfn> implementation <em class="rfc2119">MUST</em>
+      satisfy all normative requirements in the following sections of this
+      specification:
+    </p>
+
+    <ul>
+      <li><a href="#terminology">Terminology</a></li>
+      <li><a href="#supply-chain-event">Supply Chain Event</a></li>
+      <li><a href="#seal-data-structure">SEAL Data Structure</a></li>
+      <li><a href="#vsc-state-machine">VSC State Machine</a></li>
+      <li><a href="#event-matrix">Event Matrix Envelope</a></li>
+      <li><a href="#securing-mechanisms">Securing Mechanisms</a></li>
+    </ul>
+
+    <p>
+      Core Conformance <em class="rfc2119">MUST NOT</em> require implementation
+      of any specific <a>+Dn vocabulary</a>. An implementation achieves Core
+      Conformance by correctly implementing the geometry of the
+      <a>Event Matrix</a>—the SEAL structure, the four-quadrant VSC state
+      machine, the Event envelope, and the securing mechanisms—independent
+      of any particular vocabulary binding.
+    </p>
+
+    <p>
+      This separation ensures that no single vocabulary steward can hold the
+      ecosystem hostage. The VSC Matrix operates as neutral infrastructure,
+      and Core Conformance reflects this principle.
+    </p>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────
+       2.3 Vocabulary Conformance (Optional)
+       ───────────────────────────────────────────────────────────── -->
+  <section id="vocabulary-conformance">
+    <h3>Vocabulary Conformance</h3>
+
+    <p>
+      An implementation <em class="rfc2119">MAY</em> additionally claim
+      conformance to one or more <dfn data-lt="+Dn vocabulary">+Dn vocabularies</dfn>.
+      Vocabulary conformance is <em class="rfc2119">ALWAYS OPTIONAL</em> and
+      supplementary to <a>Core Conformance</a>.
+    </p>
+
+    <p>
+      A <dfn>VSC Vocabulary-Conformant</dfn> implementation for a given
+      +Dn vocabulary <em class="rfc2119">MUST</em>:
+    </p>
+
+    <ul>
+      <li>Satisfy all requirements of <a>Core Conformance</a>.</li>
+      <li>Implement the specific vocabulary bindings defined in that
+          vocabulary's companion specification (for example, population of
+          HS codes as a +D1 vocabulary, or INCOTERMS® rules as a +D2
+          vocabulary).</li>
+    </ul>
+
+    <p>
+      Vocabularies are defined in separate specifications maintained by
+      their respective stewards. The VSC Community Group does not endorse,
+      rank, or prioritize any +Dn vocabulary over another. All vocabularies
+      that correctly implement the extension mechanics defined in
+      <a href="#extensibility">Extensibility Model (+Dn)</a>
+      are first-class citizens of the ecosystem.
+    </p>
+
+    <p>
+      No conformance claim of any class <em class="rfc2119">SHALL</em> be
+      denied on the basis of vocabulary selection or non-selection.
+    </p>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────────
+       2.4 Testability
+       ───────────────────────────────────────────────────────────── -->
+  <section id="testability">
+    <h3>Testability</h3>
+
+    <p>
+      Conformance is assessed against the testability statements
+      accompanying each normative requirement in this specification.
+      Testability statements for Core Conformance are maintained
+      within this document. Testability statements for Vocabulary
+      Conformance are maintained within each vocabulary's companion
+      specification.
+    </p>
+
+    <p>
+      The VSC Community Group <em class="rfc2119">MAY</em> maintain a
+      community test suite for Core Conformance. Vocabulary stewards
+      <em class="rfc2119">SHOULD</em> provide their own test suites
+      for Vocabulary Conformance claims.
+    </p>
+  </section>
 </section>
-
 <!-- ═══════════════════════════════════════════════════════════════
      3. SCOPE
      ═══════════════════════════════════════════════════════════════ -->
@@ -1499,7 +1596,435 @@
         violations are defined in their respective normative sections and use cases.
     </p>
   </section>
+
+  <div class="figure" style="overflow-x:auto">
+  <svg viewBox="0 0 1300 950" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <style>
+        @keyframes flowDash { to { stroke-dashoffset: -30; } }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        @keyframes slideRight { from { transform:translateX(-20px);opacity:0; } to { transform:translateX(0);opacity:1; } }
+        @keyframes dotPulse { 0%,100% { r:5;opacity:1; } 50% { r:10;opacity:0.3; } }
+        .fl { stroke-dasharray:8 4; animation:flowDash .8s linear infinite; }
+        .pulse-dot { animation:dotPulse 2s ease-in-out infinite; }
+        .reveal { animation:fadeIn .6s ease-out forwards; }
+        .arrow-blue polygon { fill:#2563eb; }
+        .arrow-purple polygon { fill:#7c3aed; }
+        .arrow-green polygon { fill:#059669; }
+        .arrow-amber polygon { fill:#d97706; }
+        .arrow-teal polygon { fill:#0d9488; }
+        .arrow-rose polygon { fill:#e11d48; }
+      </style>
+      <marker id="ab" class="arrow-blue" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto"><polygon points="0 0,12 4,0 8"/></marker>
+      <marker id="ap" class="arrow-purple" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto"><polygon points="0 0,12 4,0 8"/></marker>
+      <marker id="ag" class="arrow-green" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto"><polygon points="0 0,12 4,0 8"/></marker>
+      <marker id="aa" class="arrow-amber" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto"><polygon points="0 0,12 4,0 8"/></marker>
+      <marker id="at" class="arrow-teal" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto"><polygon points="0 0,12 4,0 8"/></marker>
+      <marker id="ar" class="arrow-rose" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto"><polygon points="0 0,12 4,0 8"/></marker>
+      <filter id="shadow"><feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#0f172a" flood-opacity=".06"/></filter>
+      <filter id="shadowLight"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity=".04"/></filter>
+    </defs>
+
+    <rect width="1300" height="950" fill="#fff" rx="20"/>
+    <pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="1.2" fill="#f1f5f9"/></pattern>
+    <rect width="1300" height="950" fill="url(#dotGrid)" rx="20"/>
+
+    <!-- Title -->
+    <text x="650" y="35" text-anchor="middle" font-size="17" font-weight="800" fill="#0f172a">The Complete VSC Journey — From Physical Event to Verified Outcome</text>
+    <text x="650" y="58" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b">Every step is a living, verifiable process — watch the arrows to understand the flow</text>
+
+    <!-- ============================================================ -->
+    <!-- PHASE 1: THE EVENT HAPPENS -->
+    <!-- ============================================================ -->
+    <g transform="translate(50, 80)">
+      <rect width="260" height="170" rx="16" fill="#fff" stroke="#cbd5e1" stroke-width="2" filter="url(#shadow)"/>
+      <rect width="260" height="42" rx="16" fill="#f1f5f9"/><rect y="28" width="260" height="14" fill="#f1f5f9"/>
+      <text x="130" y="28" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">🌍 A Real Event Occurs</text>
+      <text x="130" y="62" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b">Something happens in the physical world</text>
+
+      <rect x="20" y="82" width="220" height="28" rx="8" fill="#fef2f2"/>
+      <text x="130" y="100" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">Vaccine batch manufactured</text>
+
+      <rect x="20" y="116" width="220" height="28" rx="8" fill="#fef2f2"/>
+      <text x="130" y="134" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">Shipment loaded at Mumbai port</text>
+
+      <rect x="20" y="150" width="220" height="28" rx="8" fill="#fef2f2"/>
+      <text x="130" y="168" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">Temperature: 4.2°C logged</text>
+    </g>
+
+    <!-- Arrow 1: Event → EPCIS Capture -->
+    <line x1="315" y1="165" x2="395" y2="165" stroke="#2563eb" stroke-width="3" marker-end="url(#ab)" class="fl"/>
+    <text x="355" y="155" text-anchor="middle" font-size="9" font-weight="700" fill="#2563eb">captured as</text>
+
+    <!-- PHASE 2: EPCIS EVENT -->
+    <g transform="translate(405, 80)">
+      <rect width="220" height="170" rx="16" fill="#fff" stroke="#93c5fd" stroke-width="2" filter="url(#shadow)"/>
+      <rect width="220" height="42" rx="16" fill="#dbeafe"/><rect y="28" width="220" height="14" fill="#dbeafe"/>
+      <text x="110" y="28" text-anchor="middle" font-size="14" font-weight="800" fill="#1e3a8a">📋 EPCIS Event</text>
+      <text x="110" y="62" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b">Structured event record</text>
+
+      <rect x="15" y="82" width="190" height="28" rx="8" fill="#eff6ff"/>
+      <text x="110" y="100" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">eventType: ObjectEvent</text>
+
+      <rect x="15" y="116" width="190" height="28" rx="8" fill="#eff6ff"/>
+      <text x="110" y="134" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">bizStep: shipping</text>
+
+      <rect x="15" y="150" width="190" height="28" rx="8" fill="#eff6ff"/>
+      <text x="110" y="168" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">GTIN: 8901234567890</text>
+    </g>
+
+    <!-- Arrow 2: EPCIS → VC -->
+    <line x1="630" y1="165" x2="710" y2="165" stroke="#2563eb" stroke-width="3" marker-end="url(#ab)" class="fl"/>
+    <text x="670" y="155" text-anchor="middle" font-size="9" font-weight="700" fill="#2563eb">mapped to</text>
+
+    <!-- PHASE 3: VERIFIABLE CREDENTIAL -->
+    <g transform="translate(720, 80)">
+      <rect width="240" height="170" rx="16" fill="#fff" stroke="#6ee7b7" stroke-width="2" filter="url(#shadow)"/>
+      <rect width="240" height="42" rx="16" fill="#d1fae5"/><rect y="28" width="240" height="14" fill="#d1fae5"/>
+      <text x="120" y="28" text-anchor="middle" font-size="14" font-weight="800" fill="#064e3b">🔐 Verifiable Credential</text>
+      <text x="120" y="62" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b">Tamper-evident digital proof</text>
+
+      <rect x="15" y="82" width="210" height="28" rx="8" fill="#ecfdf5"/>
+      <text x="120" y="100" text-anchor="middle" font-size="9" font-weight="700" fill="#065f46">Signed with DID key</text>
+
+      <rect x="15" y="116" width="210" height="28" rx="8" fill="#ecfdf5"/>
+      <text x="120" y="134" text-anchor="middle" font-size="9" font-weight="700" fill="#065f46">Data Integrity proof</text>
+
+      <rect x="15" y="150" width="210" height="28" rx="8" fill="#ecfdf5"/>
+      <text x="120" y="168" text-anchor="middle" font-size="9" font-weight="700" fill="#065f46">credentialStatus: active</text>
+    </g>
+
+    <!-- Arrow 3: VC → Vocabularies -->
+    <line x1="840" y1="250" x2="840" y2="295" stroke="#0d9488" stroke-width="2.5" marker-end="url(#at)" class="fl"/>
+    <line x1="300" y1="250" x2="840" y2="295" stroke="#0d9488" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#at)" class="fl"/>
+    <line x1="515" y1="250" x2="840" y2="295" stroke="#0d9488" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#at)" class="fl"/>
+    <text x="840" y="285" text-anchor="middle" font-size="9" font-weight="700" fill="#0d9488">enriched with normative vocabularies</text>
+
+    <!-- PHASE 4: THREE VOCABULARIES (center row) -->
+    <!-- HS Codes -->
+    <g transform="translate(80, 310)">
+      <rect width="250" height="130" rx="14" fill="#fff" stroke="#0d9488" stroke-width="2" filter="url(#shadow)"/>
+      <rect width="250" height="38" rx="14" fill="#0d9488"/><rect y="24" width="250" height="14" fill="#0d9488"/>
+      <text x="125" y="26" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">📦 HS Code</text>
+      <text x="125" y="58" text-anchor="middle" font-size="9" font-weight="600" fill="#ccfbf1">What is this product?</text>
+      <text x="125" y="84" text-anchor="middle" font-size="10" font-weight="700" fill="#0f766e">HS: 3004.90</text>
+      <text x="125" y="106" text-anchor="middle" font-size="9" font-weight="600" fill="#475569">"Medicaments for retail sale"</text>
+      <text x="125" y="126" text-anchor="middle" font-size="8" font-weight="700" fill="#0d9488">200+ countries understand this</text>
+    </g>
+
+    <!-- INCOTERMS -->
+    <g transform="translate(360, 310)">
+      <rect width="250" height="130" rx="14" fill="#fff" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+      <rect width="250" height="38" rx="14" fill="#d97706"/><rect y="24" width="250" height="14" fill="#d97706"/>
+      <text x="125" y="26" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">📋 INCOTERMS®</text>
+      <text x="125" y="58" text-anchor="middle" font-size="9" font-weight="600" fill="#fef3c7">Who bears the risk?</text>
+      <text x="125" y="84" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e">CIF Mombasa</text>
+      <text x="125" y="106" text-anchor="middle" font-size="9" font-weight="600" fill="#475569">Risk transfers: On board Mumbai</text>
+      <text x="125" y="126" text-anchor="middle" font-size="8" font-weight="700" fill="#d97706">ICC INCOTERMS® 2020</text>
+    </g>
+
+    <!-- Trade Finance -->
+    <g transform="translate(640, 310)">
+      <rect width="250" height="130" rx="14" fill="#fff" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+      <rect width="250" height="38" rx="14" fill="#059669"/><rect y="24" width="250" height="14" fill="#059669"/>
+      <text x="125" y="26" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">🏦 Trade Finance</text>
+      <text x="125" y="58" text-anchor="middle" font-size="9" font-weight="600" fill="#a7f3d0">How is payment governed?</text>
+      <text x="125" y="84" text-anchor="middle" font-size="10" font-weight="700" fill="#065f46">LC: Irrevocable</text>
+      <text x="125" y="106" text-anchor="middle" font-size="9" font-weight="600" fill="#475569">Issuing Bank: Kenya Commercial</text>
+      <text x="125" y="126" text-anchor="middle" font-size="8" font-weight="700" fill="#059669">UCP 600 · USD 250,000</text>
+    </g>
+
+    <!-- Arrow 4: Vocabularies → Event Matrix -->
+    <line x1="205" y1="440" x2="300" y2="500" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#ap)" class="fl"/>
+    <line x1="485" y1="440" x2="485" y2="500" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#ap)" class="fl"/>
+    <line x1="765" y1="440" x2="670" y2="500" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#ap)" class="fl"/>
+    <text x="485" y="490" text-anchor="middle" font-size="9" font-weight="700" fill="#7c3aed">assembled into the Event Matrix</text>
+
+    <!-- PHASE 5: EVENT MATRIX -->
+    <g transform="translate(200, 510)">
+      <rect width="560" height="100" rx="16" fill="#fff" stroke="#7c3aed" stroke-width="2.5" filter="url(#shadow)"/>
+      <rect width="560" height="38" rx="16" fill="#7c3aed"/><rect y="24" width="560" height="14" fill="#7c3aed"/>
+      <text x="280" y="26" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">🧩 The VSC Event Matrix — One Row, Every Dimension</text>
+
+      <!-- Five columns inside the matrix -->
+      <rect x="20" y="55" width="100" height="30" rx="6" fill="#dbeafe"/><text x="70" y="74" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">D1: Event</text>
+      <rect x="128" y="55" width="100" height="30" rx="6" fill="#ede9fe"/><text x="178" y="74" text-anchor="middle" font-size="9" font-weight="700" fill="#5b21b6">D2: Actor</text>
+      <rect x="236" y="55" width="100" height="30" rx="6" fill="#ccfbf1"/><text x="286" y="74" text-anchor="middle" font-size="9" font-weight="700" fill="#0f766e">D3: Product</text>
+      <rect x="344" y="55" width="100" height="30" rx="6" fill="#fef3c7"/><text x="394" y="74" text-anchor="middle" font-size="9" font-weight="700" fill="#92400e">D4: Commercial</text>
+      <rect x="452" y="55" width="100" height="30" rx="6" fill="#d1fae5"/><text x="502" y="74" text-anchor="middle" font-size="9" font-weight="700" fill="#065f46">D5: Financial</text>
+    </g>
+
+    <!-- Arrow 5: Matrix → Verifier -->
+    <line x1="480" y1="610" x2="480" y2="660" stroke="#059669" stroke-width="3" marker-end="url(#ag)" class="fl"/>
+    <text x="480" y="645" text-anchor="middle" font-size="9" font-weight="700" fill="#059669">verified through the Universal Pattern</text>
+
+    <!-- PHASE 6: VERIFIER -->
+    <g transform="translate(200, 670)">
+      <rect width="560" height="110" rx="16" fill="#fff" stroke="#059669" stroke-width="2.5" filter="url(#shadow)"/>
+      <rect width="560" height="38" rx="16" fill="#059669"/><rect y="24" width="560" height="14" fill="#059669"/>
+      <text x="280" y="26" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">🔍 VSC Verifier — The Universal Verification Pattern</text>
+
+      <rect x="20" y="50" width="170" height="24" rx="6" fill="#ecfdf5"/><text x="105" y="66" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">1. Resolve DID → key</text>
+      <rect x="200" y="50" width="170" height="24" rx="6" fill="#ecfdf5"/><text x="285" y="66" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">2. Verify proof</text>
+      <rect x="380" y="50" width="170" height="24" rx="6" fill="#ecfdf5"/><text x="465" y="66" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">3. Check status</text>
+
+      <rect x="20" y="80" width="170" height="24" rx="6" fill="#fffbeb"/><text x="105" y="96" text-anchor="middle" font-size="8" font-weight="700" fill="#92400e">4. Validate authority</text>
+      <rect x="200" y="80" width="170" height="24" rx="6" fill="#fffbeb"/><text x="285" y="96" text-anchor="middle" font-size="8" font-weight="700" fill="#92400e">5. Apply rules</text>
+      <rect x="380" y="80" width="170" height="24" rx="6" fill="#d1fae5"/><text x="465" y="96" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">6. Compute trust score</text>
+    </g>
+
+    <!-- Arrow 6: Verifier → Outcome -->
+    <line x1="480" y1="780" x2="480" y2="830" stroke="#059669" stroke-width="3" marker-end="url(#ag)" class="fl"/>
+
+    <!-- PHASE 7: OUTCOME -->
+    <g transform="translate(300, 840)">
+      <rect width="360" height="70" rx="16" fill="#ecfdf5" stroke="#059669" stroke-width="3" filter="url(#shadow)"/>
+      <text x="180" y="32" text-anchor="middle" font-size="15" font-weight="800" fill="#065f46">✓ VERIFIED &amp; ACCEPTED</text>
+      <text x="180" y="55" text-anchor="middle" font-size="10" font-weight="700" fill="#047857">Proof valid · Status active · Chain complete · Trust: 0.97</text>
+    </g>
+
+    <!-- ============================================================ -->
+    <!-- RIGHT SIDE: KEY INSIGHT PANEL -->
+    <!-- ============================================================ -->
+    <g transform="translate(980, 80)">
+      <rect width="280" height="400" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" filter="url(#shadow)"/>
+      <rect width="280" height="42" rx="16" fill="#1e293b"/><rect y="28" width="280" height="14" fill="#1e293b"/>
+      <text x="140" y="28" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">💡 The Core Insight</text>
+
+      <text x="140" y="68" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">One credential answers</text>
+      <text x="140" y="86" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">every question:</text>
+
+      <rect x="20" y="100" width="240" height="28" rx="6" fill="#dbeafe"/>
+      <text x="140" y="119" text-anchor="middle" font-size="9" font-weight="600" fill="#1e40af">What happened? (EPCIS)</text>
+
+      <rect x="20" y="136" width="240" height="28" rx="6" fill="#ede9fe"/>
+      <text x="140" y="155" text-anchor="middle" font-size="9" font-weight="600" fill="#5b21b6">Who did it? (DID)</text>
+
+      <rect x="20" y="172" width="240" height="28" rx="6" fill="#ccfbf1"/>
+      <text x="140" y="191" text-anchor="middle" font-size="9" font-weight="600" fill="#0f766e">What is the product? (HS)</text>
+
+      <rect x="20" y="208" width="240" height="28" rx="6" fill="#fef3c7"/>
+      <text x="140" y="227" text-anchor="middle" font-size="9" font-weight="600" fill="#92400e">Who bears the risk? (INCOTERMS®)</text>
+
+      <rect x="20" y="244" width="240" height="28" rx="6" fill="#d1fae5"/>
+      <text x="140" y="263" text-anchor="middle" font-size="9" font-weight="600" fill="#065f46">How is it paid? (UCP 600)</text>
+
+      <rect x="20" y="280" width="240" height="28" rx="6" fill="#fef2f2"/>
+      <text x="140" y="299" text-anchor="middle" font-size="9" font-weight="600" fill="#991b1b">Is it compliant? (Rules)</text>
+
+      <line x1="20" y1="320" x2="260" y2="320" stroke="#e2e8f0" stroke-width="1"/>
+
+      <text x="140" y="344" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">One verifier processes</text>
+      <text x="140" y="364" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">any trade event</text>
+
+      <rect x="20" y="378" width="240" height="28" rx="6" fill="#fff" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="140" y="397" text-anchor="middle" font-size="9" font-weight="700" fill="#7c3aed">Domain-agnostic</text>
+    </g>
+
+    <!-- Legend / Bottom note -->
+    <g transform="translate(50, 920)">
+      <text x="0" y="15" font-size="10" font-weight="700" fill="#475569">← The journey flows left to right. Each step is cryptographically connected to the next. No step can be altered without detection.</text>
+    </g>
+  </svg>
+  <p class="caption">
+    Figure 2 — The Complete VSC Journey: From a physical event occurring in the real world, through EPCIS capture, Verifiable
+    Credential issuance, enrichment with three normative vocabularies, assembly into the Event Matrix, verification through the
+    Universal Pattern, to final trusted outcome. Every arrow represents a living, cryptographically secured process.
+  </p>
+</div>
 </section>
+
+<div class="figure" style="overflow-x:auto;background:#fff;padding:20px 0;">
+  <svg viewBox="0 0 1100 1050" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <style>
+        @keyframes flowDash { to { stroke-dashoffset: -22; } }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+        @keyframes glow { 0%,100% { filter:drop-shadow(0 0 3px rgba(37,99,235,0.3)); } 50% { filter:drop-shadow(0 0 8px rgba(37,99,235,0.6)); } }
+        .fl { stroke-dasharray: 5 3; animation: flowDash .6s linear infinite; }
+        .pulse { animation: pulse 2.5s ease-in-out infinite; }
+        .glow { animation: glow 3s ease-in-out infinite; }
+      </style>
+      <marker id="a-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2563eb"/></marker>
+      <marker id="a-purple" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#7c3aed"/></marker>
+      <marker id="a-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#059669"/></marker>
+      <marker id="a-amber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#d97706"/></marker>
+      <marker id="a-teal" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0d9488"/></marker>
+      <filter id="sh"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity=".04"/></filter>
+    </defs>
+
+    <rect width="1100" height="1050" fill="#fff" rx="16"/>
+
+    <!-- Title -->
+    <text x="550" y="28" text-anchor="middle" font-size="16" font-weight="800" fill="#0f172a">The Complete VSC Journey — From Raw Ingredients to Verified Outcome</text>
+    <text x="550" y="50" text-anchor="middle" font-size="10" font-weight="500" fill="#64748b">Each node is a cryptographically signed event. Each arrow carries verifiable data forward.</text>
+
+    <!-- ═══════════════ PHASE 1: INGREDIENTS & API ═══════════════ -->
+    <text x="40" y="88" font-size="11" font-weight="800" fill="#1e293b">PHASE 1 — Raw Ingredients &amp; API Manufacturing · Hyderabad, India</text>
+    <line x1="40" y1="95" x2="1060" y2="95" stroke="#f1f5f9" stroke-width="2"/>
+
+    <!-- Node 1: Para-aminophenol -->
+    <circle cx="130" cy="155" r="40" fill="#fff" stroke="#f59e0b" stroke-width="2.5" filter="url(#sh)"/>
+    <text x="130" y="150" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">Para-</text>
+    <text x="130" y="164" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">aminophenol</text>
+    <text x="130" y="180" text-anchor="middle" font-size="7" fill="#b45309">HS 2924.29</text>
+
+    <!-- Node 2: Acetic Anhydride -->
+    <circle cx="310" cy="155" r="40" fill="#fff" stroke="#f59e0b" stroke-width="2.5" filter="url(#sh)"/>
+    <text x="310" y="150" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">Acetic</text>
+    <text x="310" y="164" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">Anhydride</text>
+    <text x="310" y="180" text-anchor="middle" font-size="7" fill="#b45309">HS 2915.24</text>
+
+    <!-- Flow lines to API Plant -->
+    <line x1="170" y1="155" x2="245" y2="155" stroke="#2563eb" stroke-width="2" marker-end="url(#a-blue)" class="fl"/>
+    <line x1="350" y1="155" x2="425" y2="155" stroke="#2563eb" stroke-width="2" marker-end="url(#a-blue)" class="fl"/>
+
+    <!-- Node 3: API Plant -->
+    <circle cx="500" cy="155" r="48" fill="#eff6ff" stroke="#2563eb" stroke-width="3" filter="url(#sh)" class="glow"/>
+    <text x="500" y="148" text-anchor="middle" font-size="9" font-weight="800" fill="#1e3a8a">API</text>
+    <text x="500" y="162" text-anchor="middle" font-size="9" font-weight="800" fill="#1e3a8a">Plant</text>
+    <text x="500" y="180" text-anchor="middle" font-size="7" fill="#64748b">TransformationEvent</text>
+
+    <!-- Data label between nodes -->
+    <text x="215" y="145" text-anchor="middle" font-size="7" fill="#2563eb">EPCIS VC</text>
+    <text x="395" y="145" text-anchor="middle" font-size="7" fill="#2563eb">EPCIS VC</text>
+
+    <!-- Arrow to Phase 2 -->
+    <line x1="500" y1="203" x2="500" y2="255" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#a-purple)" class="fl"/>
+    <text x="510" y="232" font-size="7" fill="#7c3aed">API VC signed</text>
+
+    <!-- ═══════════════ PHASE 2: FORMULATION ═══════════════ -->
+    <text x="40" y="278" font-size="11" font-weight="800" fill="#1e293b">PHASE 2 — Formulation Manufacturing · Baddi, Himachal Pradesh, India</text>
+    <line x1="40" y1="285" x2="1060" y2="285" stroke="#f1f5f9" stroke-width="2"/>
+
+    <!-- Node 4: Formulation Plant -->
+    <circle cx="500" cy="340" r="55" fill="#f5f3ff" stroke="#7c3aed" stroke-width="3" filter="url(#sh)" class="glow"/>
+    <text x="500" y="330" text-anchor="middle" font-size="10" font-weight="800" fill="#4c1d95">Formulation</text>
+    <text x="500" y="348" text-anchor="middle" font-size="10" font-weight="800" fill="#4c1d95">Plant</text>
+    <text x="500" y="368" text-anchor="middle" font-size="7" fill="#64748b">TransformationEvent</text>
+    <text x="500" y="382" text-anchor="middle" font-size="7" fill="#64748b">Schedule M GMP</text>
+
+    <!-- CTC Callout -->
+    <rect x="630" y="305" width="170" height="55" rx="10" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.5" filter="url(#sh)"/>
+    <text x="715" y="325" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">CTC Origin Check</text>
+    <text x="715" y="342" text-anchor="middle" font-size="7" fill="#047857">Input HS: Ch 29</text>
+    <text x="715" y="356" text-anchor="middle" font-size="7" fill="#047857">Output HS: Ch 30</text>
+
+    <!-- QR Code Node -->
+    <line x1="500" y1="395" x2="500" y2="435" stroke="#0d9488" stroke-width="2" marker-end="url(#a-teal)" class="fl"/>
+
+    <circle cx="500" cy="460" r="38" fill="#f0fdfa" stroke="#0d9488" stroke-width="2.5" filter="url(#sh)"/>
+    <text x="500" y="456" text-anchor="middle" font-size="8" font-weight="700" fill="#0f766e">QR Code</text>
+    <text x="500" y="472" text-anchor="middle" font-size="8" font-weight="700" fill="#0f766e">Applied</text>
+    <text x="500" y="490" text-anchor="middle" font-size="6" fill="#64748b">GS1 Digital Link</text>
+
+    <!-- Arrow to Phase 3 -->
+    <line x1="500" y1="498" x2="500" y2="545" stroke="#d97706" stroke-width="2.5" marker-end="url(#a-amber)" class="fl"/>
+
+    <!-- ═══════════════ PHASE 3: DISTRIBUTION ═══════════════ -->
+    <text x="40" y="568" font-size="11" font-weight="800" fill="#1e293b">PHASE 3 — Distribution &amp; Cold Chain · Mumbai → Dubai → Mombasa</text>
+    <line x1="40" y1="575" x2="1060" y2="575" stroke="#f1f5f9" stroke-width="2"/>
+
+    <!-- Node 5: C&F -->
+    <circle cx="130" cy="630" r="35" fill="#fff" stroke="#2563eb" stroke-width="2" filter="url(#sh)"/>
+    <text x="130" y="627" text-anchor="middle" font-size="8" font-weight="700" fill="#1e3a8a">C&amp;F</text>
+    <text x="130" y="643" text-anchor="middle" font-size="8" font-weight="700" fill="#1e3a8a">Agent</text>
+
+    <!-- Node 6: Stockist -->
+    <circle cx="310" cy="630" r="35" fill="#fff" stroke="#2563eb" stroke-width="2" filter="url(#sh)"/>
+    <text x="310" y="627" text-anchor="middle" font-size="8" font-weight="700" fill="#1e3a8a">Super</text>
+    <text x="310" y="643" text-anchor="middle" font-size="8" font-weight="700" fill="#1e3a8a">Stockist</text>
+
+    <line x1="165" y1="630" x2="270" y2="630" stroke="#2563eb" stroke-width="1.5" marker-end="url(#a-blue)" class="fl"/>
+
+    <!-- Node 7: Cold Chain Hub -->
+    <line x1="345" y1="630" x2="420" y2="630" stroke="#2563eb" stroke-width="1.5" marker-end="url(#a-blue)" class="fl"/>
+
+    <circle cx="500" cy="630" r="48" fill="#fef2f2" stroke="#e11d48" stroke-width="2.5" filter="url(#sh)"/>
+    <text x="500" y="622" text-anchor="middle" font-size="9" font-weight="800" fill="#991b1b">Cold Chain</text>
+    <text x="500" y="638" text-anchor="middle" font-size="9" font-weight="800" fill="#991b1b">Logistics</text>
+    <text x="500" y="656" text-anchor="middle" font-size="6" fill="#64748b">IoT Logger DID</text>
+
+    <!-- Temperature readings -->
+    <rect x="580" y="605" width="75" height="18" rx="6" fill="#ecfdf5"/><text x="617" y="618" text-anchor="middle" font-size="7" fill="#047857">BRU: 2.1°C</text>
+    <rect x="580" y="628" width="75" height="18" rx="6" fill="#ecfdf5"/><text x="617" y="641" text-anchor="middle" font-size="7" fill="#047857">DXB: 3.8°C</text>
+    <rect x="580" y="651" width="75" height="18" rx="6" fill="#fef2f2"/><text x="617" y="664" text-anchor="middle" font-size="7" fill="#b91c1c">⚠ BOM: 9.2°C</text>
+
+    <line x1="500" y1="678" x2="500" y2="720" stroke="#059669" stroke-width="2.5" marker-end="url(#a-green)" class="fl"/>
+
+    <!-- ═══════════════ PHASE 4: CUSTOMS & BANK ═══════════════ -->
+    <text x="40" y="743" font-size="11" font-weight="800" fill="#1e293b">PHASE 4 — Customs Clearance · Trade Finance · Pharmacy Verification</text>
+    <line x1="40" y1="750" x2="1060" y2="750" stroke="#f1f5f9" stroke-width="2"/>
+
+    <!-- Node 8: Customs -->
+    <circle cx="180" cy="805" r="45" fill="#ecfdf5" stroke="#059669" stroke-width="2.5" filter="url(#sh)"/>
+    <text x="180" y="798" text-anchor="middle" font-size="9" font-weight="800" fill="#065f46">Kenya</text>
+    <text x="180" y="814" text-anchor="middle" font-size="9" font-weight="800" fill="#065f46">Customs</text>
+
+    <!-- Node 9: Bank -->
+    <circle cx="430" cy="805" r="45" fill="#ecfdf5" stroke="#059669" stroke-width="2.5" filter="url(#sh)"/>
+    <text x="430" y="798" text-anchor="middle" font-size="9" font-weight="800" fill="#065f46">KCB</text>
+    <text x="430" y="814" text-anchor="middle" font-size="9" font-weight="800" fill="#065f46">Bank</text>
+
+    <!-- Node 10: Pharmacy -->
+    <circle cx="680" cy="805" r="45" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2.5" filter="url(#sh)"/>
+    <text x="680" y="798" text-anchor="middle" font-size="9" font-weight="800" fill="#4c1d95">Rural</text>
+    <text x="680" y="814" text-anchor="middle" font-size="9" font-weight="800" fill="#4c1d95">Pharmacy</text>
+
+    <!-- Flow between Phase 4 nodes -->
+    <line x1="225" y1="805" x2="380" y2="805" stroke="#059669" stroke-width="1.5" marker-end="url(#a-green)" class="fl"/>
+    <line x1="475" y1="805" x2="630" y2="805" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#a-purple)" class="fl"/>
+
+    <!-- Arrow to Final -->
+    <line x1="680" y1="850" x2="680" y2="895" stroke="#059669" stroke-width="2.5" marker-end="url(#a-green)" class="fl"/>
+
+    <!-- Final Outcome -->
+    <circle cx="680" cy="925" r="50" fill="#047857" filter="url(#sh)"/>
+    <text x="680" y="920" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">✓</text>
+    <text x="680" y="938" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">VERIFIED</text>
+
+    <!-- Labels for Phase 4 nodes -->
+    <text x="180" y="862" text-anchor="middle" font-size="7" fill="#047857">HS 3004.90 · 0% duty</text>
+    <text x="430" y="862" text-anchor="middle" font-size="7" fill="#047857">LC Compliant · $250K</text>
+    <text x="680" y="862" text-anchor="middle" font-size="7" fill="#7c3aed">QR Scan · Authentic ✓</text>
+
+    <!-- ═══════════════ RIGHT SIDEBAR: DATA EVOLUTION ═══════════════ -->
+    <rect x="880" y="85" width="195" height="850" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" filter="url(#sh)"/>
+    <text x="977" y="112" text-anchor="middle" font-size="11" font-weight="800" fill="#0f172a">Data Evolution</text>
+    <line x1="900" y1="122" x2="1055" y2="122" stroke="#e2e8f0" stroke-width="1"/>
+
+    <circle cx="930" cy="155" r="6" fill="#f59e0b"/><text x="948" y="159" font-size="8" fill="#64748b">EPCIS Event</text>
+    <line x1="930" y1="165" x2="930" y2="200" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <circle cx="930" cy="215" r="6" fill="#2563eb"/><text x="948" y="219" font-size="8" fill="#64748b">VC signed</text>
+    <line x1="930" y1="225" x2="930" y2="300" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <circle cx="930" cy="315" r="6" fill="#7c3aed"/><text x="948" y="319" font-size="8" fill="#64748b">+ HS Code 3004.90</text>
+    <line x1="930" y1="325" x2="930" y2="400" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <circle cx="930" cy="415" r="6" fill="#0d9488"/><text x="948" y="419" font-size="8" fill="#64748b">+ INCOTERMS® CIF</text>
+    <line x1="930" y1="425" x2="930" y2="500" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <circle cx="930" cy="515" r="6" fill="#d97706"/><text x="948" y="519" font-size="8" fill="#64748b">+ Trade Finance LC</text>
+    <line x1="930" y1="525" x2="930" y2="600" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <circle cx="930" cy="615" r="6" fill="#e11d48"/><text x="948" y="619" font-size="8" fill="#64748b">+ IoT Temp Log</text>
+    <line x1="930" y1="625" x2="930" y2="720" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <circle cx="930" cy="735" r="6" fill="#059669"/><text x="948" y="739" font-size="8" fill="#64748b">Event Matrix Row</text>
+    <line x1="930" y1="745" x2="930" y2="820" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <circle cx="930" cy="835" r="6" fill="#047857"/><text x="948" y="839" font-size="8" fill="#64748b">Verified Outcome</text>
+
+    <text x="977" y="875" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">One credential</text>
+    <text x="977" y="893" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">accumulates</text>
+    <text x="977" y="911" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">all evidence</text>
+  </svg>
+  <p class="caption">
+    Figure 2 — The Complete VSC Journey: From raw chemical ingredients through API manufacturing, formulation with QR code application, distribution through cold chain logistics with IoT temperature monitoring, customs clearance, automated LC settlement, and final pharmacy verification. Each circular node represents a cryptographically signed event. The right sidebar shows how a single credential accumulates data — EPCIS, VC proof, HS Code, INCOTERMS®, Trade Finance, IoT logs, Event Matrix, and final verified outcome — as it moves through the supply chain.
+  </p>
+</div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -1790,6 +2315,204 @@
       </dd>
     </dl>
   </section>
+
+  <div class="figure" style="overflow-x:auto;background:#fff;padding:30px 0;">
+  <svg viewBox="0 0 1200 920" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <style>
+        @keyframes flowDash { to { stroke-dashoffset: -20; } }
+        @keyframes subtlePulse { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
+        .fl { stroke-dasharray: 5 3; animation: flowDash .5s linear infinite; }
+        .live { animation: subtlePulse 3s ease-in-out infinite; }
+      </style>
+      <marker id="m1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#64748b"/></marker>
+      <filter id="card-shadow"><feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.08"/></filter>
+      <filter id="module-shadow"><feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.06"/></filter>
+      <linearGradient id="envelope-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#fafbfc"/>
+        <stop offset="100%" style="stop-color:#f1f5f9"/>
+      </linearGradient>
+    </defs>
+
+    <rect width="1200" height="920" fill="#fff" rx="20"/>
+
+    <!-- Title -->
+    <text x="600" y="35" text-anchor="middle" font-size="17" font-weight="800" fill="#0f172a">VSC Modular Envelope — The Complete Verification Operating System</text>
+    <text x="600" y="56" text-anchor="middle" font-size="10" font-weight="500" fill="#64748b">One standardized container. Pluggable modules. Every trade event fits here.</text>
+
+    <!-- ═══════════════ MASTER ENVELOPE CARD ═══════════════ -->
+    <rect x="50" y="75" width="1100" height="810" rx="20" fill="url(#envelope-grad)" stroke="#cbd5e1" stroke-width="2.5" filter="url(#card-shadow)"/>
+    
+    <!-- Envelope header bar -->
+    <rect x="50" y="75" width="1100" height="52" rx="20" fill="#0f172a"/>
+    <rect x="50" y="105" width="1100" height="22" fill="#0f172a"/>
+    <text x="600" y="108" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">VSC ENVELOPE — VERIFIABLE SUPPLY CHAIN</text>
+
+    <!-- Status indicator -->
+    <circle cx="1080" cy="101" r="6" fill="#10b981" class="live"/>
+    <text x="1095" y="105" font-size="9" font-weight="600" fill="#94a3b8">LIVE</text>
+
+    <!-- ═══════════ SECTION 1: FIVE-LAYER FOUNDATION ═══════════ -->
+    <text x="600" y="162" text-anchor="middle" font-size="11" font-weight="700" fill="#475569" letter-spacing="1">FOUNDATION LAYERS</text>
+    <line x1="420" y1="170" x2="780" y2="170" stroke="#e2e8f0" stroke-width="2"/>
+
+    <!-- Layer cards centered as a group -->
+    <rect x="135" y="184" width="170" height="62" rx="10" fill="#fff" stroke="#bfdbfe" stroke-width="2" filter="url(#module-shadow)"/>
+    <rect x="135" y="184" width="170" height="6" rx="3" fill="#3b82f6"/>
+    <text x="220" y="212" text-anchor="middle" font-size="11" font-weight="800" fill="#1e40af">EPCIS Event</text>
+    <text x="220" y="234" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">What occurred · Layer 1</text>
+
+    <line x1="308" y1="215" x2="340" y2="215" stroke="#64748b" stroke-width="2" marker-end="url(#m1)"/>
+
+    <rect x="345" y="184" width="170" height="62" rx="10" fill="#fff" stroke="#bfdbfe" stroke-width="2" filter="url(#module-shadow)"/>
+    <rect x="345" y="184" width="170" height="6" rx="3" fill="#3b82f6"/>
+    <text x="430" y="212" text-anchor="middle" font-size="11" font-weight="800" fill="#1e40af">VC Data Model</text>
+    <text x="430" y="234" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">Cryptographic proof · Layer 2</text>
+
+    <line x1="518" y1="215" x2="550" y2="215" stroke="#64748b" stroke-width="2" marker-end="url(#m1)"/>
+
+    <rect x="555" y="184" width="170" height="62" rx="10" fill="#fff" stroke="#bfdbfe" stroke-width="2" filter="url(#module-shadow)"/>
+    <rect x="555" y="184" width="170" height="6" rx="3" fill="#3b82f6"/>
+    <text x="640" y="212" text-anchor="middle" font-size="11" font-weight="800" fill="#1e40af">DID Core</text>
+    <text x="640" y="234" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">Identity binding · Layer 3</text>
+
+    <line x1="728" y1="215" x2="760" y2="215" stroke="#64748b" stroke-width="2" marker-end="url(#m1)"/>
+
+    <rect x="765" y="184" width="170" height="62" rx="10" fill="#fff" stroke="#fcd34d" stroke-width="2" filter="url(#module-shadow)"/>
+    <rect x="765" y="184" width="170" height="6" rx="3" fill="#f59e0b"/>
+    <text x="850" y="212" text-anchor="middle" font-size="11" font-weight="800" fill="#92400e">Trust Framework</text>
+    <text x="850" y="234" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">Authorization · Layer 4</text>
+
+    <!-- ═══════════ SECTION 2: NORMATIVE VOCABULARIES ═══════════ -->
+    <text x="600" y="284" text-anchor="middle" font-size="11" font-weight="700" fill="#475569" letter-spacing="1">PLUGGABLE VOCABULARY MODULES</text>
+    <line x1="390" y1="292" x2="810" y2="292" stroke="#e2e8f0" stroke-width="2"/>
+
+    <!-- HS Code Module -->
+    <rect x="90" y="306" width="320" height="82" rx="12" fill="#fff" stroke="#0d9488" stroke-width="2" filter="url(#module-shadow)"/>
+    <rect x="90" y="306" width="320" height="36" rx="12" fill="#0d9488"/><rect x="90" y="330" width="320" height="12" fill="#0d9488"/>
+    <text x="250" y="330" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📦 HS Code · Commodity Classification</text>
+    <text x="250" y="362" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">HS: 3004.90 · Version: 2022</text>
+    <text x="250" y="382" text-anchor="middle" font-size="9" font-weight="600" fill="#475569">"Medicaments for retail sale" · 200+ countries</text>
+
+    <!-- INCOTERMS Module -->
+    <rect x="440" y="306" width="320" height="82" rx="12" fill="#fff" stroke="#d97706" stroke-width="2" filter="url(#module-shadow)"/>
+    <rect x="440" y="306" width="320" height="36" rx="12" fill="#d97706"/><rect x="440" y="330" width="320" height="12" fill="#d97706"/>
+    <text x="600" y="330" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📋 INCOTERMS® · Commercial Terms</text>
+    <text x="600" y="362" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">CIF Mombasa · Version: 2020</text>
+    <text x="600" y="382" text-anchor="middle" font-size="9" font-weight="600" fill="#475569">Risk transfers: On board vessel · Mumbai</text>
+
+    <!-- Trade Finance Module -->
+    <rect x="790" y="306" width="320" height="82" rx="12" fill="#fff" stroke="#059669" stroke-width="2" filter="url(#module-shadow)"/>
+    <rect x="790" y="306" width="320" height="36" rx="12" fill="#059669"/><rect x="790" y="330" width="320" height="12" fill="#059669"/>
+    <text x="950" y="330" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">🏦 Trade Finance · Payment</text>
+    <text x="950" y="362" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">LC: Irrevocable · USD 250,000</text>
+    <text x="950" y="382" text-anchor="middle" font-size="9" font-weight="600" fill="#475569">Issuing Bank: Kenya Commercial · UCP 600</text>
+
+    <!-- ═══════════ SECTION 3: EXTENSION MODULES ═══════════ -->
+    <text x="600" y="426" text-anchor="middle" font-size="11" font-weight="700" fill="#475569" letter-spacing="1">EXTENSION MODULES — OPTIONAL · PLUGGABLE · FORWARD-COMPATIBLE</text>
+    <line x1="310" y1="434" x2="890" y2="434" stroke="#e2e8f0" stroke-width="2"/>
+
+    <rect x="90" y="448" width="240" height="68" rx="10" fill="#fff" stroke="#e11d48" stroke-width="1.5" stroke-dasharray="5 3" filter="url(#module-shadow)"/>
+    <text x="210" y="476" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">🌡 IoT Temperature Log</text>
+    <text x="210" y="498" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">Logger DID · Per-leg readings</text>
+
+    <rect x="350" y="448" width="240" height="68" rx="10" fill="#fff" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5 3" filter="url(#module-shadow)"/>
+    <text x="470" y="476" text-anchor="middle" font-size="10" font-weight="700" fill="#5b21b6">♻ Carbon Accounting (D6)</text>
+    <text x="470" y="498" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">CBAM · GLEC Framework</text>
+
+    <rect x="610" y="448" width="240" height="68" rx="10" fill="#fff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 3" filter="url(#module-shadow)"/>
+    <text x="730" y="476" text-anchor="middle" font-size="10" font-weight="700" fill="#1e40af">🛡 Insurance Certificate</text>
+    <text x="730" y="498" text-anchor="middle" font-size="8" font-weight="600" fill="#475569">ICC (C) · 110% · Allianz Policy</text>
+
+    <rect x="870" y="448" width="240" height="68" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="5 3" filter="url(#module-shadow)"/>
+    <text x="990" y="478" text-anchor="middle" font-size="11" font-weight="700" fill="#94a3b8">+ Add Module</text>
+    <text x="990" y="498" text-anchor="middle" font-size="8" font-weight="600" fill="#94a3b8">Forward-compatible · +Dn</text>
+
+    <!-- ═══════════ SECTION 4: ARCHITECTURAL FRAMEWORKS ═══════════ -->
+    <text x="600" y="554" text-anchor="middle" font-size="11" font-weight="700" fill="#475569" letter-spacing="1">ARCHITECTURAL FRAMEWORKS</text>
+    <line x1="410" y1="562" x2="790" y2="562" stroke="#e2e8f0" stroke-width="2"/>
+
+    <!-- Event Matrix -->
+    <rect x="90" y="576" width="510" height="95" rx="14" fill="#fff" stroke="#7c3aed" stroke-width="2.5" filter="url(#module-shadow)"/>
+    <rect x="90" y="576" width="510" height="40" rx="14" fill="#7c3aed"/><rect x="90" y="604" width="510" height="12" fill="#7c3aed"/>
+    <text x="345" y="602" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">🧩 VSC Event Matrix — Cross-Domain Verification Schema</text>
+    
+    <!-- Five mini columns inside matrix -->
+    <rect x="110" y="628" width="88" height="30" rx="6" fill="#dbeafe"/><text x="154" y="648" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">D1: Event</text>
+    <rect x="205" y="628" width="88" height="30" rx="6" fill="#ede9fe"/><text x="249" y="648" text-anchor="middle" font-size="9" font-weight="700" fill="#5b21b6">D2: Actor</text>
+    <rect x="300" y="628" width="88" height="30" rx="6" fill="#ccfbf1"/><text x="344" y="648" text-anchor="middle" font-size="9" font-weight="700" fill="#0f766e">D3: Product</text>
+    <rect x="395" y="628" width="88" height="30" rx="6" fill="#fef3c7"/><text x="439" y="648" text-anchor="middle" font-size="9" font-weight="700" fill="#92400e">D4: Comm</text>
+    <rect x="490" y="628" width="88" height="30" rx="6" fill="#d1fae5"/><text x="534" y="648" text-anchor="middle" font-size="9" font-weight="700" fill="#065f46">D5: Fin</text>
+
+    <!-- Rule Compiler -->
+    <rect x="620" y="576" width="490" height="95" rx="14" fill="#fff" stroke="#059669" stroke-width="2.5" filter="url(#module-shadow)"/>
+    <rect x="620" y="576" width="490" height="40" rx="14" fill="#059669"/><rect x="620" y="604" width="490" height="12" fill="#059669"/>
+    <text x="865" y="602" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">⚙ Regulatory Rule Compiler — Machine-Executable Compliance</text>
+    
+    <!-- Rules inside -->
+    <rect x="640" y="628" width="105" height="30" rx="6" fill="#d1fae5"/><text x="692" y="648" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">DSCSA ✓</text>
+    <rect x="753" y="628" width="105" height="30" rx="6" fill="#d1fae5"/><text x="805" y="648" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">EUDR ✓</text>
+    <rect x="866" y="628" width="105" height="30" rx="6" fill="#d1fae5"/><text x="918" y="648" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">CBAM ✓</text>
+    <rect x="979" y="628" width="105" height="30" rx="6" fill="#d1fae5"/><text x="1031" y="648" text-anchor="middle" font-size="8" font-weight="700" fill="#065f46">UCP 600 ✓</text>
+
+    <!-- ═══════════ SECTION 5: VERIFICATION PIPELINE ═══════════ -->
+    <text x="600" y="710" text-anchor="middle" font-size="11" font-weight="700" fill="#475569" letter-spacing="1">UNIVERSAL VERIFICATION PIPELINE</text>
+    <line x1="400" y1="718" x2="800" y2="718" stroke="#e2e8f0" stroke-width="2"/>
+
+    <!-- Pipeline steps as connected circles, centered -->
+    <circle cx="175" cy="762" r="30" fill="#fff" stroke="#2563eb" stroke-width="2.5" filter="url(#module-shadow)"/>
+    <text x="175" y="758" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">Resolve</text>
+    <text x="175" y="774" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">DID</text>
+
+    <line x1="207" y1="762" x2="248" y2="762" stroke="#64748b" stroke-width="2" marker-end="url(#m1)" class="fl"/>
+
+    <circle cx="290" cy="762" r="30" fill="#fff" stroke="#2563eb" stroke-width="2.5" filter="url(#module-shadow)"/>
+    <text x="290" y="758" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">Verify</text>
+    <text x="290" y="774" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">Proof</text>
+
+    <line x1="322" y1="762" x2="363" y2="762" stroke="#64748b" stroke-width="2" marker-end="url(#m1)" class="fl"/>
+
+    <circle cx="405" cy="762" r="30" fill="#fff" stroke="#d97706" stroke-width="2.5" filter="url(#module-shadow)"/>
+    <text x="405" y="758" text-anchor="middle" font-size="9" font-weight="700" fill="#92400e">Check</text>
+    <text x="405" y="774" text-anchor="middle" font-size="9" font-weight="700" fill="#92400e">Status</text>
+
+    <line x1="437" y1="762" x2="478" y2="762" stroke="#64748b" stroke-width="2" marker-end="url(#m1)" class="fl"/>
+
+    <circle cx="520" cy="762" r="30" fill="#fff" stroke="#d97706" stroke-width="2.5" filter="url(#module-shadow)"/>
+    <text x="520" y="758" text-anchor="middle" font-size="9" font-weight="700" fill="#92400e">Validate</text>
+    <text x="520" y="774" text-anchor="middle" font-size="9" font-weight="700" fill="#92400e">Auth</text>
+
+    <line x1="552" y1="762" x2="593" y2="762" stroke="#64748b" stroke-width="2" marker-end="url(#m1)" class="fl"/>
+
+    <circle cx="635" cy="762" r="30" fill="#fff" stroke="#7c3aed" stroke-width="2.5" filter="url(#module-shadow)"/>
+    <text x="635" y="758" text-anchor="middle" font-size="9" font-weight="700" fill="#5b21b6">Apply</text>
+    <text x="635" y="774" text-anchor="middle" font-size="9" font-weight="700" fill="#5b21b6">Rules</text>
+
+    <line x1="667" y1="762" x2="708" y2="762" stroke="#64748b" stroke-width="2" marker-end="url(#m1)" class="fl"/>
+
+    <circle cx="750" cy="762" r="30" fill="#fff" stroke="#7c3aed" stroke-width="2.5" filter="url(#module-shadow)"/>
+    <text x="750" y="758" text-anchor="middle" font-size="9" font-weight="700" fill="#5b21b6">Compute</text>
+    <text x="750" y="774" text-anchor="middle" font-size="9" font-weight="700" fill="#5b21b6">Score</text>
+
+    <line x1="782" y1="762" x2="830" y2="762" stroke="#10b981" stroke-width="3" marker-end="url(#m1)"/>
+
+    <!-- Outcome -->
+    <rect x="840" y="732" width="180" height="62" rx="14" fill="#047857" filter="url(#card-shadow)"/>
+    <text x="930" y="760" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">✓ VERIFIED</text>
+    <text x="930" y="782" text-anchor="middle" font-size="10" font-weight="600" fill="#a7f3d0">Trust Score: 0.97</text>
+
+    <!-- ═══════════ BOTTOM STRIP: KEY PROPERTIES ═══════════ -->
+    <rect x="90" y="828" width="1020" height="38" rx="10" fill="#f8fafc"/>
+    <text x="230" y="852" text-anchor="middle" font-size="9" font-weight="600" fill="#334155">Orthogonal Dimensions</text>
+    <text x="430" y="852" text-anchor="middle" font-size="9" font-weight="600" fill="#334155">Standardized Vocabularies</text>
+    <text x="630" y="852" text-anchor="middle" font-size="9" font-weight="600" fill="#334155">Forward-Compatible (+Dn)</text>
+    <text x="830" y="852" text-anchor="middle" font-size="9" font-weight="600" fill="#334155">ML-Ready Feature Space</text>
+
+  </svg>
+  <p class="caption">
+    Figure 3 — The VSC Modular Envelope: A single standardized container for any trade event. The four foundation layers provide event capture, cryptographic proof, identity binding, and trust governance. Three pluggable vocabulary modules (HS Code, INCOTERMS®, Trade Finance) add commodity classification, commercial terms, and payment instrument data. Extension modules (IoT logs, carbon accounting, insurance) can be added without modifying the envelope. The Event Matrix and Regulatory Rule Compiler process everything through a universal verification pipeline that ends with a cryptographically signed trust score.
+  </p>
+</div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
