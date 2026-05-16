@@ -4323,6 +4323,180 @@ labels = {
       <p class="caption">Figure 2b — Pharmacy verification pipeline (top) and recall revocation propagation flow (bottom).</p>
     </div>
 
+    <div class="figure" style="overflow-x:auto;background:#fff;padding:30px 0;">
+  <svg viewBox="0 0 1100 750" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <style>
+        @keyframes flowDash { to { stroke-dashoffset: -20; } }
+        @keyframes subtlePulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+        @keyframes scanLine { 0% { transform:translateY(-60px);opacity:0; } 50% { opacity:0.15; } 100% { transform:translateY(60px);opacity:0; } }
+        .fl { stroke-dasharray: 5 3; animation: flowDash .5s linear infinite; }
+        .live-dot { animation: subtlePulse 2s ease-in-out infinite; }
+        .scan { animation: scanLine 3s ease-in-out infinite; }
+      </style>
+      <marker id="m1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#64748b"/></marker>
+      <filter id="card-shadow"><feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.10"/></filter>
+      <filter id="inner-shadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.04"/></filter>
+      <linearGradient id="card-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#ffffff"/>
+        <stop offset="100%" style="stop-color:#fafbfc"/>
+      </linearGradient>
+      <linearGradient id="verified-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#047857"/>
+        <stop offset="100%" style="stop-color:#065f46"/>
+      </linearGradient>
+      <linearGradient id="vp-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#f5f3ff"/>
+        <stop offset="100%" style="stop-color:#ede9fe"/>
+      </linearGradient>
+    </defs>
+
+    <rect width="1100" height="750" fill="#fff" rx="20"/>
+
+    <!-- Title -->
+    <text x="550" y="35" text-anchor="middle" font-size="16" font-weight="800" fill="#0f172a">VSC Verifiable Presentation — Real-World UX</text>
+    <text x="550" y="56" text-anchor="middle" font-size="10" font-weight="500" fill="#64748b">How a customs officer, bank, or regulator sees a VSC-verified shipment</text>
+
+    <!-- ═══════════════ MASTER VP CARD ═══════════════ -->
+    <rect x="50" y="80" width="1000" height="640" rx="22" fill="url(#card-grad)" stroke="#cbd5e1" stroke-width="2.5" filter="url(#card-shadow)"/>
+
+    <!-- Card Header -->
+    <rect x="50" y="80" width="1000" height="64" rx="22" fill="#0f172a"/>
+    <rect x="50" y="120" width="1000" height="24" fill="#0f172a"/>
+
+    <!-- Header content -->
+    <text x="90" y="110" font-size="13" font-weight="700" fill="#94a3b8">VERIFIABLE PRESENTATION</text>
+    <text x="90" y="130" font-size="18" font-weight="800" fill="#ffffff">Shipment VP-2026-08921-IN-KE</text>
+
+    <!-- Status badge -->
+    <rect x="780" y="92" width="100" height="26" rx="13" fill="#047857"/>
+    <text x="830" y="110" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">✓ VERIFIED</text>
+
+    <!-- Live indicator -->
+    <circle cx="900" cy="105" r="5" fill="#10b981" class="live-dot"/>
+    <text x="915" y="110" font-size="9" font-weight="600" fill="#10b981">Verified 2s ago</text>
+
+    <!-- Issuer info -->
+    <text x="90" y="150" font-size="10" fill="#94a3b8">Issued by: State Bank of India (did:web:sbi.co.in) · 15 July 2026 · 14:30 UTC</text>
+
+    <!-- ═══════════ SECTION 1: PRODUCT IDENTITY ═══════════ -->
+    <text x="90" y="190" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2">PRODUCT IDENTITY</text>
+    <line x1="90" y1="198" x2="1030" y2="198" stroke="#e2e8f0" stroke-width="1"/>
+
+    <!-- Product card -->
+    <rect x="90" y="210" width="440" height="110" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#inner-shadow)"/>
+
+    <!-- Product icon area -->
+    <rect x="105" y="225" width="55" height="55" rx="10" fill="#dbeafe"/>
+    <text x="132" y="255" text-anchor="middle" font-size="22">💊</text>
+
+    <text x="175" y="248" font-size="14" font-weight="800" fill="#0f172a">Paracetamol 500mg Tablets</text>
+    <text x="175" y="268" font-size="10" font-weight="600" fill="#475569">Batch: B2026-0457 · Exp: 12/2028 · 100-strip pack</text>
+
+    <rect x="175" y="280" width="130" height="22" rx="6" fill="#f0fdfa"/>
+    <text x="240" y="295" text-anchor="middle" font-size="9" font-weight="700" fill="#0f766e">HS: 3004.90.11 (2022)</text>
+
+    <rect x="315" y="280" width="180" height="22" rx="6" fill="#f8fafc"/>
+    <text x="405" y="295" text-anchor="middle" font-size="9" font-weight="600" fill="#475569">Medicaments for retail sale</text>
+
+    <!-- Verification badges -->
+    <rect x="550" y="210" width="240" height="110" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#inner-shadow)"/>
+
+    <rect x="565" y="225" width="210" height="28" rx="6" fill="#ecfdf5"/>
+    <circle cx="585" cy="239" r="6" fill="#10b981"/>
+    <text x="600" y="243" font-size="9" font-weight="700" fill="#065f46">HS Code validated against WCO 2022</text>
+
+    <rect x="565" y="260" width="210" height="28" rx="6" fill="#ecfdf5"/>
+    <circle cx="585" cy="274" r="6" fill="#10b981"/>
+    <text x="600" y="278" font-size="9" font-weight="700" fill="#065f46">GTIN resolved via GS1 Digital Link</text>
+
+    <rect x="565" y="295" width="210" height="28" rx="6" fill="#ecfdf5"/>
+    <circle cx="585" cy="309" r="6" fill="#10b981"/>
+    <text x="600" y="313" font-size="9" font-weight="700" fill="#065f46">DID proof verified · did:mfr:form-in-002</text>
+
+    <!-- ═══════════ SECTION 2: COMMERCIAL TERMS ═══════════ -->
+    <text x="90" y="355" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2">COMMERCIAL TERMS</text>
+    <line x1="90" y1="363" x2="1030" y2="363" stroke="#e2e8f0" stroke-width="1"/>
+
+    <rect x="90" y="375" width="250" height="75" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#inner-shadow)"/>
+    <text x="110" y="400" font-size="11" font-weight="800" fill="#0f172a">INCOTERMS® 2020</text>
+    <text x="110" y="420" font-size="14" font-weight="800" fill="#92400e">CIF Mombasa</text>
+    <text x="110" y="440" font-size="9" fill="#64748b">Risk transfers: On board Mumbai</text>
+
+    <rect x="360" y="375" width="250" height="75" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#inner-shadow)"/>
+    <text x="380" y="400" font-size="11" font-weight="800" fill="#0f172a">Insurance (CIF Required)</text>
+    <text x="380" y="420" font-size="14" font-weight="800" fill="#065f46">ICC (C) · 110%</text>
+    <text x="380" y="440" font-size="9" fill="#64748b">Allianz Policy #IN-2026-08921</text>
+
+    <rect x="630" y="375" width="250" height="75" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#inner-shadow)"/>
+    <text x="650" y="400" font-size="11" font-weight="800" fill="#0f172a">Trade Finance</text>
+    <text x="650" y="420" font-size="14" font-weight="800" fill="#1e40af">LC Irrevocable</text>
+    <text x="650" y="440" font-size="9" fill="#64748b">KCB · USD 250,000 · UCP 600</text>
+
+    <!-- ═══════════ SECTION 3: CUSTODY CHAIN ═══════════ -->
+    <text x="90" y="485" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2">CUSTODY CHAIN — 4 VERIFIED EVENTS</text>
+    <line x1="90" y1="493" x2="1030" y2="493" stroke="#e2e8f0" stroke-width="1"/>
+
+    <!-- Chain visualization -->
+    <rect x="90" y="505" width="185" height="55" rx="10" fill="#fff" stroke="#2563eb" stroke-width="2" filter="url(#inner-shadow)"/>
+    <circle cx="115" cy="532" r="14" fill="#2563eb"/><text x="115" y="537" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">1</text>
+    <text x="140" y="528" font-size="10" font-weight="700" fill="#0f172a">Commissioning</text>
+    <text x="140" y="546" font-size="8" fill="#64748b">did:mfr:form-in-002 ✓</text>
+
+    <line x1="278" y1="532" x2="305" y2="532" stroke="#64748b" stroke-width="1.5" marker-end="url(#m1)" class="fl"/>
+
+    <rect x="310" y="505" width="185" height="55" rx="10" fill="#fff" stroke="#2563eb" stroke-width="2" filter="url(#inner-shadow)"/>
+    <circle cx="335" cy="532" r="14" fill="#2563eb"/><text x="335" y="537" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">2</text>
+    <text x="360" y="528" font-size="10" font-weight="700" fill="#0f172a">Shipping</text>
+    <text x="360" y="546" font-size="8" fill="#64748b">did:mfr:form-in-002 ✓</text>
+
+    <line x1="498" y1="532" x2="525" y2="532" stroke="#64748b" stroke-width="1.5" marker-end="url(#m1)" class="fl"/>
+
+    <rect x="530" y="505" width="185" height="55" rx="10" fill="#fff" stroke="#7c3aed" stroke-width="2" filter="url(#inner-shadow)"/>
+    <circle cx="555" cy="532" r="14" fill="#7c3aed"/><text x="555" y="537" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">3</text>
+    <text x="580" y="528" font-size="10" font-weight="700" fill="#0f172a">Receiving</text>
+    <text x="580" y="546" font-size="8" fill="#64748b">did:whl:dea-002 ✓</text>
+
+    <line x1="718" y1="532" x2="745" y2="532" stroke="#64748b" stroke-width="1.5" marker-end="url(#m1)" class="fl"/>
+
+    <rect x="750" y="505" width="185" height="55" rx="10" fill="#fff" stroke="#059669" stroke-width="2" filter="url(#inner-shadow)"/>
+    <circle cx="775" cy="532" r="14" fill="#059669"/><text x="775" y="537" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">4</text>
+    <text x="800" y="528" font-size="10" font-weight="700" fill="#0f172a">Dispensing</text>
+    <text x="800" y="546" font-size="8" fill="#64748b">did:disp:npi-003 ✓</text>
+
+    <!-- ═══════════ SECTION 4: TEMPERATURE LOG ═══════════ -->
+    <text x="90" y="595" font-size="10" font-weight="700" fill="#64748b" letter-spacing="2">COLD CHAIN INTEGRITY</text>
+    <line x1="90" y1="603" x2="1030" y2="603" stroke="#e2e8f0" stroke-width="1"/>
+
+    <rect x="90" y="615" width="600" height="50" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#inner-shadow)"/>
+
+    <!-- Temperature timeline -->
+    <rect x="110" y="630" width="90" height="22" rx="6" fill="#ecfdf5"/><text x="155" y="645" text-anchor="middle" font-size="8" font-weight="700" fill="#047857">BRU: 2.1°C</text>
+    <rect x="215" y="630" width="90" height="22" rx="6" fill="#ecfdf5"/><text x="260" y="645" text-anchor="middle" font-size="8" font-weight="700" fill="#047857">DXB: 3.8°C</text>
+    <rect x="320" y="630" width="90" height="22" rx="6" fill="#fef2f2"/><text x="365" y="645" text-anchor="middle" font-size="8" font-weight="700" fill="#b91c1c">⚠ BOM: 9.2°C</text>
+    <rect x="425" y="630" width="90" height="22" rx="6" fill="#ecfdf5"/><text x="470" y="645" text-anchor="middle" font-size="8" font-weight="700" fill="#047857">NBO: 5.4°C</text>
+
+    <text x="545" y="645" font-size="8" fill="#b91c1c">Excursion: 9.2°C exceeds 2–8°C range</text>
+
+    <!-- IoT logger info -->
+    <rect x="710" y="615" width="220" height="50" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#inner-shadow)"/>
+    <text x="730" y="638" font-size="9" font-weight="700" fill="#0f172a">IoT Logger: iot:logger-pqs-001</text>
+    <text x="730" y="656" font-size="8" fill="#64748b">Each reading: DID-signed VC ✓</text>
+
+    <!-- ═══════════ FOOTER: TRUST SCORE ═══════════ -->
+    <line x1="90" y1="685" x2="1030" y2="685" stroke="#e2e8f0" stroke-width="1"/>
+
+    <rect x="90" y="695" width="920" height="18" rx="6" fill="#f8fafc"/>
+    <rect x="90" y="695" width="890" height="18" rx="6" fill="#047857"/>
+    <text x="970" y="708" font-size="8" font-weight="700" fill="#fff">Trust Score: 0.97</text>
+
+    <text x="90" y="728" font-size="8" fill="#64748b">DID Resolve ✓ · Proof Valid ✓ · Status Active ✓ · ATP Registry ✓ · HS 3004.90 ✓ · CIF Compliant ✓ · LC Docs 5/5 ✓ · Chain Complete ✓</text>
+  </svg>
+  <p class="caption">
+    Figure 4 — VSC Verifiable Presentation (VP) as it would appear to a customs officer, bank, or regulator. The card shows the complete shipment identity: product classification (HS code), commercial terms (INCOTERMS® CIF), trade finance (LC), the four-event custody chain with DID verification for each actor, cold chain temperature log with excursion flagged, and a composite trust score with all verification checks listed.
+  </p>
+</div>
+
     <p><strong>Failure modes:</strong></p>
     <ul>
       <li><em>Salami injection attack:</em> An adversary inserts a fabricated custody transfer credential between two legitimate steps. The verifier MUST detect that the fabricated credential's issuer is not in the authorized trading partner registry.</li>
@@ -4679,6 +4853,8 @@ labels = {
   <!-- UC-04 -->
   <section id="uc-battery">
     <h3>UC-04: Battery Passport for EV Supply Chain</h3>
+
+
 
     <dl class="uc-meta">
       <dt>Regulatory driver</dt>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Verifiable Supply Chain Community Group · W3C</title>
-<meta name="description" content="W3C Community Group accelerating decentralized, verifiable data standards in global supply chains.">
+<meta name="description" content="W3C Community Group building decentralized, verifiable data standards for global supply chains using Verifiable Credentials, DIDs, and UORA.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,15 +13,12 @@
   --ink: #0A0A0A;
   --ink-2: #1A1A1A;
   --ink-3: #2A2A2A;
-  --ink-4: #3A3A3A;
   --surface: #FFFFFF;
   --surface-2: #F8F8F8;
-  --surface-3: #F0F0F0;
   --line: rgba(0,0,0,0.10);
   --line-2: rgba(0,0,0,0.16);
   --accent: #1A4FBB;
   --accent-2: #EBF1FB;
-  --accent-text: #0A1F5C;
   --green: #0A5A3C;
   --green-bg: #E8F8F0;
   --amber: #5C3800;
@@ -33,18 +30,8 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--sans);
-  background: var(--surface);
-  color: var(--ink);
-  line-height: 1.6;
-  font-size: 15px;
-  -webkit-font-smoothing: antialiased;
-}
-
+body { font-family: var(--sans); background: var(--surface); color: var(--ink); line-height: 1.6; font-size: 15px; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 
 /* ─── NAV ─────────────────────────────────────── */
@@ -55,469 +42,139 @@ a { color: inherit; text-decoration: none; }
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2rem;
-  height: 56px;
+  padding: 0 2rem; height: 56px;
 }
-
 .nav-left { display: flex; align-items: center; gap: 12px; }
-
-.nav-w3c {
-  font-family: var(--mono);
-  font-size: 11px; font-weight: 500;
-  letter-spacing: 0.06em;
-  background: var(--ink);
-  color: #FFFFFF;
-  padding: 4px 8px;
-  border-radius: 5px;
-}
-
+.nav-w3c { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; background: var(--ink); color: #FFFFFF; padding: 4px 8px; border-radius: 5px; }
 .nav-slash { color: var(--ink-3); font-weight: 300; }
-
-.nav-name {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--ink-2);
-  letter-spacing: -0.01em;
-}
-
+.nav-name { font-size: 13px; font-weight: 400; color: var(--ink-2); letter-spacing: -0.01em; }
 .nav-right { display: flex; align-items: center; gap: 1.75rem; }
-
-.nav-link {
-  font-size: 13px;
-  color: var(--ink-3);
-  transition: color 0.15s;
-}
+.nav-link { font-size: 13px; color: var(--ink-3); transition: color 0.15s; }
 .nav-link:hover { color: var(--ink); }
-
-.nav-cta {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 500;
-  background: var(--ink);
-  color: #FFFFFF;
-  padding: 7px 16px;
-  border-radius: 7px;
-  transition: opacity 0.15s;
-  border: none; cursor: pointer;
-}
+.nav-cta { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; background: var(--ink); color: #FFFFFF; padding: 7px 16px; border-radius: 7px; transition: opacity 0.15s; border: none; cursor: pointer; }
 .nav-cta:hover { opacity: 0.82; }
+.live-indicator { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--green); margin-left: 12px; }
+.live-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: livePulse 1.5s ease-in-out infinite; }
+@keyframes livePulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
 
 /* ─── HERO ────────────────────────────────────── */
-.hero {
-  padding: 7rem 2rem 5rem;
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5rem;
-  align-items: center;
-}
-
-.hero-kicker {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--accent);
-  letter-spacing: 0.04em;
-  margin-bottom: 1.75rem;
-  border: 1px solid rgba(26,79,187,0.25);
-  background: var(--accent-2);
-  padding: 5px 12px;
-  border-radius: 100px;
-}
-.kicker-dot {
-  width: 6px; height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
-  animation: pulse 2.4s ease-in-out infinite;
-}
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-.hero h1 {
-  font-size: 48px;
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-  margin-bottom: 1.5rem;
-}
+.hero { padding: 7rem 2rem 5rem; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.hero-kicker { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.04em; margin-bottom: 1.75rem; border: 1px solid rgba(26,79,187,0.25); background: var(--accent-2); padding: 5px 12px; border-radius: 100px; }
+.kicker-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+.hero h1 { font-size: 48px; font-weight: 300; line-height: 1.1; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 1.5rem; }
 .hero h1 strong { font-weight: 500; display: block; }
-
-.hero-desc {
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--ink-2);
-  max-width: 420px;
-  margin-bottom: 2.25rem;
-}
-
+.hero-desc { font-size: 16px; line-height: 1.7; color: var(--ink-2); max-width: 420px; margin-bottom: 2.25rem; }
 .hero-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 13px; font-weight: 500;
-  background: var(--ink);
-  color: #FFFFFF;
-  padding: 11px 22px;
-  border-radius: 8px;
-  transition: opacity 0.15s, transform 0.15s;
-  border: none; cursor: pointer;
-}
+.btn-primary { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; background: var(--ink); color: #FFFFFF; padding: 11px 22px; border-radius: 8px; transition: opacity 0.15s, transform 0.15s; border: none; cursor: pointer; }
 .btn-primary:hover { opacity: 0.82; transform: translateY(-1px); }
-
-.btn-secondary {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 13px; font-weight: 400;
-  color: var(--ink-2);
-  padding: 11px 20px;
-  border-radius: 8px;
-  border: 1px solid rgba(0,0,0,0.18);
-  background: var(--surface);
-  transition: border-color 0.15s, background 0.15s;
-  cursor: pointer;
-}
+.btn-secondary { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 400; color: var(--ink-2); padding: 11px 20px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.18); background: var(--surface); transition: border-color 0.15s, background 0.15s; cursor: pointer; }
 .btn-secondary:hover { border-color: rgba(0,0,0,0.30); background: var(--surface-2); }
-
-.hero-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(0,0,0,0.14);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-}
-
-.hero-card-header {
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  display: flex; align-items: center; gap: 8px;
-  background: #FAFAFA;
-}
-
+.hero-card { background: #FFFFFF; border: 1px solid rgba(0,0,0,0.14); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+.hero-card-header { padding: 1rem 1.25rem; border-bottom: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; gap: 8px; background: #FAFAFA; }
 .card-dot { width: 8px; height: 8px; border-radius: 50%; }
-.dot-r { background: #FF5F57; }
-.dot-y { background: #FEBC2E; }
-.dot-g { background: #28C840; }
+.dot-r { background: #FF5F57; } .dot-y { background: #FEBC2E; } .dot-g { background: #28C840; }
+.card-file { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-left: auto; }
+.hero-card-body { padding: 1.25rem; font-family: var(--mono); font-size: 12px; line-height: 1.75; color: #1A1A1A; background: #FFFFFF; }
+.c-gray { color: #3A3A3A; } .c-key { color: #0F4B6E; } .c-str { color: #0A5A3C; } .c-num { color: #5C3800; }
 
-.card-file {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--ink-3);
-  margin-left: auto;
-}
-
-.hero-card-body {
-  padding: 1.25rem;
-  font-family: var(--mono);
-  font-size: 12px;
-  line-height: 1.75;
-  color: #1A1A1A;
-  background: #FFFFFF;
-}
-
-.c-gray { color: #3A3A3A; }
-.c-key { color: #0F4B6E; }
-.c-str { color: #0A5A3C; }
-.c-num { color: #5C3800; }
-.c-bool { color: #4B1078; }
-.c-type { color: #1A4FBB; }
-
-/* ─── STATS ───────────────────────────────────── */
-.stats-strip {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  justify-content: center;
-  background: var(--surface);
-}
-.stat-block {
-  padding: 1.5rem 3.5rem;
-  text-align: center;
-  border-right: 1px solid var(--line);
-}
+/* ─── STATS STRIP ─────────────────────────────── */
+.stats-strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; justify-content: center; background: var(--surface); }
+.stat-block { padding: 1.5rem 3.5rem; text-align: center; border-right: 1px solid var(--line); }
 .stat-block:last-child { border-right: none; }
-.stat-n { font-size: 28px; font-weight: 300; letter-spacing: -0.04em; color: var(--ink); display: block; }
+.stat-n { font-size: 28px; font-weight: 300; letter-spacing: -0.04em; color: var(--ink); display: block; transition: color 0.3s; }
 .stat-l { font-size: 12px; color: var(--ink-3); margin-top: 2px; display: block; }
+.stat-updated { text-align: center; padding: 0.5rem; font-size: 10px; color: var(--ink-3); font-family: var(--mono); background: var(--surface-2); }
 
 /* ─── SECTION SHARED ─────────────────────────── */
 .section { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; }
-.section-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin-bottom: 1.25rem;
-  display: flex; align-items: center; gap: 8px;
-}
+.section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
 .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(0,0,0,0.10); max-width: 48px; }
 .section-title { font-size: 32px; font-weight: 300; letter-spacing: -0.025em; color: var(--ink); margin-bottom: 0.6rem; }
 .section-title strong { font-weight: 500; }
-.section-sub { font-size: 15px; color: var(--ink-2); line-height: 1.65; max-width: 520px; margin-bottom: 3rem; }
+.section-sub { font-size: 15px; color: var(--ink-2); line-height: 1.65; max-width: 560px; margin-bottom: 3rem; }
+
+/* ─── VSC OVERVIEW ──────────────────────────── */
+.overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+.overview-card { border: 1px solid var(--line-2); border-radius: var(--radius-lg); padding: 1.75rem; background: #FFFFFF; transition: border-color 0.15s, box-shadow 0.15s; }
+.overview-card:hover { border-color: rgba(0,0,0,0.22); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.overview-icon { font-size: 28px; margin-bottom: 1rem; display: block; }
+.overview-name { font-size: 14px; font-weight: 500; margin-bottom: 0.5rem; color: var(--ink); }
+.overview-desc { font-size: 12px; color: var(--ink-2); line-height: 1.55; }
 
 /* ─── SPEC LINK CARDS ─────────────────────────── */
-.spec-link-card {
-  display: block;
-  border: 1px solid rgba(0,0,0,0.12);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  background: #FFFFFF;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  cursor: pointer;
-  color: var(--ink);
-}
-.spec-link-card:hover {
-  border-color: rgba(0,0,0,0.22);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-}
+.spec-link-card { display: block; border: 1px solid rgba(0,0,0,0.12); border-radius: var(--radius-lg); padding: 1.75rem; background: #FFFFFF; transition: border-color 0.15s, box-shadow 0.15s; cursor: pointer; color: var(--ink); }
+.spec-link-card:hover { border-color: rgba(0,0,0,0.22); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.deliverable-icon { width: 36px; height: 36px; border-radius: 9px; border: 1px solid rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 1rem; background: #F8F8F8; }
+.deliverable-name { font-size: 15px; font-weight: 500; letter-spacing: -0.015em; margin-bottom: 0.5rem; color: var(--ink); }
+.deliverable-desc { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
 
-/* ─── SPEC VIEWER ─────────────────────────────── */
-.spec-viewer-section {
-  background: #0A0A0A;
-  color: #FFFFFF;
-  padding: 4rem 2rem;
-}
-
-.spec-viewer-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.spec-viewer-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  margin-bottom: 1rem;
-}
-
-.spec-viewer-title {
-  font-size: 32px;
-  font-weight: 300;
-  letter-spacing: -0.025em;
-  margin-bottom: 2rem;
-}
-.spec-viewer-title strong { font-weight: 500; }
-
-.spec-tabs {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.spec-tab {
-  padding: 0.65rem 1.3rem;
-  border-radius: 100px;
-  font-size: 13px;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid rgba(255,255,255,0.28);
-  color: rgba(255,255,255,0.75);
-  background: transparent;
-  font-family: var(--sans);
-}
-
-.spec-tab:hover {
-  border-color: rgba(255,255,255,0.55);
-  color: #FFFFFF;
-}
-
-.spec-tab.active {
-  background: #FFFFFF;
-  color: #0A0A0A;
-  border-color: #FFFFFF;
-  font-weight: 500;
-}
-
-.spec-frame-wrap {
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: #FFFFFF;
-}
-
-.spec-frame-wrap iframe {
-  width: 100%;
-  height: 600px;
-  border: none;
-  display: block;
-}
-
-.spec-empty {
-  padding: 3rem;
-  text-align: center;
-  color: var(--ink-2);
-}
-
-.spec-empty i {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: 0.75rem;
-  opacity: 0.3;
-}
-
-/* ─── PROFILES GRID ──────────────────────────── */
-.profiles-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border: 1px solid rgba(0,0,0,0.14);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: #FFFFFF;
-}
-
-.profile-cell {
-  padding: 1.75rem;
-  border-right: 1px solid rgba(0,0,0,0.08);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  transition: background 0.15s;
-  position: relative;
-  background: #FFFFFF;
-}
+/* ─── PROFILES ────────────────────────────────── */
+.profiles-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid rgba(0,0,0,0.14); border-radius: var(--radius-lg); overflow: hidden; background: #FFFFFF; }
+.profile-cell { padding: 1.75rem; border-right: 1px solid rgba(0,0,0,0.08); border-bottom: 1px solid rgba(0,0,0,0.08); transition: background 0.15s; background: #FFFFFF; }
 .profile-cell:hover { background: #F8F8F8; }
 .profile-cell:nth-child(3n) { border-right: none; }
-.profile-cell:nth-last-child(-n+3) { border-bottom: none; }
-
 .profile-icon { font-size: 22px; margin-bottom: 0.75rem; display: block; }
 .profile-name { font-size: 14px; font-weight: 500; margin-bottom: 0.4rem; letter-spacing: -0.01em; color: var(--ink); }
 .profile-desc { font-size: 12px; color: var(--ink-2); line-height: 1.55; margin-bottom: 0.85rem; }
-
-.status-pill {
-  display: inline-block;
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  padding: 3px 9px;
-  border-radius: 100px;
-}
+.status-pill { display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.04em; padding: 3px 9px; border-radius: 100px; }
 .status-active { background: var(--green-bg); color: var(--green); }
-.status-draft { background: var(--accent-2); color: var(--accent-text); }
-.status-planned { background: var(--surface-3); color: var(--ink-3); }
-
+.status-draft { background: var(--accent-2); color: var(--accent); }
+.status-planned { background: #F0F0F0; color: var(--ink-3); }
 .profile-regs { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 0.85rem; }
-.reg-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--ink-3);
-  border: 1px solid rgba(0,0,0,0.14);
-  padding: 2px 7px;
-  border-radius: 4px;
-  background: #FFFFFF;
-}
+.reg-tag { font-family: var(--mono); font-size: 10px; color: var(--ink-3); border: 1px solid rgba(0,0,0,0.14); padding: 2px 7px; border-radius: 4px; background: #FFFFFF; }
 
 /* ─── DELIVERABLES ───────────────────────────── */
 .deliverables-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-.deliverable-card {
-  border: 1px solid rgba(0,0,0,0.12);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  background: #FFFFFF;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.deliverable-card:hover {
-  border-color: rgba(0,0,0,0.22);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-}
-.deliverable-icon {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  border: 1px solid rgba(0,0,0,0.12);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  margin-bottom: 1rem;
-  background: #F8F8F8;
-}
-.deliverable-name { font-size: 15px; font-weight: 500; letter-spacing: -0.015em; margin-bottom: 0.5rem; color: var(--ink); }
-.deliverable-desc { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.deliverable-card { border: 1px solid rgba(0,0,0,0.12); border-radius: var(--radius-lg); padding: 1.75rem; background: #FFFFFF; transition: border-color 0.15s, box-shadow 0.15s; }
+.deliverable-card:hover { border-color: rgba(0,0,0,0.22); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
 .deliverable-items { margin-top: 1rem; display: flex; flex-direction: column; gap: 5px; }
 .di-item { display: flex; align-items: baseline; gap: 8px; font-size: 12px; color: var(--ink-2); }
-.di-item::before { content: '—'; color: var(--ink-4); flex-shrink: 0; }
+.di-item::before { content: '—'; color: #64748b; flex-shrink: 0; }
 
 /* ─── COMPLIANCE ──────────────────────────────── */
 .compliance-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
 .compliance-block-title { font-size: 13px; font-weight: 500; margin-bottom: 0.75rem; color: var(--ink); }
 .compliance-list { display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.12); border-radius: var(--radius); overflow: hidden; background: #FFFFFF; }
-.compliance-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0.8rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.06);
-  font-size: 13px; transition: background 0.12s;
-  color: var(--ink);
-}
+.compliance-row { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 13px; transition: background 0.12s; color: var(--ink); }
 .compliance-row:last-child { border-bottom: none; }
 .compliance-row:hover { background: #F8F8F8; }
-.comp-name { color: var(--ink); font-weight: 400; }
 .comp-scope { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
 
-/* ─── ACTIVITY ────────────────────────────────── */
-.activity-list { border: 1px solid rgba(0,0,0,0.12); border-radius: var(--radius-lg); overflow: hidden; background: #FFFFFF; }
-.activity-item {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 1rem 1.25rem; border-bottom: 1px solid rgba(0,0,0,0.06);
-  cursor: pointer; transition: background 0.12s;
-  text-decoration: none; color: inherit;
-}
-.activity-item:last-child { border-bottom: none; }
-.activity-item:hover { background: #F8F8F8; }
-.a-avatar {
-  width: 30px; height: 30px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 10px; font-weight: 500;
-  flex-shrink: 0; margin-top: 1px;
-}
-.av-blue { background: var(--accent-2); color: var(--accent-text); }
+/* ─── PARTICIPANTS ──────────────────────────── */
+.participants-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; border: 1px solid rgba(0,0,0,0.14); border-radius: var(--radius-lg); overflow: hidden; background: rgba(0,0,0,0.08); }
+.participant-cell { background: #FFFFFF; padding: 1.25rem; display: flex; align-items: center; gap: 10px; transition: background 0.12s; }
+.participant-cell:hover { background: #F8F8F8; }
+.p-ava { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 11px; font-weight: 500; flex-shrink: 0; }
+.av-blue { background: var(--accent-2); color: var(--accent); }
 .av-green { background: var(--green-bg); color: var(--green); }
 .av-amber { background: var(--amber-bg); color: var(--amber); }
 .av-gray { background: #F0F0F0; color: var(--ink-3); }
-.a-body { flex: 1; }
-.a-subject { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.4; margin-bottom: 3px; }
-.a-meta { font-size: 11px; color: var(--ink-3); display: flex; gap: 8px; }
-.a-meta span::before { content: '·'; margin-right: 8px; }
-.a-meta span:first-child::before { display: none; }
-.a-arrow {
-  font-size: 11px; color: var(--ink-3); flex-shrink: 0;
-  align-self: center; opacity: 0; transition: opacity 0.12s;
-}
-.activity-item:hover .a-arrow { opacity: 1; }
-.activity-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-.activity-header-right a {
-  font-size: 12px; color: var(--accent); font-family: var(--mono);
-  display: flex; align-items: center; gap: 4px;
-}
-.activity-header-right a:hover { text-decoration: underline; }
-
-/* ─── PARTICIPANTS ────────────────────────────── */
-.participants-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-  border: 1px solid rgba(0,0,0,0.14); border-radius: var(--radius-lg);
-  overflow: hidden; background: rgba(0,0,0,0.08);
-}
-.participant-cell {
-  background: #FFFFFF; padding: 1.25rem;
-  display: flex; align-items: center; gap: 10px; transition: background 0.12s;
-}
-.participant-cell:hover { background: #F8F8F8; }
-.p-ava {
-  width: 36px; height: 36px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 11px; font-weight: 500; flex-shrink: 0;
-}
 .p-name { font-size: 13px; font-weight: 500; line-height: 1.3; color: var(--ink); }
 .p-role { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
 .participants-note { margin-top: 1rem; font-size: 12px; color: var(--ink-3); text-align: center; }
 .participants-note a { color: var(--accent); }
 .participants-note a:hover { text-decoration: underline; }
 
+/* ─── ACTIVITY ────────────────────────────────── */
+.activity-list { border: 1px solid rgba(0,0,0,0.12); border-radius: var(--radius-lg); overflow: hidden; background: #FFFFFF; }
+.activity-item { display: flex; align-items: flex-start; gap: 12px; padding: 1rem 1.25rem; border-bottom: 1px solid rgba(0,0,0,0.06); cursor: pointer; transition: background 0.12s; text-decoration: none; color: inherit; }
+.activity-item:last-child { border-bottom: none; }
+.activity-item:hover { background: #F8F8F8; }
+.a-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 10px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+.a-body { flex: 1; }
+.a-subject { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.4; margin-bottom: 3px; }
+.a-meta { font-size: 11px; color: var(--ink-3); display: flex; gap: 8px; }
+.a-meta span::before { content: '·'; margin-right: 8px; }
+.a-meta span:first-child::before { display: none; }
+.a-arrow { font-size: 11px; color: var(--ink-3); flex-shrink: 0; align-self: center; opacity: 0; transition: opacity 0.12s; }
+.activity-item:hover .a-arrow { opacity: 1; }
+.activity-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.activity-header-right a { font-size: 12px; color: var(--accent); font-family: var(--mono); display: flex; align-items: center; gap: 4px; }
+.activity-header-right a:hover { text-decoration: underline; }
+
 /* ─── JOIN BANNER ─────────────────────────────── */
-.join-banner {
-  margin: 0 2rem 5rem; max-width: 1100px;
-  margin-left: auto; margin-right: auto;
-  border: 1px solid rgba(0,0,0,0.14); border-radius: var(--radius-lg);
-  background: #0A0A0A; color: #FFFFFF;
-  padding: 3.5rem; display: flex;
-  align-items: flex-start; justify-content: space-between; gap: 3rem;
-}
+.join-banner { margin: 0 2rem 5rem; max-width: 1100px; margin-left: auto; margin-right: auto; border: 1px solid rgba(0,0,0,0.14); border-radius: var(--radius-lg); background: #0A0A0A; color: #FFFFFF; padding: 3.5rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 3rem; }
 .join-banner h2 { font-size: 30px; font-weight: 300; letter-spacing: -0.025em; margin-bottom: 0.75rem; }
 .join-banner h2 strong { font-weight: 500; }
 .join-banner p { font-size: 14px; opacity: 0.75; line-height: 1.6; max-width: 440px; margin-bottom: 1.5rem; }
@@ -525,41 +182,24 @@ a { color: inherit; text-decoration: none; }
 .join-crit { display: flex; align-items: baseline; gap: 10px; font-size: 13px; opacity: 0.85; }
 .crit-mark { color: #28C840; font-size: 11px; flex-shrink: 0; }
 .join-right { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; align-self: center; }
-.btn-join-primary {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 13px; font-weight: 500; background: #FFFFFF;
-  color: #0A0A0A; padding: 12px 24px; border-radius: 8px;
-  white-space: nowrap; transition: opacity 0.15s; border: none; cursor: pointer;
-}
+.btn-join-primary { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; background: #FFFFFF; color: #0A0A0A; padding: 12px 24px; border-radius: 8px; white-space: nowrap; transition: opacity 0.15s; border: none; cursor: pointer; }
 .btn-join-primary:hover { opacity: 0.88; }
-.btn-join-ghost {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 12px; color: rgba(255,255,255,0.65);
-  padding: 8px 14px; border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.20);
-  text-align: center; justify-content: center;
-  transition: border-color 0.15s, color 0.15s; cursor: pointer;
-}
+.btn-join-ghost { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: rgba(255,255,255,0.65); padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.20); text-align: center; justify-content: center; transition: border-color 0.15s, color 0.15s; cursor: pointer; }
 .btn-join-ghost:hover { color: #FFFFFF; border-color: rgba(255,255,255,0.45); }
 
 /* ─── FOOTER ──────────────────────────────────── */
-footer {
-  border-top: 1px solid rgba(0,0,0,0.10); padding: 2rem 2rem;
-  display: flex; align-items: center; justify-content: space-between;
-  max-width: 1100px; margin: 0 auto; background: #FFFFFF;
-}
+footer { border-top: 1px solid rgba(0,0,0,0.10); padding: 2rem 2rem; display: flex; align-items: center; justify-content: space-between; max-width: 1100px; margin: 0 auto; background: #FFFFFF; }
 .footer-left { display: flex; align-items: center; gap: 10px; }
 .footer-mono { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
-.footer-sep { color: var(--ink-4); }
 .footer-links { display: flex; gap: 1.5rem; }
 .footer-links a { font-size: 12px; color: var(--ink-3); transition: color 0.12s; }
 .footer-links a:hover { color: var(--ink); }
 .full-divider { height: 1px; background: rgba(0,0,0,0.10); margin: 0 2rem; }
 
-/* ─── RESPONSIVE ─────────────────────────────── */
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem 3rem; }
   .hero h1 { font-size: 36px; }
+  .overview-grid { grid-template-columns: 1fr 1fr; }
   .profiles-grid { grid-template-columns: 1fr 1fr; }
   .profile-cell:nth-child(2n) { border-right: none; }
   .deliverables-grid { grid-template-columns: 1fr; }
@@ -570,12 +210,11 @@ footer {
   .stats-strip { flex-wrap: wrap; }
   .stat-block { flex: 1; min-width: 120px; padding: 1.25rem 2rem; }
 }
-
 @media (max-width: 600px) {
   .hero h1 { font-size: 28px; }
+  .overview-grid { grid-template-columns: 1fr; }
   .profiles-grid { grid-template-columns: 1fr; }
   .profile-cell { border-right: none !important; }
-  .profile-cell:not(:last-child) { border-bottom: 1px solid rgba(0,0,0,0.08) !important; }
   .participants-grid { grid-template-columns: 1fr; }
   footer { flex-direction: column; gap: 1rem; text-align: center; }
   .section { padding: 3.5rem 1.25rem; }
@@ -585,14 +224,15 @@ footer {
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="nav-left">
     <span class="nav-w3c">W3C</span>
     <span class="nav-slash">/</span>
     <span class="nav-name">Verifiable Supply Chain CG</span>
+    <span class="live-indicator" id="liveIndicator"><span class="live-dot"></span><span id="liveText">Connecting...</span></span>
   </div>
   <div class="nav-right">
+    <a href="#overview" class="nav-link">About VSC</a>
     <a href="#profiles" class="nav-link">Profiles</a>
     <a href="#specs" class="nav-link">Specs</a>
     <a href="#deliverables" class="nav-link">Deliverables</a>
@@ -602,15 +242,14 @@ footer {
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-left">
     <div class="hero-kicker"><span class="kicker-dot"></span>W3C Community Group · Launched Feb 2026</div>
     <h1>Verifiable trust<br><strong>in global supply chains</strong></h1>
-    <p class="hero-desc">We develop industry-specific VC/UORA profiles, interoperability frameworks, and trust governance for the most regulated industries on earth — built on W3C VC 2.0 and UORA.</p>
+    <p class="hero-desc">We build the infrastructure for cryptographically verifiable trade — mapping EPCIS events to Verifiable Credentials, binding DIDs to supply chain actors, and embedding HS Codes, INCOTERMS®, and UCP 600 as normative vocabularies so every shipment becomes a self-proving trade document.</p>
     <div class="hero-actions">
       <a href="https://www.w3.org/community/vsc/join" class="btn-primary" target="_blank">Join the community</a>
-      <a href="https://github.com/w3c-cg/vsc" class="btn-secondary" target="_blank">GitHub ↗</a>
+      <a href="https://github.com/w3c-cg/vsc-requirements" class="btn-secondary" target="_blank">GitHub ↗</a>
       <a href="https://lists.w3.org/Archives/Public/public-vsc/" class="btn-secondary" target="_blank">Mailing list ↗</a>
     </div>
   </div>
@@ -618,21 +257,22 @@ footer {
     <div class="hero-card">
       <div class="hero-card-header">
         <span class="card-dot dot-r"></span><span class="card-dot dot-y"></span><span class="card-dot dot-g"></span>
-        <span class="card-file">pharma-credential.jsonld</span>
+        <span class="card-file">vsc-event-credential.jsonld</span>
       </div>
       <div class="hero-card-body">
         <span class="c-gray">{</span><br>
         &nbsp;&nbsp;<span class="c-key">"@context"</span>: [<br>
         &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"https://www.w3.org/ns/credentials/v2"</span>,<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"https://w3c-cg.github.io/vsc/contexts/pharma/v1"</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-str">"https://w3c-cg.github.io/vsc/contexts/v1"</span><br>
         &nbsp;&nbsp;],<br>
-        &nbsp;&nbsp;<span class="c-key">"type"</span>: [<span class="c-str">"VerifiableCredential"</span>, <span class="c-str">"PharmaLotAttestation"</span>],<br>
-        &nbsp;&nbsp;<span class="c-key">"issuer"</span>: <span class="c-str">"did:web:manufacturer.example"</span>,<br>
+        &nbsp;&nbsp;<span class="c-key">"type"</span>: [<span class="c-str">"VerifiableCredential"</span>, <span class="c-str">"VscObjectEvent"</span>],<br>
+        &nbsp;&nbsp;<span class="c-key">"issuer"</span>: <span class="c-str">"did:web:mfr.example.com"</span>,<br>
         &nbsp;&nbsp;<span class="c-key">"credentialSubject"</span>: <span class="c-gray">{</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">"lotNumber"</span>: <span class="c-str">"LOT-2026-A7F3"</span>,<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">"dscsaCompliant"</span>: <span class="c-bool">true</span>,<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">"ndc"</span>: <span class="c-str">"12345-678-90"</span>,<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">"expiryDate"</span>: <span class="c-str">"2028-06-30"</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">"eventType"</span>: <span class="c-str">"ObjectEvent"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">"bizStep"</span>: <span class="c-str">"shipping"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">"hsCode"</span>: <span class="c-num">"3004.90"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">"incoterms"</span>: <span class="c-str">"CIF:2020:Mombasa"</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="c-key">"tradeFinance"</span>: <span class="c-str">"LC:irrevoc:USD250K"</span><br>
         &nbsp;&nbsp;<span class="c-gray">}</span><br>
         <span class="c-gray">}</span>
       </div>
@@ -640,273 +280,227 @@ footer {
   </div>
 </section>
 
-<!-- STATS STRIP -->
 <div class="stats-strip">
-  <div class="stat-block"><span class="stat-n">8</span><span class="stat-l">Participants</span></div>
-  <div class="stat-block"><span class="stat-n">15</span><span class="stat-l">Mailing list messages</span></div>
+  <div class="stat-block"><span class="stat-n" id="statParticipants">—</span><span class="stat-l">Participants</span></div>
+  <div class="stat-block"><span class="stat-n" id="statMessages">—</span><span class="stat-l">Mailing list messages</span></div>
   <div class="stat-block"><span class="stat-n">3</span><span class="stat-l">Open GitHub issues</span></div>
   <div class="stat-block"><span class="stat-n">5</span><span class="stat-l">Industry verticals</span></div>
   <div class="stat-block"><span class="stat-n">2</span><span class="stat-l">GitHub forks</span></div>
 </div>
+<div class="stat-updated" id="statUpdated">Loading live data...</div>
 
-<!-- SPECIFICATIONS -->
+<section class="section" id="overview">
+  <div class="section-label">About VSC</div>
+  <div class="section-title">What the <strong>Verifiable Supply Chain</strong> framework does</div>
+  <p class="section-sub">VSC is a five-layer architecture that transforms physical supply chain events into self-contained, cryptographically provable trade documents. It maps EPCIS events to Verifiable Credentials, binds DIDs to supply chain actors, and embeds three normative vocabularies — HS Codes, INCOTERMS®, and UCP 600 — so a single credential answers what the product is, who bears commercial risk, and how payment is governed.</p>
+  <div class="overview-grid">
+    <div class="overview-card"><span class="overview-icon">📋</span><div class="overview-name">EPCIS → VC Mapping</div><div class="overview-desc">Lossless transformation of all five EPCIS event types into Verifiable Credentials with Data Integrity proofs.</div></div>
+    <div class="overview-card"><span class="overview-icon">🔐</span><div class="overview-name">DID Identity Binding</div><div class="overview-desc">Every credential signed by the asserting actor's DID. Verifiers resolve DIDs independently — no central authority required.</div></div>
+    <div class="overview-card"><span class="overview-icon">📦</span><div class="overview-name">Normative Vocabularies</div><div class="overview-desc">HS Codes for commodity classification, INCOTERMS® for commercial terms, UCP 600 for trade finance.</div></div>
+    <div class="overview-card"><span class="overview-icon">🧩</span><div class="overview-name">Event Matrix</div><div class="overview-desc">Five-dimensional cross-domain verification schema. Forward-compatible with +Dn extensibility. ML-ready.</div></div>
+  </div>
+</section>
+
 <section class="section" id="specs">
   <div class="section-label">Specifications</div>
-  <div class="section-title"><strong>Read the specs</strong> — open in new tab</div>
-  <p class="section-sub">Each specification is a standalone ReSpec document. Click to open in a new tab where you can read, bookmark, and share.</p>
-
+  <div class="section-title"><strong>Read the specs</strong></div>
+  <p class="section-sub">Each specification is a standalone ReSpec document.</p>
   <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-top: 2rem;">
-    
+    <a href="specs/vsc-requirements.html" target="_blank" class="spec-link-card">
+      <div class="deliverable-icon">📘</div>
+      <div class="deliverable-name">VSC Requirements &amp; Use Cases</div>
+      <div class="deliverable-desc">The foundational specification — twenty functional requirements, eleven use cases, the Event Matrix, Regulatory Rule Compiler.</div>
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 10px; color: var(--accent);"><span>Open specification</span><span style="font-size: 11px;">↗</span></div>
+    </a>
     <a href="specs/pharma-profile.html" target="_blank" class="spec-link-card">
       <div class="deliverable-icon">⚗️</div>
       <div class="deliverable-name">Pharma Supply Chain Profile</div>
-      <div class="deliverable-desc">VC/UORA credential schema for pharmaceutical traceability. Maps DSCSA, FDA identifiers, and GS1 EPCIS to W3C Verifiable Credentials.</div>
-      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 10px; color: var(--accent);">
-        <span>Open specification</span>
-        <span style="font-size: 11px;">↗</span>
-      </div>
+      <div class="deliverable-desc">VC/UORA credential schema for pharmaceutical traceability. Maps DSCSA, FDA identifiers, and GS1 EPCIS.</div>
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 10px; color: var(--accent);"><span>Open specification</span><span style="font-size: 11px;">↗</span></div>
     </a>
-
     <a href="specs/critical-minerals.html" target="_blank" class="spec-link-card">
       <div class="deliverable-icon">⛏️</div>
       <div class="deliverable-name">Critical Minerals Traceability</div>
-      <div class="deliverable-desc">Provenance and due-diligence credentials for lithium, cobalt, and rare earth elements. Aligned with EU Battery Regulation and OECD guidance.</div>
-      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 10px; color: var(--accent);">
-        <span>Open specification</span>
-        <span style="font-size: 11px;">↗</span>
-      </div>
+      <div class="deliverable-desc">Provenance credentials for lithium, cobalt, and rare earth elements. Aligned with EU Battery Regulation.</div>
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 10px; color: var(--accent);"><span>Open specification</span><span style="font-size: 11px;">↗</span></div>
     </a>
-
-    <a href="specs/interop-toolkit.html" target="_blank" class="spec-link-card">
-      <div class="deliverable-icon">🔧</div>
-      <div class="deliverable-name">Interoperability Toolkit</div>
-      <div class="deliverable-desc">Specifications and reference implementations for translating GS1 EPCIS events into verifiable, DID-anchored attestations.</div>
-      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 10px; color: var(--accent);">
-        <span>Open specification</span>
-        <span style="font-size: 11px;">↗</span>
-      </div>
-    </a>
-
     <a href="specs/trust-framework.html" target="_blank" class="spec-link-card">
       <div class="deliverable-icon">🏛️</div>
       <div class="deliverable-name">Trust Framework Template</div>
-      <div class="deliverable-desc">Customizable governance, accreditation, and compliance rules for supply chain networks issuing verifiable credentials.</div>
-      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 10px; color: var(--accent);">
-        <span>Open specification</span>
-        <span style="font-size: 11px;">↗</span>
-      </div>
+      <div class="deliverable-desc">Customizable governance, accreditation, and compliance rules for supply chain networks.</div>
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 10px; color: var(--accent);"><span>Open specification</span><span style="font-size: 11px;">↗</span></div>
     </a>
-
   </div>
 </section>
 
-<!-- PROFILES -->
 <section class="section" id="profiles">
   <div class="section-label">Industry profiles</div>
   <div class="section-title"><strong>VC/UORA profiles</strong> by vertical</div>
-  <p class="section-sub">Reusable, public credential schemas tailored to specific industry regulatory contexts. Each profile maps business and legal requirements to verifiable data formats.</p>
+  <p class="section-sub">Reusable, public credential schemas tailored to specific industry regulatory contexts.</p>
   <div class="profiles-grid">
-    <div class="profile-cell"><span class="profile-icon">⚗️</span><div class="profile-name">Pharmaceuticals &amp; Healthcare</div><div class="profile-desc">Lot-level chain-of-custody attestation and serialization credentials aligned with US drug traceability law.</div><span class="status-pill status-active">In progress</span><div class="profile-regs"><span class="reg-tag">DSCSA</span><span class="reg-tag">FDA 21 CFR</span><span class="reg-tag">GS1 EPCIS</span></div></div>
-    <div class="profile-cell"><span class="profile-icon">⛏️</span><div class="profile-name">Critical Minerals</div><div class="profile-desc">Provenance and due-diligence credentials for lithium, cobalt, rare earths, and other strategic minerals.</div><span class="status-pill status-draft">Draft</span><div class="profile-regs"><span class="reg-tag">CBAM</span><span class="reg-tag">EUDR</span><span class="reg-tag">ISO 14001</span></div></div>
-    <div class="profile-cell"><span class="profile-icon">🚗</span><div class="profile-name">Automotive &amp; Aerospace</div><div class="profile-desc">Component traceability, recall management, and EV battery passport credentials for multi-tier supply chains.</div><span class="status-pill status-planned">Planned</span><div class="profile-regs"><span class="reg-tag">EU Battery Reg.</span><span class="reg-tag">AS9100</span></div></div>
-    <div class="profile-cell"><span class="profile-icon">🌾</span><div class="profile-name">Food &amp; Beverage</div><div class="profile-desc">Farm-to-fork provenance, allergen disclosure, and deforestation-free sourcing attestations.</div><span class="status-pill status-planned">Planned</span><div class="profile-regs"><span class="reg-tag">EUDR</span><span class="reg-tag">GS1 EPCIS</span><span class="reg-tag">FSMA 204</span></div></div>
-    <div class="profile-cell"><span class="profile-icon">💎</span><div class="profile-name">Luxury Goods</div><div class="profile-desc">Anti-counterfeiting authenticity credentials and ownership attestation linked to the EU Digital Product Passport.</div><span class="status-pill status-planned">Planned</span><div class="profile-regs"><span class="reg-tag">EU DPP</span><span class="reg-tag">CSRD</span></div></div>
-    <div class="profile-cell"><span class="profile-icon">💻</span><div class="profile-name">Electronics</div><div class="profile-desc">Component origin, conflict minerals disclosure, and repair/recycle credentials for the circular economy.</div><span class="status-pill status-planned">Planned</span><div class="profile-regs"><span class="reg-tag">EU ESPR</span><span class="reg-tag">Dodd-Frank §1502</span></div></div>
+    <div class="profile-cell"><span class="profile-icon">⚗️</span><div class="profile-name">Pharmaceuticals &amp; Healthcare</div><div class="profile-desc">Lot-level chain-of-custody attestation and serialization credentials.</div><span class="status-pill status-active">In progress</span><div class="profile-regs"><span class="reg-tag">DSCSA</span><span class="reg-tag">FDA 21 CFR</span></div></div>
+    <div class="profile-cell"><span class="profile-icon">⛏️</span><div class="profile-name">Critical Minerals</div><div class="profile-desc">Provenance and due-diligence credentials for strategic minerals.</div><span class="status-pill status-draft">Draft</span><div class="profile-regs"><span class="reg-tag">CBAM</span><span class="reg-tag">EUDR</span></div></div>
+    <div class="profile-cell"><span class="profile-icon">🚗</span><div class="profile-name">Automotive &amp; Aerospace</div><div class="profile-desc">Component traceability and EV battery passport credentials.</div><span class="status-pill status-planned">Planned</span><div class="profile-regs"><span class="reg-tag">EU Battery Reg.</span><span class="reg-tag">AS9100</span></div></div>
+    <div class="profile-cell"><span class="profile-icon">🌾</span><div class="profile-name">Food &amp; Beverage</div><div class="profile-desc">Farm-to-fork provenance and deforestation-free sourcing attestations.</div><span class="status-pill status-planned">Planned</span><div class="profile-regs"><span class="reg-tag">EUDR</span><span class="reg-tag">FSMA 204</span></div></div>
+    <div class="profile-cell"><span class="profile-icon">💎</span><div class="profile-name">Luxury Goods</div><div class="profile-desc">Anti-counterfeiting authenticity credentials and ownership attestation.</div><span class="status-pill status-planned">Planned</span><div class="profile-regs"><span class="reg-tag">EU DPP</span><span class="reg-tag">CSRD</span></div></div>
+    <div class="profile-cell"><span class="profile-icon">💻</span><div class="profile-name">Electronics</div><div class="profile-desc">Component origin, conflict minerals disclosure, and circular economy credentials.</div><span class="status-pill status-planned">Planned</span><div class="profile-regs"><span class="reg-tag">EU ESPR</span></div></div>
   </div>
 </section>
 
 <div class="full-divider"></div>
 
-<!-- DELIVERABLES -->
 <section class="section" id="deliverables">
   <div class="section-label">Deliverables</div>
   <div class="section-title">What the group <strong>produces</strong></div>
-  <p class="section-sub">Four concrete output types — all public, all under W3C Document License, all designed to be adopted directly.</p>
+  <p class="section-sub">Four concrete output types — all public, all under W3C Document License.</p>
   <div class="deliverables-grid">
-    <div class="deliverable-card"><div class="deliverable-icon">📘</div><div class="deliverable-name">Industry Blueprints</div><div class="deliverable-desc">A library of public, reusable VC/UORA profiles for major supply chain verticals. Starting with Pharmaceuticals and Critical Minerals.</div><div class="deliverable-items"><div class="di-item">Formal JSON-LD credential schemas</div><div class="di-item">Regulatory mapping documents</div><div class="di-item">Issuer and verifier role definitions</div><div class="di-item">Data minimization guidance</div></div></div>
-    <div class="deliverable-card"><div class="deliverable-icon">🔧</div><div class="deliverable-name">Interoperability Toolkit</div><div class="deliverable-desc">Specifications and software tools for translating between existing supply chain event data and verifiable, DID-anchored attestations.</div><div class="deliverable-items"><div class="di-item">EPCIS-to-VC mapping specifications</div><div class="di-item">Translation libraries (Python, TypeScript)</div><div class="di-item">Conformance test suites</div><div class="di-item">Sample implementations</div></div></div>
-    <div class="deliverable-card"><div class="deliverable-icon">🏛️</div><div class="deliverable-name">Trust Framework Template</div><div class="deliverable-desc">A customizable template for supply chain networks to establish governance, accreditation, and compliance rules for credential issuers.</div><div class="deliverable-items"><div class="di-item">Trust anchor accreditation criteria</div><div class="di-item">Governance models for consortia</div><div class="di-item">Dispute resolution frameworks</div><div class="di-item">Liability &amp; legal entity mapping</div></div></div>
-    <div class="deliverable-card"><div class="deliverable-icon">📊</div><div class="deliverable-name">Business Implementation Guide</div><div class="deliverable-desc">A non-technical playbook for executives and solution architects, with quantified ROI case studies and pilot program templates.</div><div class="deliverable-items"><div class="di-item">Anti-counterfeiting ROI models</div><div class="di-item">ESG &amp; Scope 3 reporting guides</div><div class="di-item">Recall management reference arch.</div><div class="di-item">Vendor evaluation criteria</div></div></div>
+    <div class="deliverable-card"><div class="deliverable-icon">📘</div><div class="deliverable-name">Industry Blueprints</div><div class="deliverable-desc">A library of public, reusable VC/UORA profiles for major supply chain verticals.</div><div class="deliverable-items"><div class="di-item">Formal JSON-LD credential schemas</div><div class="di-item">Regulatory mapping documents</div><div class="di-item">Issuer and verifier role definitions</div></div></div>
+    <div class="deliverable-card"><div class="deliverable-icon">🔧</div><div class="deliverable-name">Interoperability Toolkit</div><div class="deliverable-desc">Specifications and tools for translating supply chain event data into verifiable attestations.</div><div class="deliverable-items"><div class="di-item">EPCIS-to-VC mapping specifications</div><div class="di-item">Translation libraries</div><div class="di-item">Conformance test suites</div></div></div>
+    <div class="deliverable-card"><div class="deliverable-icon">🏛️</div><div class="deliverable-name">Trust Framework Template</div><div class="deliverable-desc">Customizable governance and accreditation rules for credential issuers.</div><div class="deliverable-items"><div class="di-item">Trust anchor accreditation criteria</div><div class="di-item">Governance models for consortia</div><div class="di-item">Dispute resolution frameworks</div></div></div>
+    <div class="deliverable-card"><div class="deliverable-icon">📊</div><div class="deliverable-name">Business Implementation Guide</div><div class="deliverable-desc">Non-technical playbook with quantified ROI case studies and pilot program templates.</div><div class="deliverable-items"><div class="di-item">Anti-counterfeiting ROI models</div><div class="di-item">ESG &amp; Scope 3 reporting guides</div><div class="di-item">Vendor evaluation criteria</div></div></div>
   </div>
 </section>
 
 <div class="full-divider"></div>
 
-<!-- COMPLIANCE -->
 <section class="section" id="compliance">
   <div class="section-label">Standards alignment</div>
   <div class="section-title"><strong>Grounded</strong> in real regulations</div>
-  <p class="section-sub">Profiles are designed to satisfy existing and emerging mandates — not produce credentials for their own sake.</p>
+  <p class="section-sub">VSC maps directly to regulatory requirements across pharmaceuticals, food safety, critical minerals, and trade finance.</p>
   <div class="compliance-two-col">
-    <div><div class="compliance-block-title">Regulatory frameworks</div><div class="compliance-list"><div class="compliance-row"><span class="comp-name">US DSCSA</span><span class="comp-scope">Pharma</span></div><div class="compliance-row"><span class="comp-name">EU CBAM</span><span class="comp-scope">Minerals · Industrial</span></div><div class="compliance-row"><span class="comp-name">EUDR</span><span class="comp-scope">Food · Timber</span></div><div class="compliance-row"><span class="comp-name">EU Digital Product Passport</span><span class="comp-scope">Luxury · Electronics</span></div><div class="compliance-row"><span class="comp-name">EU Battery Regulation</span><span class="comp-scope">Automotive · EV</span></div><div class="compliance-row"><span class="comp-name">CSRD</span><span class="comp-scope">Cross-vertical</span></div><div class="compliance-row"><span class="comp-name">FSMA 204</span><span class="comp-scope">Food &amp; Bev.</span></div></div></div>
-    <div><div class="compliance-block-title">Data &amp; technical standards</div><div class="compliance-list"><div class="compliance-row"><span class="comp-name">W3C VC Data Model 2.0</span><span class="comp-scope">Core standard</span></div><div class="compliance-row"><span class="comp-name">W3C DID Core</span><span class="comp-scope">Identity layer</span></div><div class="compliance-row"><span class="comp-name">UORA</span><span class="comp-scope">Physical assets</span></div><div class="compliance-row"><span class="comp-name">GS1 EPCIS 2.0</span><span class="comp-scope">Event data</span></div><div class="compliance-row"><span class="comp-name">ISO 28000</span><span class="comp-scope">Governance</span></div><div class="compliance-row"><span class="comp-name">IETF SCITT</span><span class="comp-scope">Transparency logs</span></div><div class="compliance-row"><span class="comp-name">UN/CEFACT</span><span class="comp-scope">Trade docs</span></div></div></div>
+    <div><div class="compliance-block-title">Regulatory frameworks</div><div class="compliance-list"><div class="compliance-row"><span>US DSCSA</span><span class="comp-scope">Pharma</span></div><div class="compliance-row"><span>EU CBAM</span><span class="comp-scope">Minerals · Industrial</span></div><div class="compliance-row"><span>EUDR</span><span class="comp-scope">Food · Timber</span></div><div class="compliance-row"><span>EU Digital Product Passport</span><span class="comp-scope">Luxury · Electronics</span></div><div class="compliance-row"><span>EU Battery Regulation</span><span class="comp-scope">Automotive · EV</span></div><div class="compliance-row"><span>CSRD</span><span class="comp-scope">Cross-vertical</span></div><div class="compliance-row"><span>FSMA 204</span><span class="comp-scope">Food &amp; Bev.</span></div></div></div>
+    <div><div class="compliance-block-title">Data &amp; technical standards</div><div class="compliance-list"><div class="compliance-row"><span>W3C VC Data Model 2.0</span><span class="comp-scope">Core standard</span></div><div class="compliance-row"><span>W3C DID Core</span><span class="comp-scope">Identity layer</span></div><div class="compliance-row"><span>UORA</span><span class="comp-scope">Physical assets</span></div><div class="compliance-row"><span>GS1 EPCIS 2.0</span><span class="comp-scope">Event data</span></div><div class="compliance-row"><span>WCO HS Nomenclature</span><span class="comp-scope">Commodity codes</span></div><div class="compliance-row"><span>ICC INCOTERMS® 2020</span><span class="comp-scope">Commercial terms</span></div><div class="compliance-row"><span>UCP 600</span><span class="comp-scope">Trade finance</span></div></div></div>
   </div>
 </section>
 
 <div class="full-divider"></div>
 
-<!-- PARTICIPANTS -->
 <section class="section" id="participants">
   <div class="section-label">Community</div>
-  <div class="section-title"><strong>Founders &amp; participants</strong></div>
-  <p class="section-sub">Proposed on 3 February 2026 by Amir Hameed Mir and launched on 21 February 2026 with 5 founding supporters. Chaired by Amir Hameed Mir (Sirraya Labs), with W3C Staff Contact Ian Jacobs.</p>
-  <div class="participants-grid">
-    <div class="participant-cell"><div class="p-ava av-blue">AH</div><div><div class="p-name">Amir Hameed Mir</div><div class="p-role">Chair · Sirraya Labs</div></div></div>
-    <div class="participant-cell"><div class="p-ava av-green">MW</div><div><div class="p-name">Muezza Wani</div><div class="p-role">Founding supporter</div></div></div>
-    <div class="participant-cell"><div class="p-ava av-amber">IL</div><div><div class="p-name">Irtiqa Latif</div><div class="p-role">Founding supporter</div></div></div>
-    <div class="participant-cell"><div class="p-ava av-gray">MB</div><div><div class="p-name">Maimoona Bhat</div><div class="p-role">Founding supporter</div></div></div>
-    <div class="participant-cell"><div class="p-ava av-blue">BL</div><div><div class="p-name">Bernard Lynch</div><div class="p-role">Founding supporter</div></div></div>
-    <div class="participant-cell"><div class="p-ava av-green">SG</div><div><div class="p-name">Salil Gupta</div><div class="p-role">Participant</div></div></div>
-    <div class="participant-cell"><div class="p-ava av-amber">MJ</div><div><div class="p-name">Manil Jayswal</div><div class="p-role">Participant</div></div></div>
-    <div class="participant-cell"><div class="p-ava av-gray">TL</div><div><div class="p-name">Thanh M. Le</div><div class="p-role">Participant</div></div></div>
+  <div class="section-title"><strong>Participants</strong></div>
+  <p class="section-sub">Proposed on 3 February 2026 by Amir Hameed Mir and launched on 21 February 2026. Chaired by Amir Hameed Mir (Sirraya Labs), with W3C Staff Contact Ian Jacobs.</p>
+  <div class="participants-grid" id="participantsGrid">
+    <div class="participant-cell"><div class="p-ava av-blue">—</div><div><div class="p-name">Loading participants...</div><div class="p-role">Fetching from W3C</div></div></div>
   </div>
-  <p class="participants-note">8 participants as of May 2026 · <a href="https://www.w3.org/community/vsc/participants" target="_blank">View full list on W3C →</a></p>
+  <p class="participants-note"><span id="participantsCount">—</span> participants · <a href="https://www.w3.org/community/vsc/participants" target="_blank">View full list on W3C →</a></p>
 </section>
 
 <div class="full-divider"></div>
 
-<!-- ACTIVITY -->
 <section class="section" id="activity">
   <div class="section-label">Mailing list</div>
   <div class="activity-header">
-    <div><div class="section-title"><strong>Recent</strong> discussion</div><p class="section-sub" style="margin-bottom:0">All communication is public and archived at lists.w3.org. 15 messages across March–April 2026.</p></div>
+    <div><div class="section-title"><strong>Recent</strong> discussion</div><p class="section-sub" style="margin-bottom:0">All communication is public and archived at lists.w3.org. <span id="activityCount">—</span> messages.</p></div>
     <div class="activity-header-right"><a href="https://lists.w3.org/Archives/Public/public-vsc/" target="_blank">Full archive ↗</a></div>
   </div>
-  <div class="activity-list">
-    <a class="activity-item" href="https://lists.w3.org/Archives/Public/public-vsc/2026Apr/0006.html" target="_blank"><div class="a-avatar av-blue">AH</div><div class="a-body"><div class="a-subject">[UORA] PR #5: Update UORA Core Specification Draft – Call for Review</div><div class="a-meta"><span>Amir Hameed</span><span>28 Apr 2026</span></div></div><span class="a-arrow">→</span></a>
-    <a class="activity-item" href="https://lists.w3.org/Archives/Public/public-vsc/2026Apr/0005.html" target="_blank"><div class="a-avatar av-blue">AH</div><div class="a-body"><div class="a-subject">Re: Introduction — Irtiqa Latif</div><div class="a-meta"><span>Amir Hameed</span><span>27 Apr 2026</span></div></div><span class="a-arrow">→</span></a>
-    <a class="activity-item" href="https://lists.w3.org/Archives/Public/public-vsc/2026Apr/0004.html" target="_blank"><div class="a-avatar av-amber">IL</div><div class="a-body"><div class="a-subject">Introduction — Irtiqa Latif</div><div class="a-meta"><span>Irtiqa Latif</span><span>26 Apr 2026</span></div></div><span class="a-arrow">→</span></a>
-    <a class="activity-item" href="https://lists.w3.org/Archives/Public/public-vsc/2026Apr/0000.html" target="_blank"><div class="a-avatar av-blue">AH</div><div class="a-body"><div class="a-subject">[VSC CG] Call for Review: Initial Requirements and Use Cases (PR #2)</div><div class="a-meta"><span>Amir Hameed</span><span>24 Apr 2026</span></div></div><span class="a-arrow">→</span></a>
-    <a class="activity-item" href="https://lists.w3.org/Archives/Public/public-vsc/2026Apr/0001.html" target="_blank"><div class="a-avatar av-gray">TL</div><div class="a-body"><div class="a-subject">Introduction — VC implementer from India</div><div class="a-meta"><span>The tech Ledger</span><span>24 Apr 2026</span></div></div><span class="a-arrow">→</span></a>
-    <a class="activity-item" href="https://lists.w3.org/Archives/Public/public-vsc/2026Mar/0007.html" target="_blank"><div class="a-avatar av-blue">AH</div><div class="a-body"><div class="a-subject">[VSC CG] Welcome – Repository Ready, Let's Begin the Work</div><div class="a-meta"><span>Amir Hameed</span><span>31 Mar 2026</span></div></div><span class="a-arrow">→</span></a>
-    <a class="activity-item" href="https://lists.w3.org/Archives/Public/public-vsc/2026Mar/0006.html" target="_blank"><div class="a-avatar av-blue">AH</div><div class="a-body"><div class="a-subject">[VSC CG] Repository Structure Launched</div><div class="a-meta"><span>Amir Hameed</span><span>31 Mar 2026</span></div></div><span class="a-arrow">→</span></a>
-    <a class="activity-item" href="https://lists.w3.org/Archives/Public/public-vsc/2026Mar/0001.html" target="_blank"><div class="a-avatar av-green">LL</div><div class="a-body"><div class="a-subject">BSV Association – interest in contributing to test suites</div><div class="a-meta"><span>Lizette Louw · BSV Association</span><span>30 Mar 2026</span></div></div><span class="a-arrow">→</span></a>
+  <div class="activity-list" id="activityList">
+    <div class="activity-item"><div class="a-body"><div class="a-subject">Loading messages...</div><div class="a-meta"><span>Fetching from W3C archive</span></div></div></div>
   </div>
 </section>
 
-<!-- JOIN BANNER -->
 <div class="join-banner">
-  <div><h2>Open to anyone.<br><strong>No W3C membership required.</strong></h2><p>We are a community initiative — anyone with a free W3C account can join, contribute to specifications, and participate in discussions. All work is public and licensed under W3C Document License.</p><div class="join-criteria"><div class="join-crit"><span class="crit-mark">✓</span> Shape VC/UORA profiles before they reach W3C Note status</div><div class="join-crit"><span class="crit-mark">✓</span> Represent your industry's regulatory and implementation constraints</div><div class="join-crit"><span class="crit-mark">✓</span> Contribute to GitHub, mailing list, and open specification reviews</div><div class="join-crit"><span class="crit-mark">✓</span> All discussion archived publicly at lists.w3.org</div></div></div>
-  <div class="join-right"><a href="https://www.w3.org/community/vsc/join" class="btn-join-primary" target="_blank">Join on W3C →</a><a href="https://github.com/w3c-cg/vsc" class="btn-join-ghost" target="_blank">View GitHub</a><a href="mailto:public-vsc@w3.org" class="btn-join-ghost">Email the list</a></div>
+  <div><h2>Open to anyone.<br><strong>No W3C membership required.</strong></h2><p>We are a community initiative — anyone with a free W3C account can join, contribute to specifications, and participate in discussions. All work is public and licensed under W3C Document License.</p><div class="join-criteria"><div class="join-crit"><span class="crit-mark">✓</span> Shape the VSC Requirements and Use Cases specification</div><div class="join-crit"><span class="crit-mark">✓</span> Contribute VC/UORA profiles for your industry vertical</div><div class="join-crit"><span class="crit-mark">✓</span> Represent your industry's regulatory and implementation constraints</div><div class="join-crit"><span class="crit-mark">✓</span> All discussion archived publicly at lists.w3.org</div></div></div>
+  <div class="join-right"><a href="https://www.w3.org/community/vsc/join" class="btn-join-primary" target="_blank">Join on W3C →</a><a href="https://github.com/w3c-cg/vsc-requirements" class="btn-join-ghost" target="_blank">View GitHub</a><a href="mailto:public-vsc@w3.org" class="btn-join-ghost">Email the list</a></div>
 </div>
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-left"><span class="nav-w3c" style="font-size:9px;">W3C</span><span class="footer-mono">Verifiable Supply Chain Community Group · © 2026</span></div>
-  <div class="footer-links"><a href="https://www.w3.org/community/vsc/" target="_blank">W3C group page</a><a href="https://lists.w3.org/Archives/Public/public-vsc/" target="_blank">Mailing list</a><a href="https://github.com/w3c-cg/vsc" target="_blank">GitHub</a><a href="mailto:public-vsc@w3.org">public-vsc@w3.org</a><a href="https://www.w3.org/community/vsc/participants" target="_blank">Participants</a></div>
+  <div class="footer-left"><span class="nav-w3c" style="font-size:9px;">W3C</span><span class="footer-mono">Verifiable Supply Chain Community Group · © 2026 · Amir Hameed Mir, Chair</span></div>
+  <div class="footer-links"><a href="https://www.w3.org/community/vsc/" target="_blank">W3C group page</a><a href="https://lists.w3.org/Archives/Public/public-vsc/" target="_blank">Mailing list</a><a href="https://github.com/w3c-cg/vsc-requirements" target="_blank">GitHub</a><a href="mailto:public-vsc@w3.org">public-vsc@w3.org</a><a href="https://www.w3.org/community/vsc/participants" target="_blank">Participants</a></div>
 </footer>
 
-<!-- SPECIFICATION RENDERING ENGINE -->
 <script>
-const SPEC_CONFIG = [
-    {
-        id: 'pharma',
-        name: 'Pharma Profile',
-        url: 'specs/pharma-profile.html',
-        description: 'VC/UORA credential schema for pharmaceutical supply chains'
-    },
-    {
-        id: 'minerals',
-        name: 'Critical Minerals',
-        url: 'specs/critical-minerals.html',
-        description: 'Provenance credentials for lithium, cobalt, rare earths'
-    },
-    {
-        id: 'interop',
-        name: 'Interop Toolkit',
-        url: 'specs/interop-toolkit.html',
-        description: 'EPCIS-to-VC translation specifications'
-    },
-    {
-        id: 'trust',
-        name: 'Trust Framework',
-        url: 'specs/trust-framework.html',
-        description: 'Governance and accreditation templates'
-    }
-];
+// ─── Configuration ──────────────────────────────
+const PROXY_URL = 'https://vsc-proxy.amsaalegal.workers.dev'; // ← Your Worker
+const ARCHIVE_URL = 'https://lists.w3.org/Archives/Public/public-vsc/';
+const POLL_INTERVAL = 6000;
+let previousParticipants = 0;
+let previousMessages = 0;
 
-function buildSpecTabs() {
-    const container = document.getElementById('specTabs');
-    
-    if (SPEC_CONFIG.length === 0) {
-        container.innerHTML = '<span style="color: rgba(255,255,255,0.4); font-size: 13px;">No specifications configured yet</span>';
-        return;
+// ─── Live Data Fetch ────────────────────────────
+async function refreshLiveData() {
+  try {
+    const response = await fetch(`${PROXY_URL}/stats`);
+    if (!response.ok) throw new Error('Proxy responded ' + response.status);
+    const data = await response.json();
+
+    updateStats(data);
+    updateLiveIndicator(true);
+
+    if (data.participantsList && data.participants !== previousParticipants) {
+      renderParticipants(data.participantsList);
+      previousParticipants = data.participants;
     }
-    
-    container.innerHTML = SPEC_CONFIG.map((spec, i) => `
-        <button class="spec-tab ${i === 0 ? 'active' : ''}" 
-                onclick="loadSpec('${spec.id}', this)" 
-                data-spec-id="${spec.id}">
-            ${spec.name}
-        </button>
-    `).join('');
-    
-    if (SPEC_CONFIG.length > 0) {
-        loadSpecFrame(SPEC_CONFIG[0].url);
+
+    if (data.messagesList && data.messages !== previousMessages) {
+      renderMessages(data.messagesList);
+      previousMessages = data.messages;
     }
+  } catch (e) {
+    updateLiveIndicator(false);
+    console.log('Proxy fetch failed, will retry');
+  }
 }
 
-function loadSpec(specId, tabElement) {
-    document.querySelectorAll('.spec-tab').forEach(t => t.classList.remove('active'));
-    tabElement.classList.add('active');
-    
-    const spec = SPEC_CONFIG.find(s => s.id === specId);
-    if (spec) {
-        loadSpecFrame(spec.url);
-    }
+function updateStats(data) {
+  document.getElementById('statParticipants').textContent = data.participants || '—';
+  document.getElementById('statMessages').textContent = data.messages || '—';
+  document.getElementById('statUpdated').textContent = data.updated
+    ? `Live · Synced ${new Date(data.updated).toLocaleTimeString()}`
+    : 'Live · Syncing...';
 }
 
-function loadSpecFrame(url) {
-    const frame = document.getElementById('specFrame');
-    frame.style.opacity = '0.4';
-    frame.style.transition = 'opacity 0.15s';
-    
-    frame.onload = function() {
-        frame.style.opacity = '1';
-    };
-    
-    frame.onerror = function() {
-        frame.style.opacity = '1';
-        frame.srcdoc = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <style>
-                    body {
-                        font-family: 'DM Sans', sans-serif;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        height: 100vh;
-                        text-align: center;
-                        color: #1A1A1A;
-                        background: #FFFFFF;
-                    }
-                    .msg { max-width: 400px; }
-                    .msg-icon { font-size: 2rem; margin-bottom: 1rem; opacity: 0.3; }
-                    h3 { font-weight: 400; margin-bottom: 0.5rem; }
-                    p { font-size: 13px; color: #2A2A2A; }
-                    code { background: #F0F0F0; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
-                </style>
-            </head>
-            <body>
-                <div class="msg">
-                    <div class="msg-icon">📄</div>
-                    <h3>Specification coming soon</h3>
-                    <p>This file hasn't been created yet.<br>Add it to your repository at <code>${url}</code></p>
-                </div>
-            </body>
-            </html>
-        `;
-    };
-    
-    frame.src = url;
+function updateLiveIndicator(online) {
+  const dot = document.querySelector('.live-dot');
+  const text = document.getElementById('liveText');
+  if (online) {
+    dot.style.background = 'var(--green)';
+    text.textContent = 'Live data';
+  } else {
+    dot.style.background = '#94a3b8';
+    text.textContent = 'Offline';
+  }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    buildSpecTabs();
-    window.loadSpec = loadSpec;
-});
+function renderParticipants(list) {
+  const grid = document.getElementById('participantsGrid');
+  if (!list || list.length === 0) {
+    grid.innerHTML = '<div class="participant-cell"><div class="p-ava av-gray">—</div><div><div class="p-name">No participants loaded</div><div class="p-role">Check connection</div></div></div>';
+    return;
+  }
+  grid.innerHTML = list.map((p, i) => `
+    <div class="participant-cell" style="animation: fadeInUp 0.35s ${i * 0.05}s ease both;">
+      <div class="p-ava ${p.color || 'av-gray'}">${p.initials || '?'}</div>
+      <div><div class="p-name">${p.name}</div><div class="p-role">${p.role || 'Participant'}</div></div>
+    </div>
+  `).join('');
+  document.getElementById('participantsCount').textContent = list.length;
+}
+
+function renderMessages(list) {
+  const container = document.getElementById('activityList');
+  if (!list || list.length === 0) {
+    container.innerHTML = '<div class="activity-item"><div class="a-body"><div class="a-subject">No messages loaded</div><div class="a-meta"><span>Check connection</span></div></div></div>';
+    return;
+  }
+  container.innerHTML = list.map((m, i) => `
+    <a class="activity-item" href="${ARCHIVE_URL}${m.url || '#'}" target="_blank" style="animation: fadeInUp 0.35s ${i * 0.05}s ease both;">
+      <div class="a-avatar ${m.color || 'av-gray'}">${m.initials || '?'}</div>
+      <div class="a-body">
+        <div class="a-subject">${m.subject}</div>
+        <div class="a-meta"><span>${m.name}</span><span>${m.date}</span></div>
+      </div>
+      <span class="a-arrow">→</span>
+    </a>
+  `).join('');
+  document.getElementById('activityCount').textContent = list.length;
+}
+
+const animStyle = document.createElement('style');
+animStyle.textContent = '@keyframes fadeInUp { from { opacity:0;transform:translateY(8px); } to { opacity:1;transform:translateY(0); } }';
+document.head.appendChild(animStyle);
+
+refreshLiveData();
+setInterval(refreshLiveData, POLL_INTERVAL);
 </script>
 
 </body>
