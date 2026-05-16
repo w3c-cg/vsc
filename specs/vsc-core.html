@@ -1,0 +1,2811 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifiable Supply Chain (VSC) — Core Specification</title>
+  <meta name="description"
+    content="The VSC Core Specification defines the SEAL data structure, the VSC State Machine, the Event Matrix envelope, and the +Dn Extension Mechanism for cryptographically verifiable supply chain events." />
+  <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
+  <script class="remove">
+    var respecConfig = {
+      specStatus: "CG-DRAFT",
+      shortName: "vsc-core",
+      group: "cg/vsc",
+      wg: "Verifiable Supply Chain Community Group",
+      wgURI: "https://www.w3.org/community/vsc/",
+      wgPublicList: "public-vsc",
+      github: {
+        repoURL: "https://github.com/w3c-cg/vsc-core",
+        branch: "main"
+      },
+      edDraftURI: "https://w3c-cg.github.io/vsc-core/",
+      editors: [
+        {
+          name: "Amir Hameed Mir",
+          company: "Sirraya Labs",
+          companyURL: "https://www.sirraya.org"
+        }
+      ],
+      authors: [
+        {
+          name: "VSC Community Group Participants",
+          url: "https://www.w3.org/community/vsc/"
+        }
+      ],
+      license: "w3c-software-doc",
+      copyrightStart: 2026,
+      maxTocLevel: 4,
+      noRecTrack: true,
+      xref: ["did-core", "vc-data-model", "infra"],
+      localBiblio: {
+        "VSC-REQUIREMENTS": {
+          title: "VSC Requirements and Use Cases",
+          href: "https://w3c-cg.github.io/vsc-requirements/",
+          publisher: "W3C VSC Community Group",
+          date: "2026"
+        },
+        "EPCIS": {
+          title: "EPC Information Services (EPCIS) Standard, v2.0",
+          href: "https://ref.gs1.org/standards/epcis/",
+          publisher: "GS1",
+          date: "2022"
+        },
+        "GS1-CBV": {
+          title: "GS1 Core Business Vocabulary (CBV) Standard, v2.0",
+          href: "https://ref.gs1.org/standards/cbv/",
+          publisher: "GS1",
+          date: "2022"
+        },
+        "DID-CORE": {
+          title: "Decentralized Identifiers (DIDs) v1.0",
+          href: "https://www.w3.org/TR/did-core/",
+          publisher: "W3C",
+          date: "2022"
+        },
+        "VC-DATA-MODEL": {
+          title: "Verifiable Credentials Data Model v2.0",
+          href: "https://www.w3.org/TR/vc-data-model-2.0/",
+          publisher: "W3C",
+          date: "2024"
+        },
+        "VC-DATA-INTEGRITY": {
+          title: "Verifiable Credential Data Integrity 1.0",
+          href: "https://www.w3.org/TR/vc-data-integrity/",
+          publisher: "W3C",
+          date: "2024"
+        },
+        "BBS-2023": {
+          title: "BBS Cryptosuite v2023",
+          href: "https://www.w3.org/TR/vc-di-bbs/",
+          publisher: "W3C",
+          date: "2024"
+        },
+        "SD-JWT": {
+          title: "Selective Disclosure for JWTs (SD-JWT)",
+          href: "https://datatracker.ietf.org/doc/html/draft-ietf-oauth-selective-disclosure-jwt",
+          publisher: "IETF"
+        },
+        "DSCSA": {
+          title: "Drug Supply Chain Security Act (DSCSA)",
+          href: "https://www.fda.gov/drugs/drug-supply-chain-security-act-dscsa",
+          publisher: "U.S. Food and Drug Administration",
+          date: "2013"
+        },
+        "FSMA-204": {
+          title: "FDA Food Safety Modernization Act — Section 204",
+          href: "https://www.fda.gov/food/food-safety-modernization-act-fsma/fsma-final-rule-requirements-additional-traceability-records-certain-foods",
+          publisher: "U.S. Food and Drug Administration"
+        },
+        "FMD": {
+          title: "EU Falsified Medicines Directive 2011/62/EU",
+          href: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0062",
+          publisher: "European Parliament"
+        },
+        "UNTP": {
+          title: "UN Transparency Protocol (UNTP)",
+          href: "https://uncefact.github.io/spec-untp/",
+          publisher: "UN/CEFACT",
+          date: "2024"
+        },
+        "HS-2022": {
+          title: "Harmonized System Nomenclature 2022",
+          href: "https://www.wcoomd.org/en/topics/nomenclature/instrument-and-tools/hs-nomenclature-2022-edition.aspx",
+          publisher: "World Customs Organization",
+          date: "2022"
+        },
+        "ICC-INCOTERMS": {
+          title: "INCOTERMS® 2020 — ICC Publication No. 723E",
+          href: "https://iccwbo.org/business-solutions/incoterms-rules/incoterms-2020/",
+          publisher: "International Chamber of Commerce",
+          date: "2019"
+        },
+        "UCP600": {
+          title: "Uniform Customs and Practice for Documentary Credits (UCP 600)",
+          href: "https://iccwbo.org/business-solutions/trade-finance/ucp-600/",
+          publisher: "International Chamber of Commerce",
+          date: "2007"
+        },
+        "MLETR": {
+          title: "UNCITRAL Model Law on Electronic Transferable Records",
+          href: "https://uncitral.un.org/en/texts/ecommerce/modellaw/electronic_transferable_records",
+          publisher: "United Nations Commission on International Trade Law",
+          date: "2017"
+        },
+        "CISG": {
+          title: "United Nations Convention on Contracts for the International Sale of Goods",
+          href: "https://uncitral.un.org/en/texts/salegoods/conventions/sale_of_goods/cisg",
+          publisher: "United Nations Commission on International Trade Law",
+          date: "1980"
+        },
+        "JSON-LD": {
+          title: "JSON-LD 1.1",
+          href: "https://www.w3.org/TR/json-ld11/",
+          publisher: "W3C",
+          date: "2020"
+        },
+        "RFC2119": {
+          title: "Key words for use in RFCs to Indicate Requirement Levels",
+          href: "https://www.rfc-editor.org/rfc/rfc2119",
+          publisher: "IETF",
+          date: "1997"
+        },
+        "RFC8174": {
+          title: "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words",
+          href: "https://www.rfc-editor.org/rfc/rfc8174",
+          publisher: "IETF",
+          date: "2017"
+        },
+        "ISO28000": {
+          title: "ISO 28000:2022 — Security and resilience — Supply chain security management systems",
+          href: "https://www.iso.org/standard/79612.html",
+          publisher: "ISO",
+          date: "2022"
+        }
+      }
+    };
+  </script>
+  <style>
+    .req-block {
+      border-left: 4px solid #005a9c;
+      background: #f0f4f8;
+      padding: .75em 1em;
+      margin: 1em 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .req-block .req-id {
+      font-family: monospace;
+      font-weight: bold;
+      font-size: .9em;
+      color: #005a9c;
+    }
+    .req-block .req-title {
+      font-weight: bold;
+      display: inline;
+    }
+    .req-block .req-body {
+      margin: .4em 0 0;
+    }
+    .req-block .req-rationale {
+      margin: .4em 0 0;
+      font-size: .9em;
+      color: #444;
+    }
+    .req-block .req-rationale::before {
+      content: "Rationale: ";
+      font-weight: bold;
+    }
+    .req-block .req-test {
+      margin: .4em 0 0;
+      font-size: .9em;
+      color: #1a5c2a;
+    }
+    .req-block .req-test::before {
+      content: "Testability: ";
+      font-weight: bold;
+    }
+    .req-block .req-refs {
+      margin: .4em 0 0;
+      font-size: .85em;
+      color: #555;
+    }
+    .req-block .req-refs::before {
+      content: "References: ";
+      font-weight: bold;
+    }
+    .req-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88em;
+      margin: 1em 0;
+    }
+    .req-table th {
+      background: #005a9c;
+      color: #fff;
+      padding: .5em .75em;
+      text-align: left;
+    }
+    .req-table td {
+      border: 1px solid #ccc;
+      padding: .4em .6em;
+      vertical-align: top;
+    }
+    .req-table tr:nth-child(even) td {
+      background: #f5f5f5;
+    }
+    .conf-must   { color: #c0392b; font-weight: bold; }
+    .conf-should { color: #e67e22; font-weight: bold; }
+    .conf-may    { color: #27ae60; font-weight: bold; }
+    .figure {
+      text-align: center;
+      margin: 1.5em 0;
+    }
+    .figure .caption {
+      font-style: italic;
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 0.6em;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ABSTRACT
+════════════════════════════════════════════════════════════════ -->
+<section id="abstract">
+  <p>
+    This document defines the <strong>VSC Core Specification</strong> — the
+    normative architecture for representing supply chain events as
+    cryptographically verifiable credentials. It defines the
+    <a>SEAL</a> data structure, the <a>VSC State Machine</a>, the
+    <a>Event Matrix</a> envelope, and the <a>+Dn Extension Mechanism</a>
+    for open vocabulary extensibility.
+  </p>
+  <p>
+    The specification establishes the complete VSC verification
+    infrastructure: immutable event attestation through the SEAL structure,
+    chain-of-custody linking with support for fork and merge topology,
+    cryptographic proof binding via Decentralized Identifiers, selective
+    disclosure through a normative field registry, a correction protocol
+    that preserves audit integrity, and a credential presentation protocol
+    for request-response exchange between verifiers and holders.
+  </p>
+  <p>
+    Two inaugural profiles are defined: <strong>Pharmaceutical Finished
+    Goods</strong>, constraining VSC for DSCSA and FMD compliance, and
+    <strong>Food Safety</strong>, constraining VSC for FSMA 204 and Codex
+    Alimentarius traceability. These profiles demonstrate how the core
+    architecture extends to specific regulatory domains through vocabulary
+    binding without architectural modification.
+  </p>
+  <p>
+    This specification is the concrete realization of the requirements
+    established in [[VSC-REQUIREMENTS]]. Where the requirements document
+    defines <em>what</em> the system must do, this specification defines
+    <em>how</em> it does it. All normative statements in this specification
+    derive from requirements in [[VSC-REQUIREMENTS]].
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     STATUS OF THIS DOCUMENT
+════════════════════════════════════════════════════════════════ -->
+<section id="sotd">
+  <p>
+    This document is a <strong>Community Group Draft</strong> produced by the
+    <a href="https://www.w3.org/community/vsc/">Verifiable Supply Chain
+    Community Group</a>. It has not been endorsed by the W3C membership and
+    is not a W3C Standard. It may be updated, replaced, or made obsolete at
+    any time.
+  </p>
+  <p>
+    Feedback is welcome. The preferred mechanism is to open a
+    <a href="https://github.com/w3c-cg/vsc-core/issues">GitHub issue</a>.
+    For general discussion, see the
+    <a href="https://lists.w3.org/Archives/Public/public-vsc/">public mailing list</a>.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     1. INTRODUCTION
+════════════════════════════════════════════════════════════════ -->
+<section id="introduction">
+  <h2>Introduction</h2>
+
+  <section id="purpose">
+    <h3>Purpose</h3>
+    <p>
+      The Verifiable Supply Chain (VSC) Core Specification defines the
+      universal architecture for representing any supply chain event as a
+      cryptographically verifiable credential. It provides the normative
+      data structures, state machine, extension mechanisms, and protocol
+      bindings that enable interoperable, tamper-evident supply chain
+      event exchange across organizational and jurisdictional boundaries.
+    </p>
+    <p>
+      This specification is designed to be <strong>vocabulary-neutral</strong>.
+      The core architecture — the SEAL structure, the VSC State Machine,
+      the Event Matrix, and the +Dn mechanism — does not depend on any
+      specific industry vocabulary, commodity classification system,
+      commercial terms framework, or regulatory code. Domain-specific
+      requirements are expressed through vocabulary extensions that bind
+      to the core architecture without modifying it. This separation
+      ensures that VSC can represent pharmaceutical shipments, food
+      supply chains, electronics logistics, critical mineral movements,
+      and any other supply chain domain within a single, unified
+      verification framework.
+    </p>
+  </section>
+
+  <section id="relationship-to-requirements">
+    <h3>Relationship to Requirements</h3>
+    <p>
+      All normative statements in this specification derive from
+      requirements established in [[VSC-REQUIREMENTS]]. The complete
+      mapping of specification sections to requirement identifiers is
+      provided in <a href="#requirements-mapping">Appendix A</a>. Where
+      this specification and the requirements document appear to
+      conflict, the requirements document prevails.
+    </p>
+  </section>
+
+  <section id="document-structure-core">
+    <h3>Document Structure</h3>
+    <p>This specification is organized as follows:</p>
+    <ul>
+      <li><strong>§2 The SEAL Data Structure</strong> — defines the atomic unit of VSC truth, including all normative fields, the event vector, chain of custody block, extension mechanism, and proof binding.</li>
+      <li><strong>§3 The VSC State Machine</strong> — defines the four-quadrant custody lifecycle model, state transitions, invariants, and the mapping between state quadrants and EPCIS dispositions.</li>
+      <li><strong>§4 The Event Matrix Envelope</strong> — defines the five-dimensional vector representation of supply chain events, with complete field specifications for each dimension.</li>
+      <li><strong>§5 The +Dn Extension Mechanism</strong> — defines the open vocabulary extensibility system, including vocabulary registration requirements and forward compatibility rules.</li>
+      <li><strong>§6 Chain of Custody Linking</strong> — defines the chain topology model supporting linear, fork, and merge structures, with rules for sequence numbering and parent-child relationships.</li>
+      <li><strong>§7 Securing Mechanisms</strong> — defines cryptographic proof binding, DID-based identity, selective disclosure, and DLT agnosticism requirements.</li>
+      <li><strong>§8 Correction Protocol</strong> — defines the immutable error correction mechanism, correction SEAL structure, and verifier behavior for correction chains.</li>
+      <li><strong>§9 Credential Presentation Protocol</strong> — defines the request-response protocol for credential exchange, including transport bindings and authorization levels.</li>
+      <li><strong>§10 Profile: Pharmaceutical Finished Goods</strong> — defines the pharma-specific vocabulary bindings, mandatory fields, and verification rules.</li>
+      <li><strong>§11 Profile: Food Safety</strong> — defines the food-specific vocabulary bindings, CTE and KDE mappings, and recall readiness requirements.</li>
+    </ul>
+  </section>
+
+  <section id="conformance-core">
+    <h3>Conformance</h3>
+    <p>
+      The key words <em class="rfc2119">MUST</em>, <em class="rfc2119">MUST NOT</em>,
+      <em class="rfc2119">REQUIRED</em>, <em class="rfc2119">SHALL</em>,
+      <em class="rfc2119">SHALL NOT</em>, <em class="rfc2119">SHOULD</em>,
+      <em class="rfc2119">SHOULD NOT</em>,
+      <em class="rfc2119">RECOMMENDED</em>, <em class="rfc2119">NOT RECOMMENDED</em>,
+      <em class="rfc2119">MAY</em>, and <em class="rfc2119">OPTIONAL</em>
+      in this document are to be interpreted as described in [[RFC2119]]
+      and [[RFC8174]] when, and only when, they appear in all capitals,
+      as shown here.
+    </p>
+    <p>This specification defines three conformance classes:</p>
+    <dl>
+      <dt><dfn>VSC Core Conformant Issuer</dfn></dt>
+      <dd>
+        An implementation that creates SEALs satisfying all
+        <em class="rfc2119">MUST</em> requirements in §§2–8.
+        A Core Conformant Issuer produces SEALs that are
+        structurally valid, correctly signed, and properly
+        linked into custody chains.
+      </dd>
+      <dt><dfn>VSC Core Conformant Verifier</dfn></dt>
+      <dd>
+        An implementation that verifies SEALs satisfying all
+        <em class="rfc2119">MUST</em> requirements in §§6–7 and §9.
+        A Core Conformant Verifier correctly resolves DIDs,
+        verifies cryptographic proofs, checks credential status,
+        validates chain topology, and processes correction SEALs
+        according to the rules in §8.
+      </dd>
+      <dt><dfn>VSC Profile Conformant Implementation</dfn></dt>
+      <dd>
+        An implementation satisfying Core Conformance plus all
+        <em class="rfc2119">MUST</em> requirements of a named
+        profile (§10 or §11). Profile conformance is always in
+        addition to core conformance — no implementation can
+        claim profile conformance without also satisfying core
+        conformance.
+      </dd>
+    </dl>
+    <p>
+      The complete conformance test matrix is provided in
+      <a href="#conformance-test-matrix">Appendix D</a>. Passing all
+      tests in a category establishes conformance for that class.
+    </p>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     2. THE SEAL DATA STRUCTURE
+════════════════════════════════════════════════════════════════ -->
+<section id="seal">
+  <h2>The SEAL Data Structure</h2>
+  <div>
+<svg viewBox="0 0 800 600" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="elevated">
+      <feDropShadow dx="0" dy="20" stdDeviation="40" flood-color="#0f172a" flood-opacity="0.16"/>
+    </filter>
+    <linearGradient id="header-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="#ffffff"/>
+
+  <!-- ═══════════ CARD ═══════════ -->
+  <rect x="50" y="30" width="700" height="500" rx="28" fill="#ffffff" filter="url(#elevated)" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Header accent bar -->
+  <rect x="50" y="30" width="700" height="6" rx="3" fill="url(#header-accent)"/>
+
+  <!-- ═══════════ CARD HEADER ═══════════ -->
+
+  <!-- Chip -->
+  <rect x="100" y="68" width="50" height="36" rx="7" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="108" y="76" width="34" height="20" rx="4" fill="#2563eb" opacity="0.10"/>
+  <text x="125" y="90" font-family="system-ui, -apple-system, sans-serif" font-size="6" font-weight="800" fill="#2563eb" text-anchor="middle">VSC</text>
+
+  <!-- Label -->
+  <text x="168" y="86" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#2563eb" letter-spacing="4">VERIFIABLE SUPPLY CHAIN</text>
+  <text x="168" y="102" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" letter-spacing="3">SEAL CREDENTIAL · v1.0</text>
+
+  <!-- Status -->
+  <rect x="580" y="72" width="140" height="32" rx="16" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1.5"/>
+  <circle cx="610" cy="88" r="5" fill="#10b981"/>
+  <text x="622" y="92" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#059669">ACTIVE</text>
+
+  <!-- ═══════════ SEAL ID ═══════════ -->
+  <text x="100" y="148" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#0f172a" letter-spacing="3">IDENTIFIER</text>
+  <text x="100" y="168" font-family="SF Mono, Menlo, monospace" font-size="12" font-weight="700" fill="#0f172a">urn:uuid:f47ac10b-58cc-4372-a567-0e02b2c3d479</text>
+
+  <!-- ═══════════ ISSUER ═══════════ -->
+  <text x="100" y="202" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#0f172a" letter-spacing="3">ISSUER</text>
+  <text x="100" y="222" font-family="SF Mono, Menlo, monospace" font-size="12" font-weight="700" fill="#0f172a">did:web:manufacturer.example.com</text>
+
+  <!-- ═══════════ TIMESTAMPS ROW ═══════════ -->
+  <text x="100" y="258" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#0f172a" letter-spacing="3">ISSUANCE DATE</text>
+  <text x="100" y="278" font-family="SF Mono, Menlo, monospace" font-size="12" font-weight="700" fill="#0f172a">2026-05-16T08:30:05Z</text>
+
+  <text x="430" y="258" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#0f172a" letter-spacing="3">SEAL TIMESTAMP</text>
+  <text x="430" y="278" font-family="SF Mono, Menlo, monospace" font-size="12" font-weight="700" fill="#0f172a">2026-05-16T08:30:05Z</text>
+
+  <!-- ═══════════ DIVIDER ═══════════ -->
+  <line x1="100" y1="306" x2="700" y2="306" stroke="#e2e8f0" stroke-width="2"/>
+
+  <!-- ═══════════ EVENT VECTOR ═══════════ -->
+  <text x="100" y="338" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#0f172a" letter-spacing="3">EVENT VECTOR</text>
+
+  <!-- 5 dimension pills -->
+  <rect x="100" y="352" width="76" height="32" rx="9" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="138" y="373" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#2563eb" text-anchor="middle">what</text>
+
+  <rect x="190" y="352" width="76" height="32" rx="9" fill="#fefce8" stroke="#fde68a" stroke-width="1.5"/>
+  <text x="228" y="373" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#a16207" text-anchor="middle">when</text>
+
+  <rect x="280" y="352" width="76" height="32" rx="9" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+  <text x="318" y="373" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#15803d" text-anchor="middle">where</text>
+
+  <rect x="370" y="352" width="76" height="32" rx="9" fill="#fef2f2" stroke="#fecaca" stroke-width="1.5"/>
+  <text x="408" y="373" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#b91c1c" text-anchor="middle">who</text>
+
+  <rect x="460" y="352" width="76" height="32" rx="9" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1.5"/>
+  <text x="498" y="373" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#6d28d9" text-anchor="middle">how</text>
+
+  <!-- Extensions -->
+  <rect x="600" y="352" width="120" height="32" rx="9" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="660" y="373" font-family="SF Mono, Menlo, monospace" font-size="11" font-weight="700" fill="#0f172a" text-anchor="middle">extensions.+Dn</text>
+
+  <!-- ═══════════ CHAIN OF CUSTODY ═══════════ -->
+  <text x="100" y="418" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#0f172a" letter-spacing="3">CHAIN OF CUSTODY</text>
+
+  <rect x="100" y="428" width="220" height="30" rx="9" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="210" y="448" font-family="SF Mono, Menlo, monospace" font-size="11" font-weight="700" fill="#0f172a" text-anchor="middle">chainId: urn:uuid:chain-00...001</text>
+
+  <rect x="336" y="428" width="100" height="30" rx="9" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="386" y="448" font-family="SF Mono, Menlo, monospace" font-size="11" font-weight="700" fill="#0f172a" text-anchor="middle">sequence: 1</text>
+
+  <rect x="452" y="428" width="130" height="30" rx="9" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="517" y="448" font-family="SF Mono, Menlo, monospace" font-size="11" font-weight="700" fill="#0f172a" text-anchor="middle">topology: linear</text>
+
+  <rect x="598" y="428" width="122" height="30" rx="9" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="659" y="448" font-family="SF Mono, Menlo, monospace" font-size="10" font-weight="700" fill="#0f172a" text-anchor="middle">parentSeals: []</text>
+
+  <!-- ═══════════ CORRECTION OF ═══════════ -->
+  <text x="100" y="484" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#0f172a" letter-spacing="3">CORRECTION OF</text>
+  <rect x="100" y="492" width="80" height="26" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="140" y="510" font-family="SF Mono, Menlo, monospace" font-size="11" font-weight="700" fill="#0f172a" text-anchor="middle">null</text>
+
+  <!-- ═══════════ PROOF ═══════════ -->
+  <text x="250" y="484" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#0f172a" letter-spacing="3">PROOF</text>
+  <rect x="250" y="492" width="400" height="26" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="265" y="510" font-family="SF Mono, Menlo, monospace" font-size="11" font-weight="700" fill="#0f172a">Ed25519Signature2020 · assertionMethod</text>
+
+  <!-- ═══════════ CAPTION ═══════════ -->
+  <text x="400" y="568" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#0f172a" text-anchor="middle">Figure 1 — The VSC SEAL Credential</text>
+</svg>
+  </div>
+
+  <section id="seal-concept">
+    <h3>Concept</h3>
+    
+    <p>
+      <dfn data-lt="SEAL|SEALs">SEAL</dfn> stands for <strong>S</strong>ecure
+      <strong>E</strong>vent <strong>A</strong>ttestation <strong>L</strong>edger-entry.
+      It is the atomic, immutable unit of truth in the VSC architecture.
+      A SEAL is what gets signed, what gets stored, what gets verified,
+      and what links together to form a custody chain. Every supply chain
+      event — a manufacturing batch release, a shipment departure, a
+      temperature reading, a customs clearance, a patient dispensing —
+      is represented as a SEAL.
+    </p>
+    <p>
+      A SEAL is a specialization of the W3C Verifiable Credential
+      [[VC-DATA-MODEL]]. It carries all the standard properties of a
+      Verifiable Credential — an issuer, an issuance date, a credential
+      subject, and a cryptographic proof — and adds VSC-specific
+      properties that make it suitable for supply chain event
+      representation: a versioned seal structure, a five-dimensional
+      event vector, a chain of custody block, an extension mechanism
+      for domain vocabularies, and a correction reference for error
+      handling.
+    </p>
+    <p>
+      The SEAL is <strong>immutable</strong>. Once created and signed,
+      a SEAL <em class="rfc2119">MUST NOT</em> be modified. This is not
+      a design limitation — it is the fundamental property that makes
+      VSC chains auditable. If an error is discovered in a SEAL, the
+      correction protocol defined in <a href="#correction-protocol">§8</a>
+      <em class="rfc2119">MUST</em> be used to issue a new SEAL that
+      references and supersedes the erroneous one. The original SEAL
+      remains permanently in the chain as evidence of what was originally
+      asserted.
+    </p>
+  </section>
+
+  <section id="seal-structure">
+    <h3>Complete SEAL Structure</h3>
+    <p>
+      The following example shows the complete structure of a VSC SEAL.
+      Every top-level property is normative and <em class="rfc2119">MUST</em>
+      be present in every SEAL unless explicitly marked as optional.
+    </p>
+
+<pre class="example" title="Complete SEAL Structure">
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3c-cg.github.io/vsc-core/contexts/vsc-v1.jsonld"
+  ],
+  "type":          ["VerifiableCredential", "VSC-SEAL"],
+  "id":            "urn:uuid:f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "issuer":        "did:web:manufacturer.example.com",
+  "issuanceDate":  "2026-05-16T08:30:05Z",
+
+  "sealVersion":   "1.0",
+  "sealTimestamp": "2026-05-16T08:30:05Z",
+
+  "eventVector": {
+    "what":  { },
+    "when":  { },
+    "where": { },
+    "who":   { },
+    "how":   { }
+  },
+
+  "extensions": {
+    "+Dn": {}
+  },
+
+  "chainOfCustody": {
+    "chainId":        "urn:uuid:chain-00000000-0000-0000-0000-000000000001",
+    "sequenceNumber": 1,
+    "parentSeals":    [],
+    "childSeals":     [],
+    "topology":       "linear"
+  },
+
+  "correctionOf": null,
+
+  "credentialSubject": {
+    "id": "urn:uuid:f47ac10b-58cc-4372-a567-0e02b2c3d479"
+  },
+
+  "proof": { }
+}
+</pre>
+    <p>
+      Each of these properties is specified in detail in the following
+      subsections. Implementers <em class="rfc2119">MUST</em> ensure that
+      every SEAL they produce conforms to the field requirements defined
+      below.
+    </p>
+  </section>
+
+  <section id="seal-normative-fields">
+    <h3>Normative Fields</h3>
+
+    <section id="seal-version-field">
+      <h4><code>sealVersion</code></h4>
+      <p>
+        <em class="rfc2119">MUST</em> be present as a string.
+        <em class="rfc2119">MUST</em> be <code>"1.0"</code> for all
+        SEALs conforming to this version of the specification. This
+        field enables verifiers to determine which version of the SEAL
+        schema to apply when validating the credential. Future versions
+        of this specification will increment this value, and verifiers
+        <em class="rfc2119">MUST</em> reject SEALs with unsupported
+        version identifiers.
+      </p>
+    </section>
+
+    <section id="seal-timestamp-field">
+      <h4><code>sealTimestamp</code></h4>
+      <p>
+        <em class="rfc2119">MUST</em> be present as an ISO 8601
+        date-time string with timezone offset. Records the moment at
+        which the SEAL was generated by the issuer's system.
+      </p>
+      <p>
+        The <code>sealTimestamp</code> is distinct from
+        <code>eventVector.when.eventTime</code>. The seal timestamp
+        records <em>when the attestation was created</em>; the event
+        time records <em>when the supply chain event occurred</em>.
+        These two timestamps <em class="rfc2119">MAY</em> differ by
+        seconds, minutes, or in some operational scenarios hours, due
+        to batch processing, connectivity gaps, or human review
+        workflows. Verifiers <em class="rfc2119">MUST NOT</em> assume
+        that these two timestamps are equal.
+      </p>
+      <p class="note" title="Timestamp precision">
+        The <code>sealTimestamp</code> <em class="rfc2119">SHOULD</em>
+        be recorded at millisecond precision when the issuing system
+        supports it. At minimum, second precision is
+        <em class="rfc2119">REQUIRED</em>.
+      </p>
+    </section>
+
+    <section id="seal-correction-of-field">
+      <h4><code>correctionOf</code></h4>
+      <p>
+        <em class="rfc2119">MUST</em> be present. For original SEALs
+        (those that are not correcting a previous error), this field
+        <em class="rfc2119">MUST</em> be <code>null</code>. For
+        correction SEALs issued under the protocol defined in
+        <a href="#correction-protocol">§8</a>, this field
+        <em class="rfc2119">MUST</em> contain the <code>id</code> of
+        the erroneous SEAL being corrected.
+      </p>
+      <p>
+        The presence of a non-null <code>correctionOf</code> value is
+        the mechanism by which verifiers identify correction chains.
+        When a verifier encounters a SEAL where
+        <code>correctionOf</code> is not <code>null</code>, it
+        <em class="rfc2119">MUST</em> apply the verification rules
+        specified in <a href="#correction-protocol">§8.3</a>.
+      </p>
+    </section>
+
+    <section id="seal-id-field">
+      <h4><code>id</code></h4>
+      <p>
+        Each SEAL <em class="rfc2119">MUST</em> have a globally unique
+        identifier. This identifier is used for chain linking (as the
+        value referenced in <code>parentSeals</code> and
+        <code>childSeals</code>), for correction referencing (as the
+        value of <code>correctionOf</code>), and for general SEAL
+        retrieval and reference.
+      </p>
+      <p>
+        UUIDs encoded as URNs (e.g.,
+        <code>urn:uuid:f47ac10b-58cc-4372-a567-0e02b2c3d479</code>)
+        are <em class="rfc2119">RECOMMENDED</em> as the identifier
+        scheme. Content-addressed identifiers based on cryptographic
+        hashes of the SEAL content are
+        <em class="rfc2119">PERMITTED</em>. The identifier
+        <em class="rfc2119">MUST</em> be stable — it
+        <em class="rfc2119">MUST NOT</em> change after the SEAL is
+        created, even if the SEAL is later superseded by a correction
+        SEAL. The identifier <em class="rfc2119">MUST</em> be unique
+        across all SEALs in all chains.
+      </p>
+    </section>
+
+    <section id="seal-issuer-field">
+      <h4><code>issuer</code></h4>
+      <p>
+        <em class="rfc2119">MUST</em> be present as a Decentralized
+        Identifier (DID) conforming to [[DID-CORE]]. The issuer is the
+        <a>Supply Chain Actor</a> that asserts the event and creates
+        the SEAL. The issuer's DID <em class="rfc2119">MUST</em> be
+        resolvable to a DID Document containing the public key material
+        used to verify the SEAL's cryptographic proof.
+      </p>
+    </section>
+
+    <section id="seal-event-vector-field">
+      <h4><code>eventVector</code></h4>
+      <p>
+        <em class="rfc2119">MUST</em> be present. Contains the five
+        dimensions of the <a>Event Matrix</a>: <code>what</code>,
+        <code>when</code>, <code>where</code>, <code>who</code>, and
+        <code>how</code>. Each dimension is specified in detail in
+        <a href="#event-matrix">§4</a>. The <code>eventVector</code>
+        is the core payload of the SEAL — it captures everything that
+        is known about the supply chain event being attested.
+      </p>
+    </section>
+
+    <section id="seal-extensions-field">
+      <h4><code>extensions</code></h4>
+      <p>
+        <em class="rfc2119">MUST</em> be present. Contains the
+        <code>+Dn</code> extension block for domain-specific
+        vocabularies. The <code>+Dn</code> mechanism is specified in
+        <a href="#dn-mechanism">§5</a>. Even if no extensions are
+        used, the <code>extensions</code> object
+        <em class="rfc2119">MUST</em> be present with an empty
+        <code>+Dn</code> block.
+      </p>
+    </section>
+
+    <section id="seal-chain-field">
+      <h4><code>chainOfCustody</code></h4>
+      <p>
+        <em class="rfc2119">MUST</em> be present. Contains the chain
+        linking information that connects this SEAL to its predecessors
+        and successors. The chain of custody structure is specified in
+        <a href="#chain-of-custody">§6</a>.
+      </p>
+    </section>
+
+    <section id="seal-proof-field">
+      <h4><code>proof</code></h4>
+      <p>
+        <em class="rfc2119">MUST</em> be present. Contains the
+        cryptographic proof that binds the SEAL to the issuer's DID.
+        The proof format and requirements are specified in
+        <a href="#securing-mechanisms">§7</a>.
+      </p>
+    </section>
+
+    <section id="seal-immutability-rule">
+      <h4>Immutability Rule</h4>
+      <p>
+        Once created and signed, a SEAL <em class="rfc2119">MUST NOT</em>
+        be modified. Any change to any field — including the event
+        vector, extensions, chain of custody, or metadata — creates a
+        new SEAL. If the change is a correction of an error, the new
+        SEAL <em class="rfc2119">MUST</em> be issued as a
+        <a>correction SEAL</a> under the protocol in
+        <a href="#correction-protocol">§8</a>. If the change represents
+        a new event in the supply chain (e.g., a product moving from
+        one location to another), the new SEAL
+        <em class="rfc2119">MUST</em> be linked into the custody chain
+        with <code>parentSeals</code> referencing the previous SEAL.
+      </p>
+      <p>
+        This immutability rule is the foundation of VSC auditability.
+        Because SEALs cannot be modified, a verifier can examine any
+        SEAL in a chain and know with cryptographic certainty that the
+        event data it contains is exactly what the issuer asserted at
+        the time of issuance. The correction protocol preserves this
+        property by creating new SEALs rather than modifying existing
+        ones — the original assertion remains visible and verifiable
+        even after it has been superseded.
+      </p>
+    </section>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     3. THE VSC STATE MACHINE
+════════════════════════════════════════════════════════════════ -->
+<section id="state-machine">
+  <h2>The VSC State Machine</h2>
+
+  <div>
+    <svg viewBox="0 0 800 520" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="card">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.06"/>
+    </filter>
+    <marker id="arrow-main" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#0f172a"/>
+    </marker>
+    <marker id="arrow-loop" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#d97706"/>
+    </marker>
+    <marker id="arrow-return" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="520" fill="#ffffff"/>
+
+  <!-- ═══════════ TITLE ═══════════ -->
+  <text x="400" y="36" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#0f172a" text-anchor="middle">VSC STATE MACHINE</text>
+
+  <!-- ═══════════ FORWARD FLOW ═══════════ -->
+
+  <!-- Q1 -->
+  <g filter="url(#card)">
+    <rect x="40" y="80" width="130" height="140" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="40" y="80" width="130" height="4" rx="2" fill="#2563eb"/>
+    <text x="105" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#0f172a" text-anchor="middle">Q1</text>
+    <text x="105" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#2563eb" text-anchor="middle">ORIGIN</text>
+    <text x="105" y="180" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">active</text>
+    <text x="105" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Single entry point</text>
+  </g>
+
+  <!-- Arrow Q1→Q2 -->
+  <line x1="175" y1="150" x2="210" y2="150" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow-main)"/>
+  <text x="192" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="700" fill="#0f172a" text-anchor="middle">SHIPMENT</text>
+
+  <!-- Q2 -->
+  <g filter="url(#card)">
+    <rect x="220" y="80" width="130" height="140" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="220" y="80" width="130" height="4" rx="2" fill="#d97706"/>
+    <text x="285" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#0f172a" text-anchor="middle">Q2</text>
+    <text x="285" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#d97706" text-anchor="middle">IN TRANSIT</text>
+    <text x="285" y="170" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="700" fill="#d97706" text-anchor="middle">in_transit</text>
+    <text x="285" y="186" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="700" fill="#d97706" text-anchor="middle">stored</text>
+    <text x="285" y="202" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="700" fill="#d97706" text-anchor="middle">transshipped</text>
+  </g>
+
+  <!-- Q2 Self-Loop -->
+  <path d="M350 100 L370 100 L370 200 L350 200" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-loop)"/>
+  <text x="382" y="155" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="700" fill="#d97706">Q2→Q2</text>
+
+  <!-- Arrow Q2→Q3 -->
+  <line x1="355" y1="150" x2="390" y2="150" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow-main)"/>
+  <text x="372" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="700" fill="#0f172a" text-anchor="middle">RECEIPT</text>
+
+  <!-- Q3 -->
+  <g filter="url(#card)">
+    <rect x="400" y="80" width="130" height="140" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="400" y="80" width="130" height="4" rx="2" fill="#16a34a"/>
+    <text x="465" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#0f172a" text-anchor="middle">Q3</text>
+    <text x="465" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#16a34a" text-anchor="middle">DESTINATION</text>
+    <text x="465" y="180" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#16a34a" text-anchor="middle">received</text>
+    <text x="465" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Must follow Q2</text>
+  </g>
+
+  <!-- Arrow Q3→Q4 -->
+  <line x1="535" y1="150" x2="570" y2="150" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow-main)"/>
+  <text x="552" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="700" fill="#0f172a" text-anchor="middle">TERMINATION</text>
+
+  <!-- Q4 -->
+  <g filter="url(#card)">
+    <rect x="580" y="80" width="130" height="140" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="580" y="80" width="130" height="4" rx="2" fill="#dc2626"/>
+    <text x="645" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#0f172a" text-anchor="middle">Q4</text>
+    <text x="645" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#dc2626" text-anchor="middle">TERMINAL</text>
+    <text x="645" y="180" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#dc2626" text-anchor="middle">dispensed</text>
+    <text x="645" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">No re-entry</text>
+  </g>
+
+  <!-- ═══════════ SEPARATOR ═══════════ -->
+  <line x1="40" y1="260" x2="710" y2="260" stroke="#f1f5f9" stroke-width="2"/>
+
+  <!-- ═══════════ REVERSE FLOW ═══════════ -->
+
+  <text x="400" y="290" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#dc2626" text-anchor="middle">REVERSE FLOW — CRITICAL SUPPLY CHAIN EXCEPTION</text>
+
+  <!-- Q3 Return Card -->
+  <g filter="url(#card)">
+    <rect x="400" y="310" width="130" height="110" rx="12" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+    <rect x="400" y="310" width="130" height="4" rx="2" fill="#16a34a"/>
+    <text x="465" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">Q3</text>
+    <text x="465" y="358" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#16a34a" text-anchor="middle">DESTINATION</text>
+    <text x="465" y="390" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="700" fill="#dc2626" text-anchor="middle">returned</text>
+    <text x="465" y="408" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Damaged · Rejected · Recall</text>
+  </g>
+
+  <!-- Return Arrow -->
+  <line x1="395" y1="365" x2="355" y2="365" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 3" marker-end="url(#arrow-return)"/>
+
+  <!-- Q2 Return Card -->
+  <g filter="url(#card)">
+    <rect x="220" y="310" width="130" height="110" rx="12" fill="#ffffff" stroke="#d97706" stroke-width="1.5"/>
+    <rect x="220" y="310" width="130" height="4" rx="2" fill="#d97706"/>
+    <text x="285" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">Q2</text>
+    <text x="285" y="358" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#d97706" text-anchor="middle">IN TRANSIT</text>
+    <text x="285" y="390" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="700" fill="#dc2626" text-anchor="middle">Q3→Q2 RETURN</text>
+    <text x="285" y="408" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">+Dn justification required</text>
+  </g>
+
+  <!-- ═══════════ CAPTION ═══════════ -->
+  <text x="400" y="456" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a" text-anchor="middle">Figure 2 — The VSC State Machine covers the complete lifecycle of any product in any supply chain.</text>
+
+  <text x="400" y="476" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">Q1 ORIGIN captures manufacturing, harvesting, extraction, and commissioning events. Q2 IN TRANSIT captures freight, warehousing, cold storage, and transshipment events with multi-leg Q2→Q2 cycling.</text>
+
+  <text x="400" y="492" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">Q3 DESTINATION captures receiving, customs clearance, and acceptance events. Q4 TERMINAL captures dispensing, consumption, destruction, recycling, and permanent loss events.</text>
+
+  <text x="400" y="508" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">The Q3→Q2 reverse flow handles damaged goods rejection, quality failure returns, product recalls, and delivery refusals — with mandatory +Dn justification.</text>
+</svg>
+  </div>
+
+  <section id="state-machine-concept">
+    <h3>Concept</h3>
+    <p>
+      The <dfn>VSC State Machine</dfn> is a four-quadrant model that
+      expresses the complete lifecycle of any product in any supply
+      chain. Every product tracked by VSC exists in exactly one of four
+      custody states at any given moment. The state machine defines what
+      those states are, how products transition between them, and what
+      conditions must be satisfied for each transition to be valid.
+    </p>
+    <p>
+      The state machine is deliberately abstract. It speaks only the
+      language of custody — origin, transit, destination, and terminal
+      states. It does not mention any domain, vocabulary, industry, or
+      regulatory framework. This abstraction is what enables VSC to
+      represent pharmaceutical shipments, food supply chains, electronics
+      logistics, and critical mineral movements within the same
+      verification architecture. Domain-specific meaning is added through
+      the <a>+Dn extension mechanism</a>, not through modification of the
+      state machine.
+    </p>
+  </section>
+
+  <section id="state-machine-quadrants">
+    <h3>The Four Quadrants</h3>
+
+    <section id="q1-origin">
+      <h4>Q1: Origin</h4>
+      <p>
+        The state in which a product comes into existence within the
+        custody domain. This is the entry point for every product into
+        the VSC tracking system. The event that creates a product in Q1
+        may be manufacturing (for finished goods), harvesting (for
+        agricultural products), extraction (for minerals), commissioning
+        (for serialized pharmaceutical units), or any other act that
+        brings the product into existence as a distinct, trackable entity.
+      </p>
+      <p><strong>Invariant Q1-I1 (Single Entry Point):</strong>
+      A product <em class="rfc2119">MUST</em> enter the state machine
+      through Q1. There is no other entry point. If a product appears
+      in any other quadrant without a recorded Q1 entry event, the
+      chain is incomplete and <em class="rfc2119">MUST</em> be flagged
+      by verifiers.</p>
+    </section>
+
+    <section id="q2-in-transit">
+      <h4>Q2: In Transit</h4>
+      <p>
+        The state in which a product has left its origin but has not
+        yet reached its intended destination. This quadrant encompasses
+        active movement (road, rail, sea, air freight), temporary
+        storage (warehousing, consolidation centres, cold storage),
+        transshipment (port transfers, hub-and-spoke logistics), and
+        any intermediate handling between origin and destination.
+      </p>
+      <p>
+        A product <em class="rfc2119">MAY</em> cycle through Q2
+        multiple times via the Q2→Q2 movement transition. Each movement
+        event records a new location, a new timestamp, and potentially
+        new custody holder information. This enables VSC to track
+        complex multi-leg logistics journeys within a single custody
+        chain.
+      </p>
+      <p><strong>Invariant Q2-I1 (No Direct Origin-to-Destination):</strong>
+      A product <em class="rfc2119">MUST NOT</em> transition directly
+      from Q1 to Q3 without at least one recorded Q2 state. The
+      movement from origin to destination must be attested by at least
+      one SEAL with <code>disposition</code> in the Q2 set.</p>
+    </section>
+
+    <section id="q3-destination">
+      <h4>Q3: Destination</h4>
+      <p>
+        The state in which a product has reached its intended recipient
+        and has been accepted. Acceptance may be physical (goods
+        received and scanned at a warehouse dock), regulatory (customs
+        clearance granted, quarantine released), commercial (payment
+        released against delivery confirmation), or any combination
+        thereof.
+      </p>
+      <p><strong>Invariant Q3-I1 (Preceded by Transit):</strong>
+      A product <em class="rfc2119">MUST NOT</em> be recorded in Q3
+      without having passed through at least one Q2 state. The
+      <code>parentSeals</code> of a Q3 SEAL
+      <em class="rfc2119">MUST</em> include at least one SEAL with
+      <code>disposition</code> in the Q2 set.</p>
+      <p><strong>Invariant Q3-I2 (Verification at Transition):</strong>
+      Verification of product identity, quantity, condition, and
+      regulatory compliance <em class="rfc2119">SHOULD</em> occur at
+      the Q2→Q3 transition. This verification may be recorded as a
+      separate SEAL or as part of the receiving SEAL's event data.</p>
+    </section>
+
+    <section id="q4-terminal">
+      <h4>Q4: Terminal</h4>
+      <p>
+        The state in which a product ceases to exist within the custody
+        domain. Terminal events include dispensing (pharmaceuticals
+        administered to a patient), consumption (food products sold at
+        retail and consumed), destruction (expired, damaged, or recalled
+        goods destroyed), recycling (materials entering a recycling
+        stream), export (goods leaving the tracking jurisdiction), and
+        permanent loss (goods confirmed lost or stolen with no
+        reasonable prospect of recovery).
+      </p>
+      <p><strong>Invariant Q4-I1 (Terminal Finality):</strong>
+      A product <em class="rfc2119">MUST NOT</em> re-enter the state
+      machine from Q4. Once a product has been recorded as dispensed,
+      consumed, destroyed, or permanently lost, it cannot reappear in
+      Q1, Q2, or Q3. If a product that was thought to be lost is
+      subsequently found, or if a product is returned from a customer
+      for resale, it <em class="rfc2119">MUST</em> be recommissioned
+      as a new entity in Q1 with a new chain identifier and a new
+      serial identity. This prevents circular chains and ensures that
+      every custody chain has a definitive end.</p>
+    </section>
+  </section>
+
+  <section id="state-transitions">
+    <h3>State Transitions</h3>
+    <p>
+      The following table defines all valid state transitions in the
+      VSC State Machine. Each transition maps to a
+      <code>how.disposition</code> value that
+      <em class="rfc2119">MUST</em> be used when issuing a SEAL that
+      records that transition.
+    </p>
+    <table class="req-table">
+      <thead>
+        <tr><th>Transition</th><th>Name</th><th>Condition</th><th>Disposition</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Q1 → Q2</td><td>Shipment</td><td>Mandatory after commissioning</td><td><code>in_transit</code></td></tr>
+        <tr><td>Q2 → Q3</td><td>Receipt</td><td>Product reaches intended destination</td><td><code>received</code></td></tr>
+        <tr><td>Q3 → Q4</td><td>Termination</td><td>Product dispensed, consumed, or destroyed</td><td><code>dispensed</code> or <code>destroyed</code></td></tr>
+        <tr><td>Q2 → Q2</td><td>Movement</td><td>Intermediate transit, storage, or transshipment</td><td><code>stored</code> or <code>transshipped</code></td></tr>
+        <tr><td>Q3 → Q2</td><td>Return</td><td>Must carry justification in <code>+Dn</code> extension</td><td><code>returned</code></td></tr>
+        <tr><td>Q2 → Q2 (fork)</td><td>Consignment Split</td><td>Consignment physically divided</td><td><code>in_transit</code></td></tr>
+        <tr><td>Q2 → Q2 (merge)</td><td>Transformation</td><td>Multiple lots combined into one</td><td><code>transformed</code></td></tr>
+      </tbody>
+    </table>
+    <p>
+      The Q3→Q2 return transition is the only transition that reverses
+      the normal flow of custody. It <em class="rfc2119">MUST</em> be
+      accompanied by a justification recorded in the <code>+Dn</code>
+      extension block, explaining why the product was returned (e.g.,
+      damaged goods rejection, quality failure, recall, delivery
+      refusal). Verifiers <em class="rfc2119">MAY</em> flag Q3→Q2
+      transitions that lack adequate justification.
+    </p>
+    <p>
+      The fork and merge transitions represent non-linear custody
+      events. These are not separate state transitions but rather
+      modifications to the chain topology within Q2. They are defined
+      in detail in <a href="#chain-of-custody">§6</a>.
+    </p>
+  </section>
+
+  <section id="state-disposition-mapping">
+    <h3>Disposition-to-Quadrant Mapping</h3>
+    <p>
+      The <code>how.disposition</code> field in each SEAL's event
+      vector determines which state quadrant the product occupies at
+      the time of the event. Verifiers <em class="rfc2119">MUST</em>
+      use this mapping to validate that the sequence of dispositions
+      in a custody chain is consistent with the valid state transitions
+      defined above.
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Disposition Value</th><th>Quadrant</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>active</code></td><td>Q1</td><td>Product is active at origin (commissioned, manufactured)</td></tr>
+        <tr><td><code>in_transit</code></td><td>Q2</td><td>Product is in movement between locations</td></tr>
+        <tr><td><code>stored</code></td><td>Q2</td><td>Product is held at an intermediate location</td></tr>
+        <tr><td><code>transshipped</code></td><td>Q2</td><td>Product is being transferred between carriers</td></tr>
+        <tr><td><code>received</code></td><td>Q3</td><td>Product has been received at destination</td></tr>
+        <tr><td><code>returned</code></td><td>Q2</td><td>Product has been returned from destination</td></tr>
+        <tr><td><code>dispensed</code></td><td>Q4</td><td>Product has been dispensed to end user</td></tr>
+        <tr><td><code>destroyed</code></td><td>Q4</td><td>Product has been destroyed</td></tr>
+        <tr><td><code>transformed</code></td><td>Q2</td><td>Product has been transformed (merge event)</td></tr>
+      </tbody>
+    </table>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     4. THE EVENT MATRIX ENVELOPE
+════════════════════════════════════════════════════════════════ -->
+<section id="event-matrix">
+  <h2>The Event Matrix Envelope</h2>
+  <div>
+<svg viewBox="0 0 800 560" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="elevated">
+      <feDropShadow dx="0" dy="12" stdDeviation="24" flood-color="#0f172a" flood-opacity="0.10"/>
+    </filter>
+    <filter id="center-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="20" flood-color="#0f172a" flood-opacity="0.20"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="560" fill="#ffffff"/>
+
+  <!-- ═══════════ TITLE ═══════════ -->
+  <text x="400" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="800" fill="#0f172a" text-anchor="middle" letter-spacing="1">THE EVENT MATRIX</text>
+  <text x="400" y="58" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#0f172a" text-anchor="middle">Five Dimensions · One Canonical Event Form · Universal Vocabulary Binding</text>
+
+  <!-- ═══════════ CENTER HUB ═══════════ -->
+  <circle cx="400" cy="290" r="54" fill="#0f172a" filter="url(#center-glow)"/>
+  <circle cx="400" cy="290" r="48" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.15"/>
+  <text x="400" y="282" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle">EVENT</text>
+  <text x="400" y="302" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#94a3b8" text-anchor="middle">VECTOR</text>
+
+  <!-- ═══════════ RADIATING CONNECTION LINES ═══════════ -->
+  <line x1="400" y1="236" x2="400" y2="120" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/>
+  <line x1="454" y1="258" x2="600" y2="165" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/>
+  <line x1="470" y1="330" x2="620" y2="420" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/>
+  <line x1="330" y1="330" x2="180" y2="420" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/>
+  <line x1="346" y1="290" x2="200" y2="290" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/>
+
+  <!-- ═══════════ DIMENSION CARDS ═══════════ -->
+
+  <!-- WHAT — Top Center -->
+  <g filter="url(#elevated)">
+    <rect x="270" y="80" width="260" height="70" rx="16" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+    <rect x="286" y="96" width="4" height="38" rx="2" fill="#2563eb"/>
+    <text x="302" y="106" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#2563eb">WHAT</text>
+    <text x="302" y="124" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a">productIdentifiers [MUST] · classifications [SHOULD]</text>
+    <text x="302" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">batchOrLot · expiryDate · quantity · description</text>
+  </g>
+
+  <!-- WHEN — Top Right -->
+  <g filter="url(#elevated)">
+    <rect x="540" y="150" width="240" height="70" rx="16" fill="#ffffff" stroke="#d97706" stroke-width="2.5"/>
+    <rect x="556" y="166" width="4" height="38" rx="2" fill="#d97706"/>
+    <text x="572" y="176" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#d97706">WHEN</text>
+    <text x="572" y="194" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a">eventTime [MUST] · recordedAt [MUST]</text>
+    <text x="572" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">timezone · timePrecision: ms | s | min</text>
+  </g>
+
+  <!-- WHERE — Bottom Right -->
+  <g filter="url(#elevated)">
+    <rect x="540" y="410" width="240" height="70" rx="16" fill="#ffffff" stroke="#16a34a" stroke-width="2.5"/>
+    <rect x="556" y="426" width="4" height="38" rx="2" fill="#16a34a"/>
+    <text x="572" y="436" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#16a34a">WHERE</text>
+    <text x="572" y="454" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a">jurisdiction [MUST] · ISO 3166-1 alpha-2</text>
+    <text x="572" y="470" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">readPoint · businessLocation · geoCoordinates</text>
+  </g>
+
+  <!-- WHO — Bottom Left -->
+  <g filter="url(#elevated)">
+    <rect x="20" y="410" width="240" height="70" rx="16" fill="#ffffff" stroke="#dc2626" stroke-width="2.5"/>
+    <rect x="36" y="426" width="4" height="38" rx="2" fill="#dc2626"/>
+    <text x="52" y="436" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#dc2626">WHO</text>
+    <text x="52" y="454" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a">actorDid [MUST] · actorRole [MUST]</text>
+    <text x="52" y="470" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">assertionMethod [MUST] · actorLicense [SHOULD]</text>
+  </g>
+
+  <!-- HOW — Left Center -->
+  <g filter="url(#elevated)">
+    <rect x="20" y="265" width="240" height="70" rx="16" fill="#ffffff" stroke="#7c3aed" stroke-width="2.5"/>
+    <rect x="36" y="281" width="4" height="38" rx="2" fill="#7c3aed"/>
+    <text x="52" y="291" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#7c3aed">HOW</text>
+    <text x="52" y="309" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a">eventType [MUST] · eventTypeVocab [MUST]</text>
+    <text x="52" y="325" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">businessStep [MUST] · disposition [MUST] · action</text>
+  </g>
+
+  <!-- ═══════════ +Dn RING ═══════════ -->
+  <circle cx="400" cy="290" r="110" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6 4"/>
+  
+  <rect x="340" y="390" width="120" height="26" rx="13" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="400" y="408" font-family="SF Mono, Menlo, monospace" font-size="10" font-weight="700" fill="#0f172a" text-anchor="middle">+Dn Extensions</text>
+
+  <!-- ═══════════ CAPTION ═══════════ -->
+  <text x="400" y="520" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a" text-anchor="middle">Figure 3 — The Event Matrix. Five canonical dimensions standardized via GS1, WCO, ISO, and W3C. +Dn extends without modifying the core. Forward-compatible. Vocabulary-neutral.</text>
+
+</svg>
+
+  </div>
+
+  <section id="event-matrix-concept">
+    <h3>Concept</h3>
+    <p>
+      The <dfn>Event Matrix</dfn> is the five-dimensional vector
+      representation of a supply chain event. It is the canonical form
+      through which all events are expressed in VSC, regardless of
+      domain, vocabulary, or regulatory context. Every SEAL carries
+      an event vector that populates these five dimensions.
+    </p>
+    <p>
+      The five dimensions address the fundamental questions that any
+      supply chain event must answer: <strong>What</strong> product is
+      involved? <strong>When</strong> did the event occur?
+      <strong>Where</strong> did it happen? <strong>Who</strong>
+      asserted it? <strong>How</strong> did it happen — what type of
+      event, at what business step, resulting in what disposition?
+    </p>
+    <p>
+      Each dimension draws its values from standardized vocabularies.
+      The What dimension uses GS1 identifiers and WCO HS codes. The
+      When dimension uses ISO 8601 timestamps. The Where dimension uses
+      GS1 GLN/SGLN location identifiers and ISO 3166-1 jurisdiction
+      codes. The Who dimension uses W3C Decentralized Identifiers. The
+      How dimension uses GS1 EPCIS event types and CBV business steps
+      and dispositions. This standardization ensures that every value
+      in the matrix is meaningful to its respective domain authority
+      without translation.
+    </p>
+  </section>
+
+  <section id="dimension-what">
+    <h3>Dimension: What</h3>
+    <p>
+      The What dimension identifies the product or products involved in
+      the supply chain event. It answers the question: what is this
+      event about?
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>productIdentifiers</code></td><td class="conf-must">MUST</td><td>Array of product identifiers. At least one entry <em class="rfc2119">MUST</em> be present. Each entry includes a <code>scheme</code> (e.g., GTIN, SSCC), a <code>value</code>, an optional <code>serialNumber</code>, and a <code>schemeAuthority</code> (e.g., GS1).</td></tr>
+        <tr><td><code>classifications</code></td><td class="conf-should">SHOULD</td><td>Array of commodity classifications. At least one HS code <em class="rfc2119">SHOULD</em> be present for internationally traded goods. Each entry includes a <code>scheme</code> (HS), a <code>code</code>, a <code>description</code>, a <code>schemeAuthority</code> (WCO), and an <code>effectiveDate</code>.</td></tr>
+        <tr><td><code>batchOrLot</code></td><td class="conf-should">SHOULD</td><td>Batch or lot identifier. <em class="rfc2119">MUST</em> be present for pharmaceutical and food products. Enables recall identification and batch-level traceability.</td></tr>
+        <tr><td><code>expiryDate</code></td><td class="conf-may">MAY</td><td>Product expiry date in ISO 8601 format. <em class="rfc2119">MUST</em> be present for pharmaceutical and food profiles.</td></tr>
+        <tr><td><code>quantity</code></td><td class="conf-should">SHOULD</td><td>Numeric quantity of product units involved in this event.</td></tr>
+        <tr><td><code>quantityUnit</code></td><td class="conf-should">SHOULD</td><td>Unit of measure for the quantity field. <em class="rfc2119">MUST</em> be present if <code>quantity</code> is present.</td></tr>
+        <tr><td><code>description</code></td><td class="conf-may">MAY</td><td>Human-readable description of the product.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="dimension-when">
+    <h3>Dimension: When</h3>
+    <p>
+      The When dimension captures the temporal context of the event.
+      It answers two distinct questions: when did the event occur, and
+      when was it recorded?
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>eventTime</code></td><td class="conf-must">MUST</td><td>ISO 8601 date-time string with timezone offset representing when the supply chain event occurred.</td></tr>
+        <tr><td><code>timezone</code></td><td class="conf-must">MUST</td><td>String identifying the timezone context (e.g., "UTC", "+05:30").</td></tr>
+        <tr><td><code>recordedAt</code></td><td class="conf-must">MUST</td><td>ISO 8601 date-time string representing when the event was recorded in the issuing system.</td></tr>
+        <tr><td><code>timePrecision</code></td><td class="conf-must">MUST</td><td>One of <code>millisecond</code>, <code>second</code>, or <code>minute</code>. Indicates the precision of the event time recording.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      The separation of <code>eventTime</code> and <code>recordedAt</code>
+      is essential for supply chain auditability. In many operational
+      scenarios — batch processing of shipping manifests, delayed data
+      entry at remote facilities, data synchronization after
+      connectivity restoration — the recording timestamp may differ
+      from the event timestamp by minutes or hours. Verifiers
+      <em class="rfc2119">MUST NOT</em> treat a discrepancy between
+      these two timestamps as an error unless the difference exceeds
+      the stated <code>timePrecision</code> window by more than a
+      reasonable operational margin.
+    </p>
+  </section>
+
+  <section id="dimension-where">
+    <h3>Dimension: Where</h3>
+    <p>
+      The Where dimension captures the physical and jurisdictional
+      location of the event. It distinguishes between the read point
+      (where the event was captured, typically a specific scanner or
+      gate) and the business location (the facility or site where the
+      product was located).
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>readPoint</code></td><td class="conf-should">SHOULD</td><td>Object with <code>type</code> (typically GLN or SGLN), <code>value</code>, and optional <code>name</code>. Identifies the specific capture point.</td></tr>
+        <tr><td><code>businessLocation</code></td><td class="conf-should">SHOULD</td><td>Object with <code>type</code>, <code>value</code>, and optional <code>name</code>. Identifies the business location.</td></tr>
+        <tr><td><code>jurisdiction</code></td><td class="conf-must">MUST</td><td>ISO 3166-1 alpha-2 country code identifying the legal jurisdiction in which the event occurred. Required for customs and regulatory routing.</td></tr>
+        <tr><td><code>geoCoordinates</code></td><td class="conf-may">MAY</td><td>Object with <code>latitude</code> and <code>longitude</code>. Provides precise geographic coordinates.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="dimension-who">
+    <h3>Dimension: Who</h3>
+    <p>
+      The Who dimension identifies the actor that asserted the event
+      and the role in which they acted. It provides the cryptographic
+      binding between the event data and the asserting identity.
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>actorDid</code></td><td class="conf-must">MUST</td><td>The DID of the asserting actor. <em class="rfc2119">MUST</em> be the same as the SEAL <code>issuer</code>.</td></tr>
+        <tr><td><code>actorRole</code></td><td class="conf-must">MUST</td><td>String identifying the role in which the actor asserts this event (e.g., "manufacturer", "wholesaler", "logistics_provider", "pharmacy").</td></tr>
+        <tr><td><code>actorLicense</code></td><td class="conf-should">SHOULD</td><td>Object containing license information for regulated industries. Includes <code>type</code>, <code>number</code>, <code>issuingAuthority</code>, <code>validFrom</code>, <code>validUntil</code>, and optional <code>licenseCredential</code> reference to a separate VC.</td></tr>
+        <tr><td><code>assertionMethod</code></td><td class="conf-must">MUST</td><td>The DID URL identifying the specific verification method (key) used to sign this SEAL.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="dimension-how">
+    <h3>Dimension: How</h3>
+    <p>
+      The How dimension captures the nature of the event: what type of
+      event occurred, at what business step, resulting in what
+      disposition, and using what vocabulary to define these terms.
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>eventType</code></td><td class="conf-must">MUST</td><td>The event type identifier. Core EPCIS-origin values (ObjectEvent, AggregationEvent, etc.) are valid when <code>eventTypeVocab</code> is <code>"urn:epcis:cbv:v2"</code>. Custom event types <em class="rfc2119">MUST</em> use a URN-prefixed value.</td></tr>
+        <tr><td><code>eventTypeVocab</code></td><td class="conf-must">MUST</td><td>URN identifying the vocabulary that defines the meaning of <code>eventType</code>. Enables verifiers to determine which validation rules to apply.</td></tr>
+        <tr><td><code>businessStep</code></td><td class="conf-must">MUST</td><td>String identifying the business process step (e.g., "commissioning", "shipping", "receiving"). May use GS1 CBV values or custom vocabulary values.</td></tr>
+        <tr><td><code>disposition</code></td><td class="conf-must">MUST</td><td>String identifying the condition or status of the product. <em class="rfc2119">MUST</em> map to a valid VSC State Machine quadrant as defined in §3.4.</td></tr>
+        <tr><td><code>action</code></td><td class="conf-must">MUST</td><td>One of <code>ADD</code>, <code>OBSERVE</code>, or <code>DELETE</code>. Follows the EPCIS action vocabulary.</td></tr>
+      </tbody>
+    </table>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     5. THE +Dn EXTENSION MECHANISM
+════════════════════════════════════════════════════════════════ -->
+<section id="dn-mechanism">
+  <h2>The +Dn Extension Mechanism</h2>
+
+  <section id="dn-concept">
+    <h3>Concept</h3>
+    <p>
+      The <dfn>+Dn mechanism</dfn> is the vocabulary extension system
+      of the VSC architecture. It allows any domain — pharmaceuticals,
+      food safety, electronics, critical minerals, sustainability
+      reporting, trade finance — to define vocabularies that extend
+      the five-dimensional Event Matrix with domain-specific data
+      fields, without modifying the core architecture.
+    </p>
+    <p>
+      The "+Dn" name reflects the mathematical concept of additional
+      dimensions. Just as a coordinate system can be extended from
+      three dimensions to n-dimensions without invalidating the
+      original axes, the VSC Event Matrix can be extended from five
+      dimensions to five-plus-n dimensions. Each extension occupies
+      a numbered slot (+D1, +D2, +D3, ... +Dn) within the
+      <code>extensions</code> block of the SEAL. Each slot can hold
+      one or more vocabulary instances, identified by their unique
+      vocabulary URNs.
+    </p>
+  </section>
+
+  <section id="dn-structure">
+    <h3>Structural Position</h3>
+    <p>
+      All +Dn vocabularies are carried in the <code>extensions</code>
+      block of the SEAL, under the reserved <code>+Dn</code> key.
+      The <code>+Dn</code> key is reserved — no other extension
+      mechanism may use this key, and no other top-level SEAL property
+      may be named <code>+Dn</code>.
+    </p>
+    <p>
+      The <code>extensions</code> block <em class="rfc2119">MUST</em>
+      be present in every SEAL, even if no extensions are used. An
+      empty <code>+Dn</code> object signals that the SEAL carries no
+      domain-specific extensions. This ensures that verifiers can
+      always locate the extensions block at a known position in the
+      SEAL structure.
+    </p>
+  </section>
+
+  <section id="dn-vocabulary-definition">
+    <h3>Vocabulary Definition Requirements</h3>
+    <p>
+      A +Dn vocabulary <em class="rfc2119">MUST</em> be defined by a
+      vocabulary specification that includes all of the following
+      elements:
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Element</th><th>Description</th><th>Obligation</th></tr></thead>
+      <tbody>
+        <tr><td>Vocabulary URN</td><td>Globally unique identifier for the vocabulary</td><td class="conf-must">MUST</td></tr>
+        <tr><td>Dimension Key</td><td>The +Dn slot key used in the SEAL</td><td class="conf-must">MUST</td></tr>
+        <tr><td>JSON Schema</td><td>Machine-readable schema defining the vocabulary structure</td><td class="conf-must">MUST</td></tr>
+        <tr><td>Semantic Mapping</td><td>Documentation mapping vocabulary terms to the core five dimensions</td><td class="conf-must">MUST</td></tr>
+        <tr><td>Required Fields</td><td>List of fields that must be populated for vocabulary conformance</td><td class="conf-must">MUST</td></tr>
+        <tr><td>Steward DID</td><td>DID of the organization maintaining the vocabulary</td><td class="conf-must">MUST</td></tr>
+        <tr><td>License</td><td>License under which the vocabulary schema is published</td><td class="conf-must">MUST</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="dn-forward-compat">
+    <h3>Forward Compatibility</h3>
+    <p>
+      Forward compatibility is the essential property that enables
+      VSC to evolve without breaking existing implementations. When a
+      verifier encounters a SEAL containing a +Dn vocabulary it does
+      not recognize, it <em class="rfc2119">MUST</em> apply the
+      following rules:
+    </p>
+    <ol>
+      <li>Process the core five-dimensional event vector without error — the unrecognized extension does not invalidate the core data.</li>
+      <li>Preserve the unknown vocabulary data unchanged in any stored or forwarded copies of the SEAL.</li>
+      <li><em class="rfc2119">MUST NOT</em> reject the SEAL solely due to the presence of unrecognized extensions.</li>
+      <li><em class="rfc2119">MAY</em> signal a warning indicating that the SEAL contains unverified extension data.</li>
+    </ol>
+    <p>
+      These rules ensure that new vocabularies can be deployed
+      incrementally. A pharmaceutical vocabulary can be adopted by
+      pharma supply chain participants without requiring food supply
+      chain participants to upgrade their verifiers. Each domain
+      evolves at its own pace, on its own infrastructure, without
+      creating breaking changes for others.
+    </p>
+  </section>
+
+  <section id="dn-equality">
+    <h3>Vocabulary Equality</h3>
+    <p>
+      All registered +Dn vocabularies have equal standing in the VSC
+      ecosystem. The VSC Community Group <em class="rfc2119">MUST NOT</em>
+      designate any vocabulary as preferred, recommended, mandatory,
+      or privileged. No vocabulary is more "official" than any other.
+      Vocabularies compete on adoption and utility — the vocabularies
+      that provide value to supply chain participants will be widely
+      implemented; those that do not will not. This neutrality is a
+      constitutional principle of VSC governance and is further
+      protected by the forkability provisions in
+      <a href="#governance">Appendix E</a>.
+    </p>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     6. CHAIN OF CUSTODY LINKING
+════════════════════════════════════════════════════════════════ -->
+<section id="chain-of-custody">
+  <h2>Chain of Custody Linking</h2>
+
+  <div>
+<svg viewBox="0 0 800 600" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="seal-shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.10"/>
+    </filter>
+    <filter id="badge-shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.06"/>
+    </filter>
+    <marker id="arrow-chain" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#0f172a"/>
+    </marker>
+    <marker id="arrow-fork" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0,7 2.5,0 5" fill="#d97706"/>
+    </marker>
+    <marker id="arrow-merge" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0,7 2.5,0 5" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrow-correct" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="600" fill="#ffffff"/>
+
+  <!-- ═══════════ TITLE ═══════════ -->
+  <text x="400" y="36" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="800" fill="#0f172a" text-anchor="middle" letter-spacing="1">CHAIN OF CUSTODY — CRYPTOGRAPHIC EVENT LINKING</text>
+  <text x="400" y="56" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#0f172a" text-anchor="middle">Linear · Fork · Merge · Correction — Four topology types covering every supply chain reality</text>
+
+  <!-- ═══════════ 1. LINEAR CHAIN ═══════════ -->
+  <text x="40" y="90" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#0f172a">LINEAR</text>
+
+  <!-- SEAL 1 -->
+  <g filter="url(#seal-shadow)">
+    <rect x="40" y="100" width="130" height="60" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="40" y="100" width="130" height="4" rx="2" fill="#3b82f6"/>
+    <text x="105" y="124" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">SEAL #1</text>
+    <text x="105" y="142" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">sequence: 1</text>
+    <text x="105" y="154" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">parentSeals: []</text>
+  </g>
+
+  <line x1="175" y1="130" x2="205" y2="130" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow-chain)"/>
+
+  <!-- SEAL 2 -->
+  <g filter="url(#seal-shadow)">
+    <rect x="215" y="100" width="130" height="60" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="215" y="100" width="130" height="4" rx="2" fill="#3b82f6"/>
+    <text x="280" y="124" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">SEAL #2</text>
+    <text x="280" y="142" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">sequence: 2</text>
+    <text x="280" y="154" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">parentSeals: [#1]</text>
+  </g>
+
+  <line x1="350" y1="130" x2="380" y2="130" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow-chain)"/>
+
+  <!-- SEAL 3 -->
+  <g filter="url(#seal-shadow)">
+    <rect x="390" y="100" width="130" height="60" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="390" y="100" width="130" height="4" rx="2" fill="#3b82f6"/>
+    <text x="455" y="124" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">SEAL #3</text>
+    <text x="455" y="142" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">sequence: 3</text>
+    <text x="455" y="154" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">parentSeals: [#2]</text>
+  </g>
+
+  <text x="315" y="178" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">topology: linear · chainId shared across all SEALs</text>
+
+  <!-- ═══════════ 2. FORK ═══════════ -->
+  <text x="40" y="220" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#0f172a">FORK</text>
+
+  <!-- Parent SEAL -->
+  <g filter="url(#seal-shadow)">
+    <rect x="40" y="230" width="130" height="55" rx="10" fill="#ffffff" stroke="#d97706" stroke-width="2"/>
+    <rect x="40" y="230" width="130" height="4" rx="2" fill="#d97706"/>
+    <text x="105" y="252" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">PALLET SEAL</text>
+    <text x="105" y="268" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">topology: fork</text>
+    <text x="105" y="280" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">childSeals: [A, B]</text>
+  </g>
+
+  <!-- Fork split lines -->
+  <line x1="175" y1="245" x2="200" y2="230" stroke="#d97706" stroke-width="1.5" marker-end="url(#arrow-fork)"/>
+  <line x1="175" y1="270" x2="200" y2="285" stroke="#d97706" stroke-width="1.5" marker-end="url(#arrow-fork)"/>
+
+  <!-- Child A -->
+  <g filter="url(#seal-shadow)">
+    <rect x="210" y="210" width="120" height="48" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="270" y="232" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" text-anchor="middle">CASE A</text>
+    <text x="270" y="248" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">parentSeals: [Pallet]</text>
+  </g>
+
+  <!-- Child B -->
+  <g filter="url(#seal-shadow)">
+    <rect x="210" y="265" width="120" height="48" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="270" y="287" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" text-anchor="middle">CASE B</text>
+    <text x="270" y="303" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">parentSeals: [Pallet]</text>
+  </g>
+
+  <text x="270" y="332" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Consignment split at distribution centre · Each child links back to fork SEAL</text>
+
+  <!-- ═══════════ 3. MERGE ═══════════ -->
+  <text x="390" y="220" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#0f172a">MERGE</text>
+
+  <!-- Input A -->
+  <g filter="url(#seal-shadow)">
+    <rect x="390" y="230" width="110" height="48" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="445" y="252" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" text-anchor="middle">INPUT X</text>
+    <text x="445" y="268" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Lot #A-001</text>
+  </g>
+
+  <!-- Input B -->
+  <g filter="url(#seal-shadow)">
+    <rect x="390" y="285" width="110" height="48" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="445" y="307" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" text-anchor="middle">INPUT Y</text>
+    <text x="445" y="323" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Lot #B-003</text>
+  </g>
+
+  <!-- Merge lines -->
+  <line x1="505" y1="254" x2="530" y2="275" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrow-merge)"/>
+  <line x1="505" y1="309" x2="530" y2="295" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrow-merge)"/>
+
+  <!-- Output SEAL -->
+  <g filter="url(#seal-shadow)">
+    <rect x="540" y="250" width="130" height="55" rx="10" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/>
+    <rect x="540" y="250" width="130" height="4" rx="2" fill="#7c3aed"/>
+    <text x="605" y="272" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">OUTPUT Z</text>
+    <text x="605" y="288" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">topology: merge</text>
+    <text x="605" y="300" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">parentSeals: [X, Y]</text>
+  </g>
+
+  <text x="545" y="322" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Multiple lots combined · All inputs referenced in parentSeals</text>
+
+  <!-- ═══════════ 4. CORRECTION ═══════════ -->
+  <text x="40" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#0f172a">CORRECTION</text>
+
+  <!-- Original SEAL -->
+  <g filter="url(#seal-shadow)">
+    <rect x="40" y="390" width="150" height="65" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="40" y="390" width="150" height="4" rx="2" fill="#94a3b8"/>
+    <text x="115" y="414" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">ORIGINAL SEAL</text>
+    <text x="115" y="432" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#dc2626" text-anchor="middle">Contains error</text>
+    <text x="115" y="448" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Never modified · Permanently retained</text>
+  </g>
+
+  <line x1="195" y1="422" x2="240" y2="422" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 3" marker-end="url(#arrow-correct)"/>
+
+  <!-- Correction SEAL -->
+  <g filter="url(#seal-shadow)">
+    <rect x="250" y="390" width="160" height="65" rx="10" fill="#ffffff" stroke="#dc2626" stroke-width="2"/>
+    <rect x="250" y="390" width="160" height="4" rx="2" fill="#dc2626"/>
+    <text x="330" y="414" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">CORRECTION SEAL</text>
+    <text x="330" y="432" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="700" fill="#dc2626" text-anchor="middle">correctionOf: [Original]</text>
+    <text x="330" y="448" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">New chainId · topology: correction</text>
+  </g>
+
+  <!-- Verifier rules -->
+  <text x="250" y="478" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a">Verifier rules:</text>
+  <text x="250" y="494" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a">Same issuer or authorized delegate · Both SEALs retained · Downstream uses corrected data · Original flagged as superseded</text>
+
+  <!-- ═══════════ BOTTOM: FIELD STRUCTURE ═══════════ -->
+  <rect x="40" y="510" width="720" height="40" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  
+  <text x="110" y="530" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" text-anchor="middle">chainId [MUST]</text>
+  <text x="245" y="530" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" text-anchor="middle">sequenceNumber [MUST]</text>
+  <text x="390" y="530" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" text-anchor="middle">parentSeals [MUST]</text>
+  <text x="530" y="530" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" text-anchor="middle">childSeals [MAY]</text>
+  <text x="650" y="530" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a" text-anchor="middle">topology [MUST]</text>
+
+  <text x="110" y="546" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">UUID shared by chain</text>
+  <text x="245" y="546" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Monotonically increasing</text>
+  <text x="390" y="546" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">[] for initial · 1 for linear · N for merge</text>
+  <text x="530" y="546" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Populated retroactively · N for fork</text>
+  <text x="650" y="546" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">linear | fork | merge | correction</text>
+
+  <!-- ═══════════ CAPTION ═══════════ -->
+  <text x="400" y="580" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">Figure 4 — Chain of Custody: Linear chains for standard custody. Fork for consignment splits. Merge for lot combinations. Correction for immutable error handling.</text>
+
+</svg>
+
+  </div>
+
+  <section id="chain-concept">
+    <h3>Concept</h3>
+    <p>
+      Chain of custody is the mathematically verifiable sequence of
+      SEALs that tracks a product or consignment through the supply
+      chain. Each SEAL in the chain is cryptographically linked to its
+      predecessors through the <code>parentSeals</code> array,
+      creating a directed acyclic graph that can be traversed forward
+      (from origin to current location) or backward (from any point to
+      origin).
+    </p>
+    <p>
+      Real supply chains are not always linear. Consignments are split
+      at distribution centres — a single pallet becomes multiple cases
+      sent to different destinations. Lots are combined in
+      manufacturing — multiple input ingredients become a single output
+      product. The VSC chain of custody model supports all of these
+      topologies through a multi-parent, multi-child linking structure.
+    </p>
+  </section>
+
+  <section id="chain-structure">
+    <h3>Chain of Custody Structure</h3>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>chainId</code></td><td class="conf-must">MUST</td><td>Globally unique identifier for this custody chain. All SEALs that belong to the same logical chain share this identifier.</td></tr>
+        <tr><td><code>sequenceNumber</code></td><td class="conf-must">MUST</td><td>Monotonically increasing integer. The initial event in a chain has sequence number 1. Each subsequent event increments by 1.</td></tr>
+        <tr><td><code>parentSeals</code></td><td class="conf-must">MUST</td><td>Array of SEAL identifiers. Empty for initial events. Contains one entry for linear chains. Contains multiple entries for merge or transformation events.</td></tr>
+        <tr><td><code>childSeals</code></td><td class="conf-may">MAY</td><td>Array of SEAL identifiers. Often empty at creation time and populated retroactively. Multiple entries indicate a fork event.</td></tr>
+        <tr><td><code>topology</code></td><td class="conf-must">MUST</td><td>One of <code>linear</code>, <code>fork</code>, <code>merge</code>, or <code>transform</code>.</td></tr>
+        <tr><td><code>topologyNote</code></td><td class="conf-should">SHOULD</td><td>Human-readable justification for non-linear topologies.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="chain-linear"><h3>Linear Chains</h3><p>Each SEAL has exactly one parent (or none for the initial event). <code>topology</code> <em class="rfc2119">MUST</em> be <code>"linear"</code>. <code>parentSeals</code> contains at most one entry.</p></section>
+  <section id="chain-fork"><h3>Consignment Fork</h3><p>When a consignment is divided, the split SEAL <em class="rfc2119">MUST</em> set <code>topology: "fork"</code> with all child SEAL identifiers in <code>childSeals</code>. Each child <em class="rfc2119">MUST</em> reference the fork SEAL in <code>parentSeals</code>.</p></section>
+  <section id="chain-merge"><h3>Transformation Merge</h3><p>When lots are combined, the merge SEAL <em class="rfc2119">MUST</em> set <code>topology: "merge"</code> or <code>"transform"</code> with all input SEAL identifiers in <code>parentSeals</code>.</p></section>
+  <section id="chain-multi-chain"><h3>Multiple Concurrent Chains</h3><p>A single consignment <em class="rfc2119">MAY</em> participate in multiple chains simultaneously via distinct <code>chainId</code> values — for example, a logistics chain and a financial chain for the same shipment.</p></section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     7. SECURING MECHANISMS
+════════════════════════════════════════════════════════════════ -->
+<section id="securing-mechanisms">
+  <h2>Securing Mechanisms</h2>
+  <section id="did-identity"><h3>DID-Based Identity</h3><p>All actors <em class="rfc2119">MUST</em> be identified by [[DID-CORE]] Decentralized Identifiers. Implementations <em class="rfc2119">MUST</em> support <code>did:web</code>. Additional DID methods are <em class="rfc2119">OPTIONAL</em>.</p></section>
+  <section id="proof-formats"><h3>Proof Formats</h3><p>VSC <em class="rfc2119">MUST</em> support [[VC-DATA-INTEGRITY]] Linked Data Proofs using <code>Ed25519Signature2020</code>. At least one selective disclosure mechanism <em class="rfc2119">MUST</em> be supported; [[BBS-2023]] is <em class="rfc2119">RECOMMENDED</em>.</p></section>
+  <section id="selective-disclosure"><h3>Selective Disclosure</h3><p>A <dfn>selective disclosure presentation</dfn> <em class="rfc2119">MUST</em> always include all "Always Disclosed" fields. "Selectively Disclosable" fields <em class="rfc2119">MAY</em> be withheld subject to the requester's authorization level. The complete field registry is in <a href="#sd-field-registry">Appendix C</a>.</p></section>
+  <section id="dlt-agnosticism"><h3>DLT Agnosticism</h3><p>VSC <em class="rfc2119">MUST NOT</em> require Distributed Ledger Technology. The <code>did:web</code> method operates on standard DNS/TLS/HTTPS infrastructure.</p></section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     8. CORRECTION PROTOCOL
+════════════════════════════════════════════════════════════════ -->
+<section id="correction-protocol">
+    <div><svg viewBox="0 0 800 620" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="seal-shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.10"/>
+    </filter>
+    <marker id="arrow-correct" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#dc2626"/>
+    </marker>
+    <marker id="arrow-chain" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#0f172a"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="620" fill="#ffffff"/>
+
+  <!-- ═══════════ TITLE ═══════════ -->
+  <text x="400" y="36" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="800" fill="#0f172a" text-anchor="middle" letter-spacing="1">CORRECTION PROTOCOL — IMMUTABLE ERROR HANDLING</text>
+  <text x="400" y="56" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#0f172a" text-anchor="middle">Original SEALs are never modified. Errors are corrected with new SEALs that preserve the full audit trail.</text>
+
+  <!-- ═══════════ SINGLE CORRECTION FLOW ═══════════ -->
+
+  <text x="40" y="90" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#dc2626">SINGLE CORRECTION</text>
+
+  <!-- Original SEAL -->
+  <g filter="url(#seal-shadow)">
+    <rect x="40" y="102" width="200" height="100" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="40" y="102" width="200" height="4" rx="2" fill="#94a3b8"/>
+
+    <rect x="56" y="118" width="56" height="20" rx="6" fill="#fef2f2"/>
+    <text x="84" y="133" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#dc2626" text-anchor="middle">ERROR</text>
+
+    <text x="56" y="152" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#0f172a">ORIGINAL SEAL</text>
+    <text x="56" y="170" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="600" fill="#0f172a">id: urn:uuid:abc-123</text>
+    <text x="56" y="186" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="600" fill="#0f172a">correctionOf: null</text>
+    <text x="56" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a">Permanently retained — never deleted</text>
+  </g>
+
+  <!-- Arrow -->
+  <line x1="245" y1="152" x2="290" y2="152" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrow-correct)"/>
+  <text x="267" y="142" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#dc2626" text-anchor="middle">CORRECTS</text>
+
+  <!-- Correction SEAL -->
+  <g filter="url(#seal-shadow)">
+    <rect x="300" y="102" width="200" height="100" rx="12" fill="#ffffff" stroke="#dc2626" stroke-width="2.5"/>
+    <rect x="300" y="102" width="200" height="4" rx="2" fill="#dc2626"/>
+
+    <rect x="316" y="118" width="68" height="20" rx="6" fill="#dc2626"/>
+    <text x="350" y="133" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#ffffff" text-anchor="middle">CORRECTION</text>
+
+    <text x="316" y="152" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#0f172a">CORRECTION SEAL</text>
+    <text x="316" y="170" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="700" fill="#dc2626">correctionOf: urn:uuid:abc-123</text>
+    <text x="316" y="186" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="600" fill="#0f172a">topology: correction</text>
+    <text x="316" y="200" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="600" fill="#0f172a">+Dn: correctionReason [MUST]</text>
+  </g>
+
+  <!-- Downstream arrow -->
+  <line x1="505" y1="152" x2="540" y2="152" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow-chain)"/>
+  <text x="522" y="142" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="700" fill="#0f172a" text-anchor="middle">DOWNSTREAM</text>
+
+  <!-- Verifier -->
+  <g filter="url(#seal-shadow)">
+    <rect x="550" y="115" width="210" height="74" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="655" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">VERIFIER</text>
+    <text x="655" y="158" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">✓ Uses correction SEAL data</text>
+    <text x="655" y="174" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">✓ Original flagged as superseded</text>
+  </g>
+
+  <!-- ═══════════ CHAINED CORRECTION ═══════════ -->
+
+  <text x="40" y="250" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#dc2626">CHAINED CORRECTIONS</text>
+
+  <text x="40" y="275" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">Multiple corrections MAY be chained. Verifiers MUST follow the chain to its terminus and use the most recent correction SEAL as the source of truth.</text>
+
+  <!-- Chained flow -->
+  <g filter="url(#seal-shadow)">
+    <rect x="40" y="290" width="140" height="52" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="110" y="312" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">ORIGINAL</text>
+    <text x="110" y="330" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">correctionOf: null</text>
+  </g>
+
+  <line x1="185" y1="316" x2="215" y2="316" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrow-correct)"/>
+
+  <g filter="url(#seal-shadow)">
+    <rect x="225" y="290" width="140" height="52" rx="10" fill="#ffffff" stroke="#dc2626" stroke-width="1.5"/>
+    <text x="295" y="312" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">CORRECTION v1</text>
+    <text x="295" y="330" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#dc2626" text-anchor="middle">correctionOf: Original</text>
+  </g>
+
+  <line x1="370" y1="316" x2="400" y2="316" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrow-correct)"/>
+
+  <g filter="url(#seal-shadow)">
+    <rect x="410" y="290" width="140" height="52" rx="10" fill="#ffffff" stroke="#dc2626" stroke-width="1.5"/>
+    <text x="480" y="312" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a" text-anchor="middle">CORRECTION v2</text>
+    <text x="480" y="330" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="700" fill="#0f172a" text-anchor="middle">correctionOf: v1</text>
+  </g>
+
+  <line x1="555" y1="316" x2="585" y2="316" stroke="#0f172a" stroke-width="1.5" marker-end="url(#arrow-chain)"/>
+
+  <text x="620" y="321" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" fill="#0f172a">V2 is the source of truth</text>
+
+  <!-- ═══════════ MULTI-PARTY CORRECTION ═══════════ -->
+
+  <text x="40" y="390" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#dc2626">MULTI-PARTY CORRECTION</text>
+
+  <!-- Scenario 1: Delegated -->
+  <g filter="url(#seal-shadow)">
+    <rect x="40" y="410" width="350" height="70" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+
+    <rect x="56" y="422" width="90" height="20" rx="6" fill="#f0fdf4"/>
+    <text x="101" y="437" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#16a34a" text-anchor="middle">DELEGATED</text>
+
+    <text x="56" y="456" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a">Actor B has documented authority</text>
+    <text x="56" y="472" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">Actor B MAY issue correction SEAL for Actor A's original</text>
+  </g>
+
+  <!-- Scenario 2: No delegation -->
+  <g filter="url(#seal-shadow)">
+    <rect x="410" y="410" width="350" height="70" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+
+    <rect x="426" y="422" width="102" height="20" rx="6" fill="#fef2f2"/>
+    <text x="477" y="437" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#dc2626" text-anchor="middle">NO DELEGATION</text>
+
+    <text x="426" y="456" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a">Actor B lacks authority to correct</text>
+    <text x="426" y="472" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">Issue new SEAL with discrepancy in +Dn · Notify issuer A</text>
+  </g>
+
+  <!-- ═══════════ VERIFIER RULES ═══════════ -->
+  <rect x="40" y="505" width="720" height="58" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <text x="60" y="524" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#0f172a">VERIFIER BEHAVIOR WHEN correctionOf IS NOT NULL</text>
+
+  <text x="60" y="544" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">① Verify proof of correction SEAL</text>
+  <text x="280" y="544" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">② Verify issuer is same or authorized delegate</text>
+  <text x="540" y="544" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">③ Verify parentSeals includes erroneous SEAL id</text>
+
+  <text x="60" y="558" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">④ Retain both SEALs — original never discarded</text>
+  <text x="340" y="558" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">⑤ Use corrected data downstream</text>
+  <text x="565" y="558" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">⑥ Flag original as superseded in audit reports</text>
+
+  <!-- ═══════════ CAPTION ═══════════ -->
+  <text x="400" y="595" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">Figure 5 — Correction Protocol: Immutable error handling with cryptographically linked correction SEALs. Original SEALs are never modified — errors are corrected with new attestations that preserve the complete audit trail.</text>
+
+</svg></div>
+  <h2>Correction Protocol</h2>
+  <section id="correction-concept"><h3>Concept</h3><p>Once created, a SEAL <em class="rfc2119">MUST NOT</em> be modified. When an error is discovered, a <dfn>correction SEAL</dfn> is issued with <code>correctionOf</code> set to the erroneous SEAL's <code>id</code>. The erroneous SEAL remains permanently in the chain; the correction SEAL adds a new, corrected attestation that supersedes it.</p></section>
+
+  <section id="correction-structure">
+    <h3>Correction SEAL Structure</h3>
+    <p>
+      A correction SEAL has the same structure as an original SEAL with
+      the following distinguishing characteristics:
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Value in Correction SEAL</th></tr></thead>
+      <tbody>
+        <tr><td><code>correctionOf</code></td><td>The <code>id</code> of the erroneous SEAL being corrected</td></tr>
+        <tr><td><code>eventVector</code></td><td>The corrected event data</td></tr>
+        <tr><td><code>chainOfCustody.parentSeals</code></td><td>The erroneous SEAL's <code>id</code> — the correction SEAL links to the erroneous SEAL as its parent in the correction chain</td></tr>
+        <tr><td><code>chainOfCustody.chainId</code></td><td>A new chain identifier — correction chains are distinct from custody chains</td></tr>
+        <tr><td><code>chainOfCustody.topology</code></td><td><code>"correction"</code></td></tr>
+        <tr><td><code>+Dn</code> extension</td><td><em class="rfc2119">MUST</em> include a <code>correctionReason</code> field explaining what was corrected and why</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="correction-verifier-rules">
+    <h3>Verifier Behavior for Correction Chains</h3>
+    <p>When a verifier encounters a SEAL where <code>correctionOf</code> is not null:</p>
+    <ol>
+      <li>The verifier <em class="rfc2119">MUST</em> verify the cryptographic proof of the correction SEAL.</li>
+      <li>The verifier <em class="rfc2119">MUST</em> verify that the issuer of the correction SEAL is the same as the issuer of the erroneous SEAL, or is an authorized delegate with documented authority to correct on the original issuer's behalf.</li>
+      <li>The verifier <em class="rfc2119">MUST</em> verify that the correction SEAL's <code>chainOfCustody.parentSeals</code> includes the erroneous SEAL's <code>id</code>.</li>
+      <li>The verifier <em class="rfc2119">MUST</em> retain both the erroneous SEAL and the correction SEAL in its records — the original is not discarded.</li>
+      <li>For downstream processing, the verifier <em class="rfc2119">MUST</em> use the corrected event data from the correction SEAL, not the data from the erroneous SEAL.</li>
+      <li>The verifier <em class="rfc2119">MUST</em> flag the original SEAL as superseded in any audit reports, with a reference to the correction SEAL.</li>
+    </ol>
+    <p>
+      Multiple corrections <em class="rfc2119">MAY</em> be chained. If
+      a correction SEAL itself contains an error, a new correction SEAL
+      may be issued with <code>correctionOf</code> pointing to the
+      previous correction SEAL. Verifiers <em class="rfc2119">MUST</em>
+      follow the chain of corrections to its terminus and use the most
+      recent correction SEAL as the source of truth.
+    </p>
+  </section>
+
+  <section id="correction-multi-party">
+    <h3>Multi-Party Correction</h3>
+    <p>
+      In some scenarios, a SEAL issued by one actor may need to be
+      corrected by a different actor. For example, a logistics provider
+      may discover that a manufacturer's shipment SEAL contains an
+      incorrect quantity. In such cases:
+    </p>
+    <ul>
+      <li>The discovering actor <em class="rfc2119">MAY</em> issue a correction SEAL if they have documented delegated authority.</li>
+      <li>If no delegation exists, the discovering actor <em class="rfc2119">SHOULD</em> issue a new SEAL (not a correction) that documents the discrepancy, with the correct data in its own <code>eventVector</code> and a reference to the erroneous SEAL in a <code>+Dn</code> extension field.</li>
+      <li>The erroneous SEAL's issuer <em class="rfc2119">SHOULD</em> be notified and <em class="rfc2119">MAY</em> issue their own correction SEAL.</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     9. CREDENTIAL PRESENTATION PROTOCOL
+════════════════════════════════════════════════════════════════ -->
+<section id="credential-presentation">
+  <h2>Credential Presentation Protocol</h2>
+
+  <div>
+    <svg viewBox="0 0 800 620" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="card-shadow">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.06"/>
+    </filter>
+    <filter id="msg-shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+    <marker id="arrow-req" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-res" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="620" fill="#ffffff"/>
+
+  <!-- ═══════════ TITLE ═══════════ -->
+  <text x="400" y="36" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="800" fill="#0f172a" text-anchor="middle" letter-spacing="1">CREDENTIAL PRESENTATION PROTOCOL</text>
+  <text x="400" y="56" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#0f172a" text-anchor="middle">Transport-Agnostic · Request-Response · Authorization-Gated Selective Disclosure</text>
+
+  <!-- ═══════════ REQUEST-RESPONSE FLOW ═══════════ -->
+
+  <!-- Verifier -->
+  <g filter="url(#card-shadow)">
+    <rect x="30" y="80" width="180" height="70" rx="14" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+    <rect x="30" y="80" width="180" height="4" rx="2" fill="#2563eb"/>
+    <text x="120" y="108" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="800" fill="#2563eb" text-anchor="middle">VERIFIER</text>
+    <text x="120" y="128" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">did:web:regulator.example</text>
+    <text x="120" y="142" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Requests SEALs · Validates proofs</text>
+  </g>
+
+  <!-- REQUEST Arrow -->
+  <line x1="215" y1="105" x2="280" y2="105" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+
+  <!-- Request Message -->
+  <g filter="url(#msg-shadow)">
+    <rect x="280" y="80" width="240" height="70" rx="10" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+    <text x="400" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#2563eb" text-anchor="middle">PRESENTATION REQUEST</text>
+    <text x="400" y="116" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">requestId [MUST] · verifierDid [MUST]</text>
+    <text x="400" y="130" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">holderDid [MUST] · requestedSeals [MUST]</text>
+    <text x="400" y="144" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="700" fill="#2563eb" text-anchor="middle">authorizationLevel [MUST]</text>
+  </g>
+
+  <!-- REQUEST Arrow to Holder -->
+  <line x1="525" y1="105" x2="590" y2="105" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-req)"/>
+
+  <!-- Holder -->
+  <g filter="url(#card-shadow)">
+    <rect x="590" y="80" width="180" height="70" rx="14" fill="#ffffff" stroke="#16a34a" stroke-width="2.5"/>
+    <rect x="590" y="80" width="180" height="4" rx="2" fill="#16a34a"/>
+    <text x="680" y="108" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="800" fill="#16a34a" text-anchor="middle">HOLDER</text>
+    <text x="680" y="128" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">did:web:manufacturer.example</text>
+    <text x="680" y="142" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Holds SEALs · Applies disclosure</text>
+  </g>
+
+  <!-- RESPONSE Arrow -->
+  <line x1="680" y1="155" x2="680" y2="195" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrow-res)"/>
+
+  <!-- Response Message -->
+  <g filter="url(#msg-shadow)">
+    <rect x="470" y="195" width="260" height="70" rx="10" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+    <text x="600" y="215" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#16a34a" text-anchor="middle">PRESENTATION RESPONSE</text>
+    <text x="600" y="231" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">responseId [MUST] · requestId [MUST]</text>
+    <text x="600" y="245" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">presentations [MUST] · Verifiable Presentations</text>
+    <text x="600" y="259" font-family="SF Mono, Menlo, monospace" font-size="7" font-weight="700" fill="#16a34a" text-anchor="middle">status: complete | partial | denied [MUST]</text>
+  </g>
+
+  <!-- RESPONSE Arrow back to Verifier -->
+  <line x1="470" y1="230" x2="215" y2="140" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrow-res)"/>
+
+  <!-- ═══════════ AUTHORIZATION LEVELS ═══════════ -->
+  <text x="400" y="305" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">AUTHORIZATION LEVELS</text>
+
+  <!-- Level 1: Public -->
+  <g filter="url(#card-shadow)">
+    <rect x="30" y="320" width="170" height="72" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="30" y="320" width="170" height="4" rx="2" fill="#94a3b8"/>
+    <text x="115" y="346" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">PUBLIC</text>
+    <text x="115" y="364" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">Always Disclosed fields only</text>
+    <text x="115" y="382" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Consumer scanning</text>
+  </g>
+
+  <!-- Level 2: Partner -->
+  <g filter="url(#card-shadow)">
+    <rect x="215" y="320" width="170" height="72" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="215" y="320" width="170" height="4" rx="2" fill="#d97706"/>
+    <text x="300" y="346" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">PARTNER</text>
+    <text x="300" y="364" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">+ Partner-classified fields</text>
+    <text x="300" y="382" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Supply chain partners</text>
+  </g>
+
+  <!-- Level 3: Regulatory -->
+  <g filter="url(#card-shadow)">
+    <rect x="400" y="320" width="170" height="72" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="400" y="320" width="170" height="4" rx="2" fill="#16a34a"/>
+    <text x="485" y="346" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">REGULATORY</text>
+    <text x="485" y="364" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">+ All except Sensitive-Commercial</text>
+    <text x="485" y="382" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">FDA · Customs · Inspectors</text>
+  </g>
+
+  <!-- Level 4: Full -->
+  <g filter="url(#card-shadow)">
+    <rect x="585" y="320" width="185" height="72" rx="12" fill="#ffffff" stroke="#dc2626" stroke-width="2"/>
+    <rect x="585" y="320" width="185" height="4" rx="2" fill="#dc2626"/>
+    <text x="677" y="346" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">FULL</text>
+    <text x="677" y="364" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">All fields disclosed</text>
+    <text x="677" y="382" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">Court orders · Legal mandate</text>
+  </g>
+
+  <!-- ═══════════ TRANSPORT BINDINGS ═══════════ -->
+  <text x="400" y="430" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">TRANSPORT BINDINGS</text>
+
+  <rect x="30" y="445" width="170" height="52" rx="10" fill="#f8fafc" stroke="#2563eb" stroke-width="2"/>
+  <text x="115" y="470" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#2563eb" text-anchor="middle">HTTPS</text>
+  <text x="115" y="488" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="700" fill="#0f172a" text-anchor="middle">MUST support</text>
+
+  <rect x="215" y="445" width="170" height="52" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="300" y="470" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#0f172a" text-anchor="middle">DIDComm v2</text>
+  <text x="300" y="488" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">OPTIONAL · Async messaging</text>
+
+  <rect x="400" y="445" width="170" height="52" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="485" y="470" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#0f172a" text-anchor="middle">WebSocket</text>
+  <text x="485" y="488" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">OPTIONAL · Real-time</text>
+
+  <rect x="585" y="445" width="185" height="52" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="677" y="470" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" fill="#0f172a" text-anchor="middle">QR Code / Offline</text>
+  <text x="677" y="488" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">OPTIONAL · Physical-to-digital</text>
+
+  <!-- ═══════════ CAPTION ═══════════ -->
+  <text x="400" y="538" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a" text-anchor="middle">Figure 6 — Credential Presentation Protocol: Verifier sends Presentation Request with authorization level. Holder responds with selectively disclosed Verifiable Presentations.</text>
+  <text x="400" y="558" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">Authorization levels gate field visibility: Public → Partner → Regulatory → Full. Transport-agnostic design supports HTTPS, DIDComm, WebSocket, and offline QR.</text>
+  <text x="400" y="576" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">Request: requestId · verifierDid · holderDid · requestedSeals · authorizationLevel. Response: responseId · requestId · presentations · status.</text>
+
+</svg>
+  </div>
+
+  <section id="cpp-concept">
+    <h3>Concept</h3>
+    <p>
+      The Credential Presentation Protocol (CPP) defines how verifiers
+      request SEALs from holders and how holders respond with
+      presentations. The protocol is transport-agnostic — it can be
+      carried over HTTPS, DIDComm, or any other secure messaging
+      channel — and defines the message formats, authorization levels,
+      and processing rules that ensure consistent behavior across all
+      VSC implementations.
+    </p>
+  </section>
+
+  <section id="cpp-request">
+    <h3>Presentation Request</h3>
+    <p>
+      A <dfn>presentation request</dfn> is a message sent by a verifier
+      to a holder requesting one or more SEALs or SEAL presentations.
+      The request <em class="rfc2119">MUST</em> include:
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>requestId</code></td><td class="conf-must">MUST</td><td>Unique identifier for this request, enabling correlation of response to request.</td></tr>
+        <tr><td><code>verifierDid</code></td><td class="conf-must">MUST</td><td>The DID of the requesting verifier.</td></tr>
+        <tr><td><code>holderDid</code></td><td class="conf-must">MUST</td><td>The DID of the holder from whom SEALs are requested.</td></tr>
+        <tr><td><code>requestedSeals</code></td><td class="conf-must">MUST</td><td>Array of criteria identifying which SEALs are requested. Criteria may include chain identifiers, time ranges, product identifiers, or event types.</td></tr>
+        <tr><td><code>authorizationLevel</code></td><td class="conf-must">MUST</td><td>One of <code>public</code>, <code>partner</code>, <code>regulatory</code>, or <code>full</code>. Determines which selectively disclosable fields may be included.</td></tr>
+        <tr><td><code>purposeOfUse</code></td><td class="conf-should">SHOULD</td><td>Human-readable statement of why the SEALs are being requested.</td></tr>
+        <tr><td><code>legalBasis</code></td><td class="conf-should">SHOULD</td><td>Legal or regulatory basis for the request (e.g., "DSCSA §582", "FSMA 204", "Customs Inspection").</td></tr>
+        <tr><td><code>responseDeadline</code></td><td class="conf-may">MAY</td><td>ISO 8601 timestamp by which a response is requested.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="cpp-response">
+    <h3>Presentation Response</h3>
+    <p>
+      A <dfn>presentation response</dfn> is a message sent by a holder
+      to a verifier in response to a presentation request. The response
+      <em class="rfc2119">MUST</em> include:
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>responseId</code></td><td class="conf-must">MUST</td><td>Unique identifier for this response.</td></tr>
+        <tr><td><code>requestId</code></td><td class="conf-must">MUST</td><td>The <code>requestId</code> from the presentation request being responded to.</td></tr>
+        <tr><td><code>presentations</code></td><td class="conf-must">MUST</td><td>Array of SEAL presentations. Each presentation is a Verifiable Presentation [[VC-DATA-MODEL]] containing one or more SEALs, with selective disclosure applied according to the request's <code>authorizationLevel</code>.</td></tr>
+        <tr><td><code>status</code></td><td class="conf-must">MUST</td><td>One of <code>complete</code>, <code>partial</code>, or <code>denied</code>.</td></tr>
+        <tr><td><code>statusReason</code></td><td class="conf-should">SHOULD</td><td>Human-readable explanation when <code>status</code> is <code>partial</code> or <code>denied</code>.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="cpp-authorization">
+    <h3>Authorization Levels</h3>
+    <p>
+      The authorization level in a presentation request determines which
+      fields from the selective disclosure registry (<a href="#sd-field-registry">Appendix C</a>) the holder may include in the
+      presented SEALs. The four levels are:
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Level</th><th>Description</th><th>Typical Use</th></tr></thead>
+      <tbody>
+        <tr><td><code>public</code></td><td>Only "Always Disclosed" fields are included. No selectively disclosable fields are revealed.</td><td>Public product verification, consumer scanning</td></tr>
+        <tr><td><code>partner</code></td><td>Selectively disclosable fields classified as "Partner" in the registry are included. Commercial and operational data is visible.</td><td>Supply chain partners, logistics providers</td></tr>
+        <tr><td><code>regulatory</code></td><td>All fields except those classified as "Sensitive-Commercial" are included. Full regulatory data is visible.</td><td>FDA inspectors, customs authorities</td></tr>
+        <tr><td><code>full</code></td><td>All fields are included. Holder <em class="rfc2119">SHOULD</em> verify the legal right of the requester before responding at this level.</td><td>Auditors with legal mandate, court orders</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="cpp-transport">
+    <h3>Transport Bindings</h3>
+    <p>
+      The Credential Presentation Protocol is transport-agnostic.
+      Implementations <em class="rfc2119">MUST</em> support HTTPS as
+      a transport binding. The following additional transport bindings
+      are <em class="rfc2119">OPTIONAL</em>:
+    </p>
+    <ul>
+      <li><strong>DIDComm v2</strong> — for asynchronous, DID-authenticated messaging</li>
+      <li><strong>WebSocket</strong> — for real-time verification scenarios</li>
+      <li><strong>QR Code / Offline</strong> — for physical-to-digital verification (e.g., scanning a product code at a retail point)</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     10. PROFILE: PHARMACEUTICAL FINISHED GOODS
+════════════════════════════════════════════════════════════════ -->
+<section id="profile-pharma">
+  <h2>Profile: Pharmaceutical Finished Goods</h2>
+  <div><svg viewBox="0 0 800 620" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="card-elevated">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.06"/>
+    </filter>
+    <filter id="badge-glow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="620" fill="#ffffff"/>
+
+  <!-- ═══════════ TITLE ═══════════ -->
+  <text x="400" y="36" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="800" fill="#0f172a" text-anchor="middle" letter-spacing="1">PROFILE: PHARMACEUTICAL FINISHED GOODS</text>
+  <text x="400" y="56" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#0f172a" text-anchor="middle">DSCSA · FMD · +D1 Vocabulary Binding · Adds constraints to VSC Core — does not modify it</text>
+
+  <!-- ═══════════ REGULATORY BADGES ═══════════ -->
+  <rect x="220" y="72" width="110" height="24" rx="8" fill="#eff6ff"/>
+  <text x="275" y="89" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#2563eb" text-anchor="middle">DSCSA</text>
+
+  <rect x="345" y="72" width="110" height="24" rx="8" fill="#fef2f2"/>
+  <text x="400" y="89" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#dc2626" text-anchor="middle">FMD</text>
+
+  <rect x="470" y="72" width="110" height="24" rx="8" fill="#f0fdf4"/>
+  <text x="525" y="89" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#16a34a" text-anchor="middle">GMP</text>
+
+  <!-- ═══════════ +D1 VOCABULARY CARD ═══════════ -->
+  <g filter="url(#card-elevated)">
+    <rect x="30" y="110" width="420" height="260" rx="14" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+    <rect x="30" y="110" width="420" height="42" rx="14" fill="#2563eb"/>
+    <rect x="30" y="138" width="420" height="14" fill="#2563eb"/>
+    <text x="240" y="138" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle">+D1 PHARMA VOCABULARY</text>
+
+    <!-- Row 1 -->
+    <rect x="50" y="166" width="180" height="28" rx="6" fill="#eff6ff"/>
+    <text x="140" y="185" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">productNDC [MUST]</text>
+    <text x="240" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">U.S. National Drug Code</text>
+
+    <!-- Row 2 -->
+    <rect x="50" y="202" width="180" height="28" rx="6" fill="#eff6ff"/>
+    <text x="140" y="221" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">productMAH [MUST]</text>
+    <text x="240" y="221" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">Marketing Authorization Holder</text>
+
+    <!-- Row 3 -->
+    <rect x="50" y="238" width="180" height="28" rx="6" fill="#eff6ff"/>
+    <text x="140" y="257" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">manufacturingSite [MUST]</text>
+    <text x="240" y="257" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">GMP certificate reference</text>
+
+    <!-- Row 4 -->
+    <rect x="50" y="274" width="180" height="28" rx="6" fill="#eff6ff"/>
+    <text x="140" y="293" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">serializationFormat [MUST]</text>
+    <text x="240" y="293" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">GS1_Datamatrix | GS1_128 | custom</text>
+
+    <!-- Row 5 -->
+    <rect x="50" y="310" width="180" height="28" rx="6" fill="#eff6ff"/>
+    <text x="140" y="329" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">transactionStatement [MUST]</text>
+    <text x="240" y="329" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">TI · TH · TS for DSCSA</text>
+
+    <!-- Row 6 -->
+    <rect x="50" y="342" width="180" height="20" rx="5" fill="#f8fafc"/>
+    <text x="140" y="356" font-family="SF Mono, Menlo, monospace" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">temperatureRange [SHOULD]</text>
+  </g>
+
+  <!-- ═══════════ MANDATORY CORE FIELDS CARD ═══════════ -->
+  <g filter="url(#card-elevated)">
+    <rect x="470" y="110" width="300" height="140" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+    <rect x="470" y="110" width="300" height="4" rx="2" fill="#0f172a"/>
+
+    <text x="620" y="138" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">MANDATORY CORE FIELDS</text>
+    <text x="620" y="156" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">In addition to all core MUST fields</text>
+
+    <line x1="490" y1="166" x2="750" y2="166" stroke="#f1f5f9" stroke-width="1"/>
+
+    <circle cx="500" cy="184" r="3" fill="#2563eb"/>
+    <text x="512" y="188" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#0f172a">what.productIdentifiers</text>
+    <text x="620" y="188" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">GTIN + SGTIN serial</text>
+
+    <circle cx="500" cy="204" r="3" fill="#2563eb"/>
+    <text x="512" y="208" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#0f172a">what.batchOrLot</text>
+
+    <circle cx="500" cy="224" r="3" fill="#2563eb"/>
+    <text x="512" y="228" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#0f172a">what.expiryDate</text>
+
+    <circle cx="500" cy="244" r="3" fill="#2563eb"/>
+    <text x="512" y="248" font-family="SF Mono, Menlo, monospace" font-size="9" font-weight="700" fill="#0f172a">who.actorLicense</text>
+  </g>
+
+  <!-- ═══════════ VERIFICATION RULES CARD ═══════════ -->
+  <g filter="url(#card-elevated)">
+    <rect x="470" y="265" width="300" height="105" rx="14" fill="#ffffff" stroke="#dc2626" stroke-width="2"/>
+    <rect x="470" y="265" width="300" height="4" rx="2" fill="#dc2626"/>
+
+    <text x="620" y="292" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#dc2626" text-anchor="middle">PHARMA VERIFICATION RULES</text>
+    <text x="620" y="308" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#0f172a" text-anchor="middle">In addition to all core verifications</text>
+
+    <line x1="490" y1="316" x2="750" y2="316" stroke="#f1f5f9" stroke-width="1"/>
+
+    <text x="490" y="334" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">① Valid GTIN + serial number present</text>
+    <text x="490" y="350" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">② Batch/lot matches product master data</text>
+    <text x="490" y="366" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a">③ Expiry not passed (unless Q4 termination)</text>
+  </g>
+
+  <!-- ═══════════ COMPLIANCE FLOW ═══════════ -->
+  <rect x="30" y="395" width="740" height="50" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+
+  <rect x="50" y="407" width="100" height="26" rx="8" fill="#eff6ff"/>
+  <text x="100" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#2563eb" text-anchor="middle">SGTIN Scan</text>
+
+  <text x="170" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#cbd5e1">→</text>
+
+  <rect x="190" y="407" width="100" height="26" rx="8" fill="#fefce8"/>
+  <text x="240" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#d97706" text-anchor="middle">License Check</text>
+
+  <text x="310" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#cbd5e1">→</text>
+
+  <rect x="330" y="407" width="120" height="26" rx="8" fill="#f0fdf4"/>
+  <text x="390" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#16a34a" text-anchor="middle">TI/TH/TS Validate</text>
+
+  <text x="470" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#cbd5e1">→</text>
+
+  <rect x="490" y="407" width="110" height="26" rx="8" fill="#fef2f2"/>
+  <text x="545" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#dc2626" text-anchor="middle">Quarantine Check</text>
+
+  <text x="620" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#cbd5e1">→</text>
+
+  <rect x="640" y="407" width="110" height="26" rx="8" fill="#0f172a"/>
+  <text x="695" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="800" fill="#ffffff" text-anchor="middle">✓ DISPENSE</text>
+
+  <!-- ═══════════ CAPTION ═══════════ -->
+  <text x="400" y="480" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#0f172a" text-anchor="middle">Figure 7 — Pharmaceutical Finished Goods Profile: Constrains VSC Core for DSCSA and FMD compliance.</text>
+  <text x="400" y="498" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">+D1 vocabulary adds NDC, MAH, GMP site, serialization format, and transaction statements. Core fields extended: SGTIN, batchOrLot, expiryDate, actorLicense.</text>
+  <text x="400" y="514" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#0f172a" text-anchor="middle">Verification pipeline: SGTIN → License validity → Transaction statement → Quarantine status → Dispense authorization.</text>
+
+</svg></div>
+
+  <section id="pharma-scope">
+    <h3>Scope</h3>
+    <p>
+      This profile constrains the VSC Core Specification for
+      pharmaceutical finished goods supply chains. It is designed to
+      satisfy the traceability requirements of the U.S. Drug Supply
+      Chain Security Act [[DSCSA]] and the EU Falsified Medicines
+      Directive [[FMD]], while remaining compatible with other
+      pharmaceutical regulatory frameworks.
+    </p>
+    <p>
+      This profile does not modify the core VSC architecture. All
+      requirements in this section are <em>additional constraints</em>
+      on the core specification, not replacements. Implementations
+      claiming conformance to this profile <em class="rfc2119">MUST</em>
+      also satisfy all core conformance requirements.
+    </p>
+  </section>
+
+  <section id="pharma-vocabulary">
+    <h3>Pharma Vocabulary Binding</h3>
+    <p>
+      Pharmaceutical implementations <em class="rfc2119">MUST</em>
+      include the <code>+D1</code> vocabulary in the
+      <code>extensions</code> block. The <code>+D1</code> slot is
+      reserved for pharmaceutical-specific data.
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>+D1.productNDC</code></td><td class="conf-must">MUST</td><td>U.S. National Drug Code (NDC) for products in U.S. distribution</td></tr>
+        <tr><td><code>+D1.productMAH</code></td><td class="conf-must">MUST</td><td>Marketing Authorization Holder identifier (EMA or national competent authority)</td></tr>
+        <tr><td><code>+D1.manufacturingSite</code></td><td class="conf-must">MUST</td><td>GMP certificate reference for the manufacturing site</td></tr>
+        <tr><td><code>+D1.serializationFormat</code></td><td class="conf-must">MUST</td><td>One of <code>GS1_Datamatrix</code>, <code>GS1_128</code>, or <code>custom</code></td></tr>
+        <tr><td><code>+D1.transactionStatement</code></td><td class="conf-must">MUST</td><td>DSCSA transaction statement data (TI, TH, TS)</td></tr>
+        <tr><td><code>+D1.temperatureRange</code></td><td class="conf-should">SHOULD</td><td>Object with <code>minCelsius</code> and <code>maxCelsius</code> for cold chain products</td></tr>
+        <tr><td><code>+D1.excursionDetected</code></td><td class="conf-may">MAY</td><td>Boolean indicating whether a temperature excursion was detected</td></tr>
+        <tr><td><code>+D1.quarantineStatus</code></td><td class="conf-may">MAY</td><td>One of <code>none</code>, <code>quarantined</code>, <code>released</code>, <code>rejected</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="pharma-mandatory-fields">
+    <h3>Mandatory Core Fields</h3>
+    <p>
+      In addition to all core mandatory fields, pharmaceutical SEALs
+      <em class="rfc2119">MUST</em> populate the following core fields:
+    </p>
+    <ul>
+      <li><code>eventVector.what.productIdentifiers</code> — at minimum, GTIN with serial number (SGTIN)</li>
+      <li><code>eventVector.what.batchOrLot</code></li>
+      <li><code>eventVector.what.expiryDate</code></li>
+      <li><code>eventVector.who.actorLicense</code></li>
+    </ul>
+  </section>
+
+  <section id="pharma-verification">
+    <h3>Verification Rules</h3>
+    <p>
+      Pharma profile verifiers <em class="rfc2119">MUST</em> perform all
+      core verifications plus the following pharma-specific checks:
+    </p>
+    <ol>
+      <li>Verify that the product identifier includes a valid GTIN and serial number.</li>
+      <li>Verify that the batch/lot number is present and matches the product master data.</li>
+      <li>Verify that the expiry date has not passed (unless the event is a Q4 termination event acknowledging expiry).</li>
+      <li>Verify that the actor's license is valid at the time of the event (check <code>validFrom</code> and <code>validUntil</code> against <code>eventTime</code>).</li>
+      <li>Verify that the transaction statement (TI/TH/TS) is present and correctly structured for DSCSA compliance.</li>
+      <li>If <code>+D1.quarantineStatus</code> is <code>quarantined</code>, flag the product as not eligible for dispensing.</li>
+    </ol>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     11. PROFILE: FOOD SAFETY
+════════════════════════════════════════════════════════════════ -->
+<section id="profile-food">
+  <h2>Profile: Food Safety</h2>
+
+  <section id="food-scope">
+    <h3>Scope</h3>
+    <p>
+      This profile constrains the VSC Core Specification for food
+      supply chains. It is designed to satisfy the traceability
+      requirements of the FDA Food Safety Modernization Act Section 204
+      [[FSMA-204]] and the Codex Alimentarius principles for food
+      traceability, while remaining compatible with other food safety
+      regulatory frameworks including EU Regulation 178/2002.
+    </p>
+  </section>
+
+  <section id="food-vocabulary">
+    <h3>Food Safety Vocabulary Binding</h3>
+    <p>
+      Food safety implementations <em class="rfc2119">MUST</em> include
+      the <code>+D2</code> vocabulary in the <code>extensions</code>
+      block. The <code>+D2</code> slot is reserved for food-specific data.
+    </p>
+    <table class="req-table">
+      <thead><tr><th>Field</th><th>Obligation</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>+D2.cteList</code></td><td class="conf-must">MUST</td><td>Array of Critical Tracking Events for this product category</td></tr>
+        <tr><td><code>+D2.kdeList</code></td><td class="conf-must">MUST</td><td>Array of Key Data Elements associated with each CTE</td></tr>
+        <tr><td><code>+D2.foodCategory</code></td><td class="conf-must">MUST</td><td>Codex Alimentarius food category code</td></tr>
+        <tr><td><code>+D2.harvestDate</code></td><td class="conf-should">SHOULD</td><td>ISO 8601 date of harvest (for produce, seafood, etc.)</td></tr>
+        <tr><td><code>+D2.productionDate</code></td><td class="conf-should">SHOULD</td><td>ISO 8601 date of production or processing</td></tr>
+        <tr><td><code>+D2.useByDate</code></td><td class="conf-must">MUST</td><td>ISO 8601 date for use-by or best-before</td></tr>
+        <tr><td><code>+D2.temperatureHistory</code></td><td class="conf-should">SHOULD</td><td>Array of temperature readings with timestamps for cold chain products</td></tr>
+        <tr><td><code>+D2.allergens</code></td><td class="conf-must">MUST</td><td>Array of allergen codes as defined by Codex Alimentarius</td></tr>
+        <tr><td><code>+D2.certifications</code></td><td class="conf-may">MAY</td><td>Array of food safety certifications (e.g., organic, fair trade, halal, kosher)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="food-cte-kde">
+    <h3>CTE and KDE Mapping</h3>
+    <p>
+      The FDA FSMA 204 rule defines Critical Tracking Events (CTEs) and
+      Key Data Elements (KDEs) for each point in the food supply chain.
+      This profile maps CTEs to VSC event types and KDEs to event vector
+      fields and +D2 vocabulary fields.
+    </p>
+    <table class="req-table">
+      <thead><tr><th>CTE</th><th>VSC Event Type</th><th>KDE Mapping</th></tr></thead>
+      <tbody>
+        <tr><td>Harvesting</td><td>ObjectEvent with <code>action: ADD</code></td><td><code>what.productIdentifiers</code>, <code>+D2.harvestDate</code>, <code>where.businessLocation</code></td></tr>
+        <tr><td>Cooling</td><td>ObjectEvent with <code>action: OBSERVE</code></td><td><code>+D2.temperatureHistory</code>, <code>when.eventTime</code></td></tr>
+        <tr><td>Packing (Initial)</td><td>AggregationEvent with <code>action: ADD</code></td><td><code>what.productIdentifiers</code>, <code>+D2.useByDate</code>, <code>+D2.allergens</code></td></tr>
+        <tr><td>Shipping</td><td>ObjectEvent with <code>disposition: in_transit</code></td><td><code>when.eventTime</code>, <code>where.businessLocation</code>, <code>who.actorDid</code></td></tr>
+        <tr><td>Receiving</td><td>ObjectEvent with <code>disposition: received</code></td><td><code>when.eventTime</code>, <code>where.businessLocation</code>, <code>who.actorDid</code></td></tr>
+        <tr><td>Transforming</td><td>TransformationEvent</td><td><code>+D2.productionDate</code>, <code>what.productIdentifiers</code> (new product), <code>chainOfCustody.parentSeals</code> (input products)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="food-recall">
+    <h3>Recall Readiness</h3>
+    <p>
+      Food safety profile implementations <em class="rfc2119">MUST</em>
+      support the following recall-related capabilities:
+    </p>
+    <ul>
+      <li><strong>One-up, one-back traceability:</strong> For any SEAL in the chain, verifiers <em class="rfc2119">MUST</em> be able to identify the immediate previous SEAL (one back) and the immediate next SEAL (one up) within 24 hours of a recall notification.</li>
+      <li><strong>Full chain reconstruction:</strong> Verifiers <em class="rfc2119">MUST</em> be able to traverse the entire custody chain from origin to current location within 72 hours of a recall notification.</li>
+      <li><strong>Batch isolation:</strong> When a batch/lot is identified for recall, verifiers <em class="rfc2119">MUST</em> be able to identify all SEALs containing that batch/lot identifier within 4 hours.</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     APPENDIX A: REQUIREMENTS MAPPING
+════════════════════════════════════════════════════════════════ -->
+<section id="requirements-mapping" class="appendix">
+  <h2>Requirements Mapping</h2>
+  <p>
+    This appendix provides the complete mapping from requirements
+    established in [[VSC-REQUIREMENTS]] to the normative sections
+    of this specification that satisfy each requirement.
+  </p>
+  <table class="req-table">
+    <thead><tr><th>Requirement ID</th><th>Requirement</th><th>Specification Section</th></tr></thead>
+    <tbody>
+      <tr><td>REQ-SEAL-001</td><td>Immutable Event Attestation</td><td><a href="#seal">§2</a></td></tr>
+      <tr><td>REQ-SEAL-002</td><td>Normative Field Structure</td><td><a href="#seal-normative-fields">§2.3</a></td></tr>
+      <tr><td>REQ-SEAL-003</td><td>Correction Protocol</td><td><a href="#correction-protocol">§8</a></td></tr>
+      <tr><td>REQ-SM-001</td><td>State Machine Model</td><td><a href="#state-machine">§3</a></td></tr>
+      <tr><td>REQ-SM-002</td><td>Disposition Mapping</td><td><a href="#state-disposition-mapping">§3.4</a></td></tr>
+      <tr><td>REQ-EM-001</td><td>Five-Dimensional Event Matrix</td><td><a href="#event-matrix">§4</a></td></tr>
+      <tr><td>REQ-EM-002</td><td>Standardized Vocabularies</td><td><a href="#event-matrix">§4</a></td></tr>
+      <tr><td>REQ-EXT-001</td><td>Vocabulary Extension System</td><td><a href="#dn-mechanism">§5</a></td></tr>
+      <tr><td>REQ-EXT-002</td><td>Forward Compatibility</td><td><a href="#dn-forward-compat">§5.4</a></td></tr>
+      <tr><td>REQ-EXT-003</td><td>Vocabulary Neutrality</td><td><a href="#dn-equality">§5.5</a></td></tr>
+      <tr><td>REQ-CHAIN-001</td><td>Chain of Custody Linking</td><td><a href="#chain-of-custody">§6</a></td></tr>
+      <tr><td>REQ-CHAIN-002</td><td>Fork and Merge Topology</td><td><a href="#chain-fork">§6.3</a>, <a href="#chain-merge">§6.4</a></td></tr>
+      <tr><td>REQ-SEC-001</td><td>DID-Based Identity</td><td><a href="#did-identity">§7.1</a></td></tr>
+      <tr><td>REQ-SEC-002</td><td>Cryptographic Proof Binding</td><td><a href="#proof-formats">§7.2</a></td></tr>
+      <tr><td>REQ-SEC-003</td><td>Selective Disclosure</td><td><a href="#selective-disclosure">§7.3</a></td></tr>
+      <tr><td>REQ-CPP-001</td><td>Credential Presentation Protocol</td><td><a href="#credential-presentation">§9</a></td></tr>
+      <tr><td>REQ-CPP-002</td><td>Authorization Levels</td><td><a href="#cpp-authorization">§9.3</a></td></tr>
+      <tr><td>REQ-PHARMA-001</td><td>DSCSA Compliance</td><td><a href="#profile-pharma">§10</a></td></tr>
+      <tr><td>REQ-PHARMA-002</td><td>FMD Compliance</td><td><a href="#profile-pharma">§10</a></td></tr>
+      <tr><td>REQ-FOOD-001</td><td>FSMA 204 Compliance</td><td><a href="#profile-food">§11</a></td></tr>
+      <tr><td>REQ-FOOD-002</td><td>Recall Readiness</td><td><a href="#food-recall">§11.4</a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     APPENDIX B: COMPLETE SEAL EXAMPLE
+════════════════════════════════════════════════════════════════ -->
+<section id="complete-example" class="appendix">
+  <h2>Complete SEAL Example</h2>
+  <p>
+    The following is a complete, valid VSC SEAL for a pharmaceutical
+    product shipment. It demonstrates all normative fields populated
+    with realistic data.
+  </p>
+<pre class="example" title="Complete Pharmaceutical Shipment SEAL">
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3c-cg.github.io/vsc-core/contexts/vsc-v1.jsonld"
+  ],
+  "type": ["VerifiableCredential", "VSC-SEAL"],
+  "id": "urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "issuer": "did:web:pharma-manufacturer.example.com",
+  "issuanceDate": "2026-05-16T08:30:05Z",
+
+  "sealVersion": "1.0",
+  "sealTimestamp": "2026-05-16T08:30:05.123Z",
+
+  "eventVector": {
+    "what": {
+      "productIdentifiers": [
+        {
+          "scheme": "GTIN",
+          "value": "00312345678904",
+          "serialNumber": "ABC123XYZ789",
+          "schemeAuthority": "GS1"
+        }
+      ],
+      "classifications": [
+        {
+          "scheme": "HS",
+          "code": "3004.90",
+          "description": "Medicaments consisting of mixed or unmixed products",
+          "schemeAuthority": "WCO",
+          "effectiveDate": "2022-01-01"
+        }
+      ],
+      "batchOrLot": "BATCH-2026-05-001",
+      "expiryDate": "2028-05-15",
+      "quantity": 500,
+      "quantityUnit": "units",
+      "description": "ExampleRx 10mg tablets, 30-count bottle"
+    },
+    "when": {
+      "eventTime": "2026-05-16T08:30:00Z",
+      "timezone": "UTC",
+      "recordedAt": "2026-05-16T08:30:05Z",
+      "timePrecision": "second"
+    },
+    "where": {
+      "readPoint": {
+        "type": "SGLN",
+        "value": "urn:epc:id:sgln:0614141.00001.0",
+        "name": "Shipping Dock Scanner 3"
+      },
+      "businessLocation": {
+        "type": "GLN",
+        "value": "0614141000012",
+        "name": "PharmaCorp Manufacturing Facility — Mumbai"
+      },
+      "jurisdiction": "IN",
+      "geoCoordinates": {
+        "latitude": 19.0760,
+        "longitude": 72.8777
+      }
+    },
+    "who": {
+      "actorDid": "did:web:pharma-manufacturer.example.com",
+      "actorRole": "manufacturer",
+      "actorLicense": {
+        "type": "manufacturing_license",
+        "number": "MFG-2026-IND-0042",
+        "issuingAuthority": "Central Drugs Standard Control Organization",
+        "validFrom": "2026-01-01",
+        "validUntil": "2030-12-31",
+        "licenseCredential": "urn:uuid:license-credential-123"
+      },
+      "assertionMethod": "did:web:pharma-manufacturer.example.com#key-1"
+    },
+    "how": {
+      "eventType": "ObjectEvent",
+      "eventTypeVocab": "urn:epcis:cbv:v2",
+      "businessStep": "shipping",
+      "disposition": "in_transit",
+      "action": "OBSERVE"
+    }
+  },
+
+  "extensions": {
+    "+Dn": {
+      "+D1": {
+        "vocabularyUrn": "urn:vsc:vocab:pharma:v1",
+        "productNDC": "12345-6789-01",
+        "productMAH": "EU/1/26/123/001",
+        "manufacturingSite": "GMP-CERT-IND-MUM-2026",
+        "serializationFormat": "GS1_Datamatrix",
+        "transactionStatement": {
+          "TI": "urn:uuid:ti-document-2026-001",
+          "TH": "did:web:pharma-manufacturer.example.com",
+          "TS": "2026-05-16T08:30:00Z"
+        },
+        "temperatureRange": {
+          "minCelsius": 15,
+          "maxCelsius": 25
+        },
+        "excursionDetected": false,
+        "quarantineStatus": "none"
+      }
+    }
+  },
+
+  "chainOfCustody": {
+    "chainId": "urn:uuid:chain-pharma-2026-001",
+    "sequenceNumber": 2,
+    "parentSeals": ["urn:uuid:commissioning-seal-2026-001"],
+    "childSeals": [],
+    "topology": "linear"
+  },
+
+  "correctionOf": null,
+
+  "credentialSubject": {
+    "id": "urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+  },
+
+  "proof": {
+    "type": "Ed25519Signature2020",
+    "created": "2026-05-16T08:30:05Z",
+    "verificationMethod": "did:web:pharma-manufacturer.example.com#key-1",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "z5LbBqYhG..."
+  }
+}
+</pre>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     APPENDIX C: SELECTIVE DISCLOSURE FIELD REGISTRY
+════════════════════════════════════════════════════════════════ -->
+<section id="sd-field-registry" class="appendix">
+  <h2>Selective Disclosure Field Registry</h2>
+  <p>
+    This registry classifies every field in the VSC SEAL structure for
+    selective disclosure purposes. Fields classified as "Always Disclosed"
+    <em class="rfc2119">MUST</em> be included in every presentation.
+    Fields classified as "Selectively Disclosable" <em class="rfc2119">MAY</em>
+    be withheld based on the requester's authorization level.
+  </p>
+  <table class="req-table">
+    <thead><tr><th>Field</th><th>Classification</th><th>Authorization Level Required</th></tr></thead>
+    <tbody>
+      <tr><td><code>sealVersion</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>sealTimestamp</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>id</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>issuer</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>eventVector.what.productIdentifiers</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>eventVector.what.classifications</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>eventVector.what.batchOrLot</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>eventVector.what.expiryDate</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>eventVector.what.quantity</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>eventVector.what.description</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>eventVector.when.eventTime</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>eventVector.when.timezone</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>eventVector.when.recordedAt</code></td><td>Selectively Disclosable</td><td>regulatory</td></tr>
+      <tr><td><code>eventVector.where.jurisdiction</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>eventVector.where.readPoint</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>eventVector.where.businessLocation</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>eventVector.where.geoCoordinates</code></td><td>Selectively Disclosable</td><td>regulatory</td></tr>
+      <tr><td><code>eventVector.who.actorDid</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>eventVector.who.actorRole</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>eventVector.who.actorLicense</code></td><td>Selectively Disclosable</td><td>regulatory</td></tr>
+      <tr><td><code>eventVector.how.eventType</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>eventVector.how.disposition</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>eventVector.how.businessStep</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>extensions.+Dn.*</code></td><td>Selectively Disclosable</td><td>partner (field-specific overrides may apply)</td></tr>
+      <tr><td><code>chainOfCustody.chainId</code></td><td>Always Disclosed</td><td>public</td></tr>
+      <tr><td><code>chainOfCustody.sequenceNumber</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>chainOfCustody.parentSeals</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>chainOfCustody.childSeals</code></td><td>Selectively Disclosable</td><td>partner</td></tr>
+      <tr><td><code>correctionOf</code></td><td>Always Disclosed</td><td>public</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     APPENDIX D: CONFORMANCE TEST MATRIX
+════════════════════════════════════════════════════════════════ -->
+<section id="conformance-test-matrix" class="appendix">
+  <h2>Conformance Test Matrix</h2>
+  <table class="req-table">
+    <thead><tr><th>Test ID</th><th>Test Description</th><th>Core Issuer</th><th>Core Verifier</th><th>Pharma Profile</th><th>Food Profile</th></tr></thead>
+    <tbody>
+      <tr><td>T-SEAL-001</td><td>SEAL contains all normative fields</td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-SEAL-002</td><td>sealVersion is "1.0"</td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-SEAL-003</td><td>correctionOf is null for original SEALs</td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-SEAL-004</td><td>SEAL has valid cryptographic proof</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-SEAL-005</td><td>SEAL immutability enforced</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-SM-001</td><td>Valid state transition Q1→Q2</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-SM-002</td><td>Valid state transition Q2→Q3</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-SM-003</td><td>Invalid transition Q1→Q3 rejected</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-SM-004</td><td>Q4→Q1 re-entry rejected</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-EM-001</td><td>All five dimensions present</td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-EM-002</td><td>what contains at least one product identifier</td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-EM-003</td><td>disposition maps to valid quadrant</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-EXT-001</td><td>Empty +Dn block accepted</td><td></td><td>✓</td><td></td><td></td></tr>
+      <tr><td>T-EXT-002</td><td>Unknown vocabulary preserved</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-EXT-003</td><td>Unknown vocabulary does not cause rejection</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-CHAIN-001</td><td>Linear chain verified</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-CHAIN-002</td><td>Fork chain verified</td><td></td><td>✓</td><td></td><td>✓</td></tr>
+      <tr><td>T-CHAIN-003</td><td>Merge chain verified</td><td></td><td>✓</td><td></td><td>✓</td></tr>
+      <tr><td>T-CORR-001</td><td>Correction SEAL links to erroneous SEAL</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-CORR-002</td><td>Corrected data used downstream</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-CORR-003</td><td>Original SEAL retained after correction</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-CPP-001</td><td>Valid presentation request generated</td><td></td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-CPP-002</td><td>Valid presentation response generated</td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-CPP-003</td><td>Authorization level enforced</td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+      <tr><td>T-PHARMA-001</td><td>NDC present</td><td></td><td></td><td>✓</td><td></td></tr>
+      <tr><td>T-PHARMA-002</td><td>SGTIN with serial present</td><td></td><td></td><td>✓</td><td></td></tr>
+      <tr><td>T-PHARMA-003</td><td>Transaction statement valid</td><td></td><td></td><td>✓</td><td></td></tr>
+      <tr><td>T-PHARMA-004</td><td>License validity checked</td><td></td><td></td><td>✓</td><td></td></tr>
+      <tr><td>T-FOOD-001</td><td>CTE list present</td><td></td><td></td><td></td><td>✓</td></tr>
+      <tr><td>T-FOOD-002</td><td>Allergens present</td><td></td><td></td><td></td><td>✓</td></tr>
+      <tr><td>T-FOOD-003</td><td>One-up, one-back traceability</td><td></td><td></td><td></td><td>✓</td></tr>
+      <tr><td>T-FOOD-004</td><td>Batch isolation within 4 hours</td><td></td><td></td><td></td><td>✓</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     APPENDIX E: GOVERNANCE AND FORKABILITY
+════════════════════════════════════════════════════════════════ -->
+<section id="governance" class="appendix">
+  <h2>Governance and Forkability</h2>
+
+  <section id="governance-model">
+    <h3>Governance Model</h3>
+    <p>
+      The VSC Core Specification is governed by the W3C Verifiable
+      Supply Chain Community Group under the W3C Community Group
+      process. Decisions are made by consensus of active participants.
+      The specification is published under the W3C Software and Document
+      License to ensure that it remains freely implementable by all
+      parties.
+    </p>
+    <p>
+      The Community Group <em class="rfc2119">MAY</em> establish
+      vocabulary registries for +Dn extensions. Such registries serve
+      as discovery mechanisms — they help implementers find vocabularies
+      that may be useful for their domains. Registration in a VSC
+      vocabulary registry is <em class="rfc2119">OPTIONAL</em>.
+      Vocabularies that are not registered have the same normative
+      standing as registered vocabularies. The registry is a
+      convenience, not a gate.
+    </p>
+  </section>
+
+  <section id="forkability">
+    <h3>Forkability</h3>
+    <p>
+      The VSC architecture is designed to be forkable. The separation
+      of core architecture from domain vocabularies means that any
+      community — an industry consortium, a national regulator, a
+      multi-stakeholder initiative, or any group of supply chain
+      participants — can:
+    </p>
+    <ul>
+      <li>Define new +Dn vocabularies that extend VSC for their domain</li>
+      <li>Define new profiles that constrain VSC for their regulatory context</li>
+      <li>Deploy VSC-compatible infrastructure independently</li>
+      <li>Register vocabularies in the VSC registry or maintain their own registry</li>
+      <li>Fork the core specification if the Community Group process does not meet their needs</li>
+    </ul>
+    <p>
+      The Community Group <em class="rfc2119">MUST NOT</em> restrict
+      the creation of new vocabularies, profiles, or implementations.
+      This forkability guarantee is a constitutional protection for
+      implementers — it ensures that VSC cannot be captured by any
+      single interest and that the ecosystem remains open to innovation
+      from all directions.
+    </p>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     APPENDIX F: MAPPING TO EPCIS
+════════════════════════════════════════════════════════════════ -->
+<section id="epcis-mapping" class="appendix">
+  <h2>Mapping to EPCIS</h2>
+  <p>
+    The VSC Event Matrix is designed to be compatible with GS1 EPCIS
+    [[EPCIS]]. This appendix provides the normative mapping between
+    EPCIS 2.0 event fields and VSC event vector fields.
+  </p>
+  <table class="req-table">
+    <thead><tr><th>EPCIS Field</th><th>VSC Event Vector Field</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>eventType</code></td><td><code>how.eventType</code></td><td>Direct mapping</td></tr>
+      <tr><td><code>action</code></td><td><code>how.action</code></td><td>ADD, OBSERVE, DELETE</td></tr>
+      <tr><td><code>bizStep</code></td><td><code>how.businessStep</code></td><td>EPCIS CBV or custom vocabulary</td></tr>
+      <tr><td><code>disposition</code></td><td><code>how.disposition</code></td><td>EPCIS CBV or custom vocabulary</td></tr>
+      <tr><td><code>eventTime</code></td><td><code>when.eventTime</code></td><td>Direct mapping</td></tr>
+      <tr><td><code>recordTime</code></td><td><code>when.recordedAt</code></td><td>Direct mapping</td></tr>
+      <tr><td><code>eventTimeZoneOffset</code></td><td><code>when.timezone</code></td><td>Direct mapping</td></tr>
+      <tr><td><code>readPoint</code></td><td><code>where.readPoint</code></td><td>Direct mapping</td></tr>
+      <tr><td><code>bizLocation</code></td><td><code>where.businessLocation</code></td><td>Direct mapping</td></tr>
+      <tr><td><code>epcList</code></td><td><code>what.productIdentifiers</code></td><td>Mapped to product identifier array</td></tr>
+      <tr><td><code>quantityList</code></td><td><code>what.quantity</code> / <code>what.quantityUnit</code></td><td>Flattened into what dimension</td></tr>
+      <tr><td><code>bizTransactionList</code></td><td><code>+Dn</code> extension</td><td>Not in core; use trade finance vocabulary</td></tr>
+      <tr><td><code>sourceList</code></td><td><code>+Dn</code> extension</td><td>Not in core; use domain vocabulary</td></tr>
+      <tr><td><code>destinationList</code></td><td><code>+Dn</code> extension</td><td>Not in core; use domain vocabulary</td></tr>
+      <tr><td><code>sensorElementList</code></td><td><code>+Dn</code> extension</td><td>Not in core; use sensor/IoT vocabulary</td></tr>
+      <tr><td><code>parentID</code></td><td><code>chainOfCustody.parentSeals</code></td><td>Mapped to custody chain structure</td></tr>
+      <tr><td><code>childEPCs</code></td><td><code>chainOfCustody.childSeals</code></td><td>Mapped to custody chain structure</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ACKNOWLEDGMENTS
+════════════════════════════════════════════════════════════════ -->
+<section id="acknowledgments" class="appendix">
+  <h2>Acknowledgments</h2>
+  <p>
+    This specification is the work of the W3C Verifiable Supply Chain
+    Community Group. The editors gratefully acknowledge the
+    contributions of all Community Group participants, the feedback
+    from early implementers, and the foundational standards work of
+    GS1, W3C, IETF, WCO, ICC, and UN/CEFACT upon which VSC builds.
+  </p>
+  <p>
+    Particular acknowledgment is due to the W3C Verifiable Credentials
+    Working Group for the Verifiable Credentials Data Model, the W3C
+    DID Working Group for the Decentralized Identifiers specification,
+    and the GS1 EPCIS community for the event vocabulary that VSC
+    harmonizes with.
+  </p>
+</section>
+
+</body>
+</html>
